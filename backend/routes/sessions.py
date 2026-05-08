@@ -411,9 +411,11 @@ def execute_problem(
         request_id = uuid4().hex[:8]
         files = build_framework_payload_files(problem, code)
         entry = str(problem.entry_point or "test_main.py").strip()
+        effective_entry = entry if entry else "test_main.py"
+
         execution_result = judge0_service.execute_multifile(
             files=files,
-            entry_point=entry if entry else "test_main.py",
+            entry_point=effective_entry,
             problem_id=str(problem.id),
             request_id=request_id,
         )
@@ -479,15 +481,14 @@ def execute_problem(
                 request_id=request_id,
             )
     except ValueError as exc:
-        logger.exception("execute_problem validation error: %s", exc)
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
     except (requests.RequestException, TimeoutError, RuntimeError) as exc:
-        logger.exception("execute_problem judge0 error: %s", exc)
+        logger.error("Judge0 execution failed: problem=%s error=%s", problem.id, exc)
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"Judge0 execution failed: {str(exc)}") from exc
     except HTTPException:
         raise
     except Exception as exc:
-        logger.exception("execute_problem unexpected error: %s", exc)
+        logger.exception("Unexpected execution error: problem=%s", problem.id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Execution failed: {str(exc)}") from exc
 
     cases: list[Any] = list(execution_result.get("cases") or [])
@@ -540,14 +541,19 @@ def build_framework_payload_files(
         if isinstance(content, str):
             payload_files.append({"path": path, "content": content})
 
-    # Always inject the test harness natively
+    # Inject the test harness only when it contains actual code content.
+    # For FastAPI-style problems: test_harness holds the full pytest source → inject at entry_point.
+    # For React-style problems: test_harness is just a filename (e.g. "App.test.jsx") that is
+    # already present in starter_files → skip to avoid overwriting the file with a path string.
     harness = str(problem.test_harness or "").strip()
     entry_point = str(problem.entry_point or "test_main.py").strip() or "test_main.py"
     if harness:
-        payload_files.append({
-            "path": entry_point,
-            "content": harness
-        })
+        existing_paths = {str(f.get("path") or "").strip() for f in payload_files if isinstance(f, dict)}
+        harness_is_path_ref = "\n" not in harness and harness in existing_paths
+        if not harness_is_path_ref:
+            payload_files.append({"path": entry_point, "content": harness})
+    else:
+        logger.warning("No test_harness for problem %s — multifile execution will likely fail", problem.id)
 
     return payload_files
 
@@ -1030,12 +1036,7 @@ def submit_session(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_candidate),
 ) -> SessionSubmitResponse:
-    logger.info(
-        "submit_session request: session_id=%s code=%s language=%s",
-        session_id,
-        _truncate_text(payload.code),
-        payload.language,
-    )
+    logger.info("POST /submit session=%s lang=%s user=%s", session_id, payload.language, current_user.id)
     session_obj = db.scalar(select(AssessmentSession).where(AssessmentSession.id == session_id))
     if session_obj is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
@@ -1043,11 +1044,6 @@ def submit_session(
 
     prior_submissions = int(
         db.scalar(select(func.count(Submission.id)).where(Submission.session_id == session_id)) or 0
-    )
-    logger.info(
-        "submit_session attempt: session_id=%s prior_submissions=%s",
-        session_id,
-        prior_submissions,
     )
 
     current_time = datetime.now(timezone.utc)
@@ -1210,13 +1206,13 @@ def submit_session(
         db.refresh(submission)
     except SQLAlchemyError as exc:
         db.rollback()
-        logger.exception("submit_session SQLAlchemy error: %s", exc)
+        logger.exception("Submit DB error: session=%s", session_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to persist submission: {str(exc)}") from exc
     except HTTPException:
         raise
     except Exception as exc:
         db.rollback()
-        logger.exception("submit_session unexpected error: %s", exc)
+        logger.exception("Submit unexpected error: session=%s", session_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Submit failed: {str(exc)}") from exc
 
     raw_cases = submission.judge_result.get("cases", []) if isinstance(submission.judge_result, dict) else []
@@ -1255,13 +1251,9 @@ def submit_session(
         cases=sanitized_cases,
     )
     logger.info(
-        "submit_session response: session_id=%s submission_id=%s status=%s overall_status=%s passed_tests=%s total_tests=%s submission_number=%s",
-        session_id,
-        response_payload.submission_id,
-        response_payload.status,
-        overall_status,
-        response_payload.passed_tests,
-        response_payload.total_tests,
+        "Submit done: session=%s submission=%s status=%s score=%s passed=%s/%s attempt=%s",
+        session_id, response_payload.submission_id, response_payload.status,
+        submission.score, response_payload.passed_tests, response_payload.total_tests,
         prior_submissions + 1,
     )
     return response_payload
@@ -1274,13 +1266,7 @@ def run_session_code(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_candidate),
 ) -> SessionRunResponse:
-    logger.info(
-        "run_session_code request: session_id=%s problem_id=%s code=%s language=%s",
-        session_id,
-        payload.problem_id,
-        _truncate_text(payload.code),
-        payload.language,
-    )
+    logger.info("POST /run session=%s problem=%s lang=%s user=%s", session_id, payload.problem_id, payload.language, current_user.id)
     session_obj = db.scalar(select(AssessmentSession).where(AssessmentSession.id == session_id))
     if session_obj is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
@@ -1316,8 +1302,7 @@ def run_session_code(
     except HTTPException:
         raise
     except Exception as exc:
-        print("=== RUN UNEXPECTED ERROR ===", repr(exc))
-        logger.exception("run_session_code unexpected error: %s", exc)
+        logger.exception("Run unexpected error: session=%s problem=%s", session_id, payload.problem_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Run failed: {str(exc)}") from exc
 
     raw_cases = execution_result.get("cases", [])
@@ -1356,15 +1341,9 @@ def run_session_code(
     if "expected_output" in execution_result:
         payload_kwargs["expected_output"] = execution_result["expected_output"]
     response_payload = SessionRunResponse(**payload_kwargs)
-    print(
-        "=== RUN RESPONSE === case_count=%s time_ms=%s overall=%s"
-        % (len(response_payload.cases), response_payload.time_taken_ms, overall_status)
-    )
     logger.info(
-        "run_session_code response: session_id=%s case_count=%s time_taken_ms=%s overall_status=%s",
-        session_id,
-        len(response_payload.cases),
-        response_payload.time_taken_ms,
-        overall_status,
+        "Run done: session=%s problem=%s status=%s cases=%s time_ms=%s",
+        session_id, payload.problem_id, overall_status,
+        len(response_payload.cases), response_payload.time_taken_ms,
     )
     return response_payload

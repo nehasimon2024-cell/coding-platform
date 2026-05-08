@@ -2,7 +2,6 @@ import base64
 import io
 import logging
 import os
-import re
 import time
 import zipfile
 from typing import Any
@@ -19,9 +18,34 @@ except Exception:
 
 logger = logging.getLogger(__name__)
 
+# Text fields that Judge0 base64-encodes in responses when base64_encoded=true
+_B64_RESPONSE_FIELDS = ("stdout", "stderr", "compile_output", "message", "source_code")
+
 
 def _judge0_verify_ssl() -> bool:
     return os.getenv("JUDGE0_VERIFY_SSL", "false").strip().lower() in ("1", "true", "yes")
+
+
+def _b64_encode(text: str) -> str:
+    """UTF-8 → base64 string, safe to send in JSON."""
+    return base64.b64encode(text.encode("utf-8")).decode("ascii")
+
+
+def _b64_decode(value: str) -> str:
+    """base64 string → UTF-8, replacing undecodable bytes."""
+    try:
+        return base64.b64decode(value).decode("utf-8", errors="replace")
+    except Exception:
+        return value
+
+
+def _decode_response_fields(result: dict[str, Any]) -> dict[str, Any]:
+    """Decode all base64 text fields Judge0 returns when base64_encoded=true."""
+    for field in _B64_RESPONSE_FIELDS:
+        val = result.get(field)
+        if isinstance(val, str):
+            result[field] = _b64_decode(val)
+    return result
 
 
 def _truncate_text(value: Any, limit: int = 2000) -> str:
@@ -29,19 +53,6 @@ def _truncate_text(value: Any, limit: int = 2000) -> str:
     if len(text) <= limit:
         return text
     return f"{text[:limit]}...<truncated:{len(text) - limit}>"
-
-
-def _compact_judge0_result(result: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "token": result.get("token"),
-        "status": result.get("status"),
-        "stdout": _truncate_text(result.get("stdout")),
-        "stderr": _truncate_text(result.get("stderr")),
-        "compile_output": _truncate_text(result.get("compile_output")),
-        "message": _truncate_text(result.get("message")),
-        "time": result.get("time"),
-        "memory": result.get("memory"),
-    }
 
 
 def map_status(result: dict[str, Any]) -> tuple[str, str | None]:
@@ -64,7 +75,7 @@ def map_status(result: dict[str, Any]) -> tuple[str, str | None]:
 
 
 class Judge0Service:
-    """Simple Judge0 CE client for code execution against multiple test inputs."""
+    """Judge0 CE client — always async (wait=false), always base64_encoded=true."""
 
     TERMINAL_STATUSES = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
 
@@ -75,9 +86,13 @@ class Judge0Service:
     def _headers(self) -> dict[str, str]:
         return {"Content-Type": "application/json"}
 
-    def _post_submission(self, payload: dict[str, Any], wait: bool) -> dict[str, Any]:
-        wait_flag = "true" if wait else "false"
-        url = f"{self.base_url}/submissions?base64_encoded=false&wait={wait_flag}"
+    def _post_submission(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """POST a submission with base64_encoded=true & wait=false.
+
+        Text fields (source_code, stdin, expected_output) must already be
+        base64-encoded by the caller. additional_files is always a base64 zip.
+        """
+        url = f"{self.base_url}/submissions?base64_encoded=true&wait=false"
         verify = _judge0_verify_ssl()
         response = requests.post(
             url,
@@ -89,11 +104,9 @@ class Judge0Service:
         if not response.ok:
             detail = (response.text or "").strip() or response.reason
             logger.error(
-                "Judge0 submission rejected: status=%s url=%s body=%s payload_keys=%s",
+                "Judge0 submission rejected: status=%s detail=%s",
                 response.status_code,
-                url,
-                detail[:2000],
-                list(payload.keys()),
+                detail[:500],
             )
             raise requests.HTTPError(
                 f"{response.status_code} {response.reason} — Judge0 says: {detail[:500]}",
@@ -102,7 +115,8 @@ class Judge0Service:
         return response.json()
 
     def _get_submission(self, token: str) -> dict[str, Any]:
-        url = f"{self.base_url}/submissions/{token}?base64_encoded=false"
+        """Poll GET /submissions/{token} with base64_encoded=true; auto-decodes text fields."""
+        url = f"{self.base_url}/submissions/{token}?base64_encoded=true"
         verify = _judge0_verify_ssl()
         response = requests.get(
             url,
@@ -111,7 +125,30 @@ class Judge0Service:
             verify=verify,
         )
         response.raise_for_status()
-        return response.json()
+        return _decode_response_fields(response.json())
+
+    def _poll_until_done(
+        self,
+        token: str,
+        *,
+        max_attempts: int = 40,
+        interval_seconds: float = 1.0,
+    ) -> dict[str, Any]:
+        """Poll until a terminal status or timeout. Logs one line per poll at DEBUG."""
+        result: dict[str, Any] = {"token": token}
+        for attempt in range(max_attempts):
+            time.sleep(interval_seconds)
+            polled = self._get_submission(token)
+            status_id = (polled.get("status") or {}).get("id")
+            logger.debug("Judge0 poll %s/%s token=%s status_id=%s", attempt + 1, max_attempts, token, status_id)
+            result = polled
+            if status_id in self.TERMINAL_STATUSES:
+                return result
+        raise TimeoutError(f"Judge0 timed out after {max_attempts} poll attempts (token={token})")
+
+    # ------------------------------------------------------------------
+    # Single-file execution
+    # ------------------------------------------------------------------
 
     def _execute_one(
         self,
@@ -133,8 +170,7 @@ class Judge0Service:
             )
 
         if language_id == 82:
-            # SQLite (language_id=82) ignores stdin; the full script goes in source_code.
-            # Prepend the hidden setup so the candidate's query runs against a seeded DB.
+            # SQLite: prepend hidden setup so the candidate's query runs against a seeded DB.
             setup = (setup_sql.rstrip() + "\n\n") if setup_sql and setup_sql.strip() else ""
             final_code = f"{setup}{user_code_stripped}"
             stdin_to_send = ""
@@ -143,37 +179,27 @@ class Judge0Service:
             stdin_to_send = stdin if stdin is not None else ""
 
         payload: dict[str, Any] = {
-            "source_code": final_code,
+            "source_code": _b64_encode(final_code),
             "language_id": language_id,
-            "stdin": stdin_to_send,
+            "stdin": _b64_encode(stdin_to_send),
         }
         if expected_output is not None:
-            payload["expected_output"] = expected_output
+            payload["expected_output"] = _b64_encode(expected_output)
 
-        try:
-            result = self._post_submission(payload, wait=True)
-        except requests.HTTPError as exc:
-            response = exc.response
-            error_text = response.text.lower() if response is not None else ""
-            if response is not None and response.status_code == 400 and "wait" in error_text:
-                token_response = self._post_submission(payload, wait=False)
-                token = token_response.get("token")
-                if not token:
-                    raise RuntimeError("Judge0 did not return a token for async submission") from exc
+        token_response = self._post_submission(payload)
+        token = token_response.get("token")
+        if not token:
+            raise RuntimeError("Judge0 did not return a submission token")
 
-                last_result: dict[str, Any] = {"token": token}
-                for _ in range(20):
-                    polled = self._get_submission(token)
-                    status_id = (polled.get("status") or {}).get("id")
-                    last_result = polled
-                    if status_id in self.TERMINAL_STATUSES:
-                        return polled
-                    time.sleep(0.5)
-                raise TimeoutError("Timed out waiting for Judge0 submission result")
-            raise
-
-        logger.info("Judge0 case execution result: %s", _compact_judge0_result(result))
+        logger.debug("Judge0 single-file submitted: lang=%s token=%s req=%s", language_id, token, request_id)
+        result = self._poll_until_done(token, max_attempts=40, interval_seconds=0.5)
+        status_id = (result.get("status") or {}).get("id")
+        logger.debug("Judge0 single-file done: token=%s status_id=%s req=%s", token, status_id, request_id)
         return result
+
+    # ------------------------------------------------------------------
+    # Multi-file execution (language_id=89)
+    # ------------------------------------------------------------------
 
     def _build_multifile_archive(
         self,
@@ -190,19 +216,27 @@ class Judge0Service:
             for entry in files
         )
         if not entry_present:
-            raise ValueError(f"Entry point file not found: {entry_path}")
+            found = [str(e.get("path") or "") for e in files if isinstance(e, dict)]
+            raise ValueError(f"Entry point '{entry_path}' not found in files {found}")
 
-        if entry_path.endswith((".test.js", ".test.jsx", ".test.ts", ".test.tsx")):
+        # Detect runner by scanning all files — for React, entry_point is the solution
+        # file (e.g. "App.js"), not the test file, so we can't rely on entry_path alone.
+        has_js_tests = any(
+            str(e.get("path") or "").strip().endswith((".test.js", ".test.jsx", ".test.ts", ".test.tsx"))
+            for e in files if isinstance(e, dict)
+        )
+        if has_js_tests:
             run_script = (
                 "#!/usr/bin/env bash\n"
                 "set -e\n"
-                f"npx jest {entry_path} --no-coverage\n"
+                "export NODE_PATH=$(npm root -g)\n"
+                "npx -y jest --no-coverage\n"
             )
         else:
             run_script = (
                 "#!/usr/bin/env bash\n"
                 "set -e\n"
-                f"python {entry_path}\n"
+                "python3 -m pytest\n"
             )
 
         buffer = io.BytesIO()
@@ -227,22 +261,31 @@ class Judge0Service:
         problem_id: str | None = None,
         request_id: str | None = None,
     ) -> dict[str, Any]:
-        additional_files = self._build_multifile_archive(
-            files=files,
-            entry_point=entry_point,
-        )
+        additional_files = self._build_multifile_archive(files=files, entry_point=entry_point)
 
         payload: dict[str, Any] = {
             "language_id": 89,
             "additional_files": additional_files,
         }
 
-        result = self._post_submission(payload, wait=True)
+        token_response = self._post_submission(payload)
+        token = token_response.get("token")
+        if not token:
+            raise RuntimeError("Judge0 did not return a submission token for multifile job")
+
+        logger.info("Judge0 multifile submitted: problem=%s token=%s req=%s", problem_id, token, request_id)
+        result = self._poll_until_done(token, max_attempts=40, interval_seconds=1.0)
+
         normalized_status, normalized_error = map_status(result)
         status_obj = result.get("status")
         status = status_obj if isinstance(status_obj, dict) else {"id": 0, "description": "Unknown"}
         status_id = status.get("id")
         passed = status_id == 3
+
+        logger.info(
+            "Judge0 multifile done: problem=%s token=%s status=[%s]%s passed=%s req=%s",
+            problem_id, token, status_id, status.get("description", ""), passed, request_id,
+        )
 
         case_result = {
             "token": result.get("token"),
@@ -260,7 +303,6 @@ class Judge0Service:
             "passed": passed,
         }
 
-        total_millis = 0
         try:
             seconds = float(case_result.get("time") or 0)
         except (TypeError, ValueError):
@@ -276,6 +318,10 @@ class Judge0Service:
             "cases": [case_result],
         }
 
+    # ------------------------------------------------------------------
+    # Public single-file entry point
+    # ------------------------------------------------------------------
+
     def execute(
         self,
         code: str,
@@ -287,13 +333,6 @@ class Judge0Service:
     ) -> dict[str, Any]:
         if not isinstance(language_id, int) or language_id <= 0:
             raise ValueError(f"Invalid Judge0 language id: {language_id}")
-
-        logger.info(
-            "Judge0 execute: language_id=%s code=%s test_count=%s",
-            language_id,
-            _truncate_text(code),
-            len(test_inputs or []),
-        )
 
         normalized_cases = test_inputs if test_inputs else [{"input": "", "output": ""}]
         case_results: list[dict[str, Any]] = []
@@ -319,7 +358,6 @@ class Judge0Service:
                 problem_id=problem_id,
                 request_id=request_id,
             )
-            logger.info("Judge0 raw response: %s", _compact_judge0_result(result))
             normalized_status, normalized_error = map_status(result)
             status_obj = result.get("status")
             status = status_obj if isinstance(status_obj, dict) else {"id": 0, "description": "Unknown"}
@@ -362,8 +400,8 @@ class Judge0Service:
             total_millis += int(seconds * 1000)
 
         logger.info(
-            "Judge0 aggregated: passed=%s/%s score=%s time_ms=%s",
-            passed_count, total_tests, score, total_millis,
+            "Judge0 execute done: lang=%s problem=%s passed=%s/%s score=%s time_ms=%s req=%s",
+            language_id, problem_id, passed_count, total_tests, score, total_millis, request_id,
         )
         return {
             "passed": passed_count == total_tests,
