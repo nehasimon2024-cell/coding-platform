@@ -137,22 +137,73 @@
           "Easy": [
             {
               "id": "react-js-beg-easy-1",
-              "title": "Basic React JS Task",
+              "title": "Render a Welcome Message",
               "skill": "React JS",
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["react-js", "beginner", "easy"],
-              "description": "Complete the basic task for React JS. Ensure your implementation satisfies the requirements.",
-              "solution": "Here is the solution for the task...",
+              "tags": ["react-js", "jsx", "components", "beginner"],
+              "description": "Create a React component named App that renders a heading with the text 'Welcome to React' and a paragraph with the text 'This is your first React challenge.'.",
+              "solution": "import React from 'react';\n\nfunction App() {\n  return (\n    <div>\n      <h1>Welcome to React</h1>\n      <p>This is your first React challenge.</p>\n    </div>\n  );\n}\n\nexport default App;",
               "starter_files": [
                 {
-                  "path": "",
-                  "content": ""
+                  "path": "App.js",
+                  "content": "import React from 'react';\n\nfunction App() {\n  return (\n    <div>\n      {/* Write your code here */}\n    </div>\n  );\n}\n\nexport default App;"
+                },
+                {
+                  "path": "App.test.jsx",
+                  "content": "import React from 'react';\nimport { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ntest('renders heading', () => {\n  render(<App />);\n  expect(screen.getByText(/Welcome to React/i)).toBeInTheDocument();\n});\n\ntest('renders paragraph', () => {\n  render(<App />);\n  expect(screen.getByText(/This is your first React challenge./i)).toBeInTheDocument();\n});"
+                },
+                {
+                  "path": "package.json",
+                  "content": "{\n  \"type\": \"module\"\n}"
+                },
+                {
+                  "path": "babel.config.cjs",
+                  "content": "module.exports = {\n  presets: [\n    ['@babel/preset-env'],\n    ['@babel/preset-react', { runtime: 'automatic' }]\n  ]\n};"
+                },
+                {
+                  "path": "jest.config.cjs",
+                  "content": "module.exports = {\n  testEnvironment: 'jsdom',\n  transform: {\n    '^.+\\\\.[jt]sx?$': 'babel-jest'\n  }\n};"
                 }
               ],
-              "entry_point": "",
-              "test_harness": ""
+              "entry_point": "App.js",
+              "test_harness": "App.test.jsx"
+            },
+            {
+              "id": "react-js-beg-easy-2",
+              "title": "Display User Name",
+              "skill": "React JS",
+              "difficulty": "Easy",
+              "level": "Beginner",
+              "question_type": "framework",
+              "tags": ["react-js", "props", "jsx"],
+              "description": "Create a React component that displays the name 'John Doe' inside an h2 tag.",
+              "solution": "import React from 'react';\n\nfunction App() {\n  return <h2>John Doe</h2>;\n}\n\nexport default App;",
+              "starter_files": [
+                {
+                  "path": "App.js",
+                  "content": "import React from 'react';\n\nfunction App() {\n  return (\n    <div>\n      {/* Render the name here */}\n    </div>\n  );\n}\n\nexport default App;"
+                },
+                {
+                  "path": "App.test.jsx",
+                  "content": "import React from 'react';\nimport { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ntest('renders John Doe', () => {\n  render(<App />);\n  expect(screen.getByText(/John Doe/i)).toBeInTheDocument();\n});"
+                },
+                {
+                  "path": "package.json",
+                  "content": "{\n  \"type\": \"module\"\n}"
+                },
+                {
+                  "path": "babel.config.cjs",
+                  "content": "module.exports = {\n  presets: [\n    ['@babel/preset-env'],\n    ['@babel/preset-react', { runtime: 'automatic' }]\n  ]\n};"
+                },
+                {
+                  "path": "jest.config.cjs",
+                  "content": "module.exports = {\n  testEnvironment: 'jsdom',\n  transform: {\n    '^.+\\\\.[jt]sx?$': 'babel-jest'\n  }\n};"
+                }
+              ],
+              "entry_point": "App.js",
+              "test_harness": "App.test.jsx"
             }
           ],
           "Medium": [],
