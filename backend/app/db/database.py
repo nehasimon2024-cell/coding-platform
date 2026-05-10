@@ -12,10 +12,10 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import Session, sessionmaker
 
-from models import Base
+from app.db.models import Base
 
-# Load local backend/.env if present so local uvicorn/scripts get DB settings.
-load_dotenv(dotenv_path=Path(__file__).with_name(".env"), override=False)
+# Load local .env from the closest parent directory automatically
+load_dotenv()
 logger = logging.getLogger(__name__)
 
 
@@ -46,8 +46,15 @@ def _drop_legacy_submission_unique_constraint(engine) -> None:
 
     with engine.begin() as conn:
         for constraint_name in candidates:
-            conn.execute(text(f'ALTER TABLE submissions DROP CONSTRAINT IF EXISTS "{constraint_name}"'))
-            logger.info("Dropped legacy constraint on submissions.session_id: %s", constraint_name)
+            conn.execute(
+                text(
+                    f'ALTER TABLE submissions DROP CONSTRAINT IF EXISTS "{constraint_name}"'
+                )
+            )
+            logger.info(
+                "Dropped legacy constraint on submissions.session_id: %s",
+                constraint_name,
+            )
 
 
 def get_db_credentials() -> dict:
@@ -82,7 +89,9 @@ def build_database_url() -> str:
             "Database connection details are not configured. Set DATABASE_URL or DB_HOST/DB credentials."
         )
 
-    return f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    return (
+        f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    )
 
 
 @lru_cache
@@ -92,7 +101,9 @@ def get_session_local() -> sessionmaker[Session]:
 
     Base.metadata.create_all(bind=engine)
     _drop_legacy_submission_unique_constraint(engine)
-    return sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False)
+    return sessionmaker(
+        bind=engine, autocommit=False, autoflush=False, expire_on_commit=False
+    )
 
 
 def get_db() -> Generator[Session, None, None]:

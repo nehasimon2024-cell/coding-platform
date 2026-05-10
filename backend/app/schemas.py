@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from models import Level, SessionStatus, SubmissionStatus, UserRole
+from app.db.models import Level, SessionStatus, SubmissionStatus, UserRole
 
 
 class LoginRequest(BaseModel):
@@ -18,7 +18,7 @@ class LoginUser(BaseModel):
     role: UserRole
     name: str
     email: EmailStr
-    employee_id: str 
+    employee_id: str
     gender: str
     department: str
 
@@ -99,16 +99,16 @@ class SessionProblemPayload(BaseModel):
     time_limit_minutes: int
     schema_tables: list[SqlTableSchema] = Field(default_factory=list)
     question_type: str | None = None
-    
+
     # MCQ
     options: list[str] | None = None
     # correct_option_index is intentionally excluded from the payload for the frontend
-    
+
     # Framework
     starter_files: list[dict[str, Any]] | None = None
     entry_point: str | None = None
     test_harness: str | None = None
-    
+
     # SQL
     database_schema: list[dict[str, Any]] | None = None
 

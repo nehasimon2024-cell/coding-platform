@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 import type { User } from "../types/user";
 
@@ -16,18 +15,11 @@ const initialState: User = {
   department: null,
 };
 
-const useUserStore = create<UserStore>()(
-  persist(
-    (set) => ({
-      ...initialState,
-      setUser: (user) => set(() => ({ ...user })),
-      clear: () => set(() => ({ ...initialState })),
-    }),
-    {
-      name: "user-store",
-    },
-  ),
-);
+const useUserStore = create<UserStore>()((set) => ({
+  ...initialState,
+  setUser: (user) => set(() => ({ ...user })),
+  clear: () => set(() => ({ ...initialState })),
+}));
 
 export { useUserStore }
 export default useUserStore

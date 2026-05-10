@@ -37,7 +37,13 @@ _CREATE_TABLE_RE = re.compile(
 # A column definition inside the CREATE TABLE body.
 # Skips lines that start with PRIMARY KEY / FOREIGN KEY / CONSTRAINT / UNIQUE.
 _TABLE_LEVEL_KEYWORDS = (
-    "primary", "foreign", "constraint", "unique", "check", "key", "index",
+    "primary",
+    "foreign",
+    "constraint",
+    "unique",
+    "check",
+    "key",
+    "index",
 )
 
 
@@ -86,12 +92,16 @@ def _parse_columns(body: str) -> list[dict[str, str]]:
         # Normalize the type: keep only the leading type token (e.g. VARCHAR(20))
         dtype_clean = re.sub(r"\s+", " ", dtype).strip().rstrip(",")
         # Strip table-level constraints that may have leaked into the type.
-        dtype_clean = re.split(
-            r"\b(PRIMARY|FOREIGN|REFERENCES|UNIQUE|CHECK|DEFAULT|NOT\s+NULL|NULL)\b",
-            dtype_clean,
-            maxsplit=1,
-            flags=re.IGNORECASE,
-        )[0].strip().rstrip(",")
+        dtype_clean = (
+            re.split(
+                r"\b(PRIMARY|FOREIGN|REFERENCES|UNIQUE|CHECK|DEFAULT|NOT\s+NULL|NULL)\b",
+                dtype_clean,
+                maxsplit=1,
+                flags=re.IGNORECASE,
+            )[0]
+            .strip()
+            .rstrip(",")
+        )
         columns.append({"name": name, "type": dtype_clean.upper() or "TEXT"})
     return columns
 
@@ -188,7 +198,9 @@ def sanitize_starter_code_for_payload(starter_code: Any) -> Any:
             continue
         if key == "default":
             # If it looks like raw CREATE TABLE setup, drop it.
-            if isinstance(value, str) and re.search(r"create\s+table", value, re.IGNORECASE):
+            if isinstance(value, str) and re.search(
+                r"create\s+table", value, re.IGNORECASE
+            ):
                 continue
         cleaned[key] = value
     return cleaned
@@ -199,7 +211,7 @@ def sanitize_starter_code_for_payload(starter_code: Any) -> Any:
 SQL_STARTER_COMMENT = (
     "/*\n"
     "Enter your query here and follow these instructions:\n"
-    "1. Append a semicolon \";\" at the end of the query.\n"
+    '1. Append a semicolon ";" at the end of the query.\n'
     "2. Use the table names exactly as shown in the Schema panel.\n"
     "3. Type your query immediately after this comment block.\n"
     "*/\n"

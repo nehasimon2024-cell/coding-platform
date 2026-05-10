@@ -5,10 +5,23 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from database import get_db
-from dependencies import require_candidate
-from models import AssessmentSession, Badge, Level, Skill, User, UserBadge, UserSkillProgress
-from schemas import CandidateBadgeResponse, LevelProgressItem, SkillProgressResponse, SkillResponse
+from app.db.database import get_db
+from app.dependencies import require_candidate
+from app.db.models import (
+    AssessmentSession,
+    Badge,
+    Level,
+    Skill,
+    User,
+    UserBadge,
+    UserSkillProgress,
+)
+from app.schemas import (
+    CandidateBadgeResponse,
+    LevelProgressItem,
+    SkillProgressResponse,
+    SkillResponse,
+)
 
 router = APIRouter(tags=["skills"])
 LEVEL_ORDER = [
@@ -42,10 +55,10 @@ def list_skills(
     skills = db.scalars(select(Skill).order_by(Skill.name.asc())).all()
     return [
         SkillResponse(
-            skill_id=skill.id, 
-            name=skill.name, 
-            description=skill.description, 
-            allowed_languages=skill.allowed_languages
+            skill_id=skill.id,
+            name=skill.name,
+            description=skill.description,
+            allowed_languages=skill.allowed_languages,
         )
         for skill in skills
     ]
@@ -58,7 +71,9 @@ def get_user_progress(
 ) -> list[SkillProgressResponse]:
     max_attempts = get_max_attempts()
     skills = db.scalars(select(Skill).order_by(Skill.name.asc())).all()
-    progress_rows = db.scalars(select(UserSkillProgress).where(UserSkillProgress.user_id == current_user.id)).all()
+    progress_rows = db.scalars(
+        select(UserSkillProgress).where(UserSkillProgress.user_id == current_user.id)
+    ).all()
 
     progress_map = {(row.skill_id, row.level): row for row in progress_rows}
     responses: list[SkillProgressResponse] = []
@@ -66,25 +81,34 @@ def get_user_progress(
     for skill in skills:
         levels: list[LevelProgressItem] = []
         for level in LEVEL_ORDER:
-            attempts_used = db.scalar(
-                select(func.count(AssessmentSession.id)).where(
-                    AssessmentSession.user_id == current_user.id,
-                    AssessmentSession.skill_id == skill.id,
-                    AssessmentSession.level == level,
+            attempts_used = (
+                db.scalar(
+                    select(func.count(AssessmentSession.id)).where(
+                        AssessmentSession.user_id == current_user.id,
+                        AssessmentSession.skill_id == skill.id,
+                        AssessmentSession.level == level,
+                    )
                 )
-            ) or 0
+                or 0
+            )
             progress = progress_map.get((skill.id, level))
             levels.append(
                 LevelProgressItem(
                     level=level,
                     label=LEVEL_LABELS[level],
-                    unlocked=bool(progress.unlocked) if progress else level == Level.BEGINNER,
+                    unlocked=(
+                        bool(progress.unlocked) if progress else level == Level.BEGINNER
+                    ),
                     cleared=bool(progress.cleared) if progress else False,
                     attempts_used=int(attempts_used),
                     attempts_remaining=max(0, max_attempts - int(attempts_used)),
                 )
             )
-        responses.append(SkillProgressResponse(skill_id=skill.id, skill_name=skill.name, levels=levels))
+        responses.append(
+            SkillProgressResponse(
+                skill_id=skill.id, skill_name=skill.name, levels=levels
+            )
+        )
 
     return responses
 
@@ -97,36 +121,48 @@ def get_skill_levels(
 ) -> SkillProgressResponse:
     skill = db.scalar(select(Skill).where(Skill.id == skill_id))
     if skill is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
+        )
 
     max_attempts = get_max_attempts()
     progress_rows = db.scalars(
-        select(UserSkillProgress).where(UserSkillProgress.user_id == current_user.id, UserSkillProgress.skill_id == skill.id)
+        select(UserSkillProgress).where(
+            UserSkillProgress.user_id == current_user.id,
+            UserSkillProgress.skill_id == skill.id,
+        )
     ).all()
     progress_map = {row.level: row for row in progress_rows}
 
     levels: list[LevelProgressItem] = []
     for level in LEVEL_ORDER:
-        attempts_used = db.scalar(
-            select(func.count(AssessmentSession.id)).where(
-                AssessmentSession.user_id == current_user.id,
-                AssessmentSession.skill_id == skill.id,
-                AssessmentSession.level == level,
+        attempts_used = (
+            db.scalar(
+                select(func.count(AssessmentSession.id)).where(
+                    AssessmentSession.user_id == current_user.id,
+                    AssessmentSession.skill_id == skill.id,
+                    AssessmentSession.level == level,
+                )
             )
-        ) or 0
+            or 0
+        )
         progress = progress_map.get(level)
         levels.append(
             LevelProgressItem(
                 level=level,
                 label=LEVEL_LABELS[level],
-                unlocked=bool(progress.unlocked) if progress else level == Level.BEGINNER,
+                unlocked=(
+                    bool(progress.unlocked) if progress else level == Level.BEGINNER
+                ),
                 cleared=bool(progress.cleared) if progress else False,
                 attempts_used=int(attempts_used),
                 attempts_remaining=max(0, max_attempts - int(attempts_used)),
             )
         )
 
-    return SkillProgressResponse(skill_id=skill.id, skill_name=skill.name, levels=levels)
+    return SkillProgressResponse(
+        skill_id=skill.id, skill_name=skill.name, levels=levels
+    )
 
 
 @router.get("/user/badges", response_model=list[CandidateBadgeResponse])

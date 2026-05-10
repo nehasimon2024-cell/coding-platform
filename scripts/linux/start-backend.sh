@@ -1,4 +1,4 @@
 #!/bin/bash
 cd backend
 source venv/bin/activate
-uvicorn main:app --reload --port 9515
+uvicorn app.main:app --reload --host localhost --port 9515
