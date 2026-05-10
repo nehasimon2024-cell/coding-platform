@@ -16,11 +16,6 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.dependencies import require_candidate
 from app.judge0_service import Judge0Service
-from app.db.sql_schema import (
-    SQL_STARTER_COMMENT,
-    looks_like_raw_setup,
-    sanitize_starter_code_for_payload,
-)
 from app.db.models import (
     AssessmentSession,
     Badge,
@@ -197,12 +192,10 @@ def build_problem_payload(problem: Problem) -> SessionProblemPayload:
         schema_tables = []
 
     if is_sql_problem:
-        template_code = SQL_STARTER_COMMENT
+        template_code = None
         sanitized_starter = None
     elif is_framework_problem:
-        sanitized_starter = sanitize_starter_code_for_payload(
-            problem.starter_code if isinstance(problem.starter_code, dict) else None
-        )
+        sanitized_starter = problem.starter_code if isinstance(problem.starter_code, dict) else None
         template_code = None
         if isinstance(problem.starter_files, list) and problem.starter_files:
             first_file = problem.starter_files[0]
@@ -211,9 +204,7 @@ def build_problem_payload(problem: Problem) -> SessionProblemPayload:
                 if isinstance(val, str):
                     template_code = val
     else:
-        sanitized_starter = sanitize_starter_code_for_payload(
-            problem.starter_code if isinstance(problem.starter_code, dict) else None
-        )
+        sanitized_starter = problem.starter_code if isinstance(problem.starter_code, dict) else None
         template_code = resolve_multifile_template_code(
             sanitized_starter
         ) or resolve_template_code(sanitized_starter or problem.starter_code)
@@ -474,17 +465,8 @@ def execute_problem(
         }
 
     if is_sql:
-        setup_snapshot = ""
-        for tc in problem.sample_test_cases or []:
-            tc_input = tc.get("input") if isinstance(tc, dict) else None
-            if isinstance(tc_input, str) and looks_like_raw_setup(tc_input):
-                setup_lines = []
-                for line in tc_input.splitlines():
-                    if line.strip().upper().startswith("SELECT"):
-                        break
-                    setup_lines.append(line)
-                setup_snapshot = "\n".join(setup_lines).strip()
-                break
+        first_tc = (problem.sample_test_cases or [None])[0]
+        setup_snapshot = first_tc.get("input", "") if isinstance(first_tc, dict) else ""
 
     request_id = uuid4().hex[:8]
 
