@@ -23,7 +23,11 @@ _B64_RESPONSE_FIELDS = ("stdout", "stderr", "compile_output", "message", "source
 
 
 def _judge0_verify_ssl() -> bool:
-    return os.getenv("JUDGE0_VERIFY_SSL", "false").strip().lower() in ("1", "true", "yes")
+    return os.getenv("JUDGE0_VERIFY_SSL", "false").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+    )
 
 
 def _b64_encode(text: str) -> str:
@@ -80,7 +84,9 @@ class Judge0Service:
     TERMINAL_STATUSES = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
 
     def __init__(self, base_url: str | None = None, timeout_seconds: int = 25) -> None:
-        self.base_url = (base_url or os.getenv("JUDGE0_BASE_URL", "https://ce.judge0.com")).rstrip("/")
+        self.base_url = (
+            base_url or os.getenv("JUDGE0_BASE_URL", "https://ce.judge0.com")
+        ).rstrip("/")
         self.timeout_seconds = timeout_seconds
 
     def _headers(self) -> dict[str, str]:
@@ -140,11 +146,19 @@ class Judge0Service:
             time.sleep(interval_seconds)
             polled = self._get_submission(token)
             status_id = (polled.get("status") or {}).get("id")
-            logger.debug("Judge0 poll %s/%s token=%s status_id=%s", attempt + 1, max_attempts, token, status_id)
+            logger.debug(
+                "Judge0 poll %s/%s token=%s status_id=%s",
+                attempt + 1,
+                max_attempts,
+                token,
+                status_id,
+            )
             result = polled
             if status_id in self.TERMINAL_STATUSES:
                 return result
-        raise TimeoutError(f"Judge0 timed out after {max_attempts} poll attempts (token={token})")
+        raise TimeoutError(
+            f"Judge0 timed out after {max_attempts} poll attempts (token={token})"
+        )
 
     # ------------------------------------------------------------------
     # Single-file execution
@@ -171,7 +185,9 @@ class Judge0Service:
 
         if language_id == 82:
             # SQLite: prepend hidden setup so the candidate's query runs against a seeded DB.
-            setup = (setup_sql.rstrip() + "\n\n") if setup_sql and setup_sql.strip() else ""
+            setup = (
+                (setup_sql.rstrip() + "\n\n") if setup_sql and setup_sql.strip() else ""
+            )
             final_code = f"{setup}{user_code_stripped}"
             stdin_to_send = ""
         else:
@@ -191,10 +207,20 @@ class Judge0Service:
         if not token:
             raise RuntimeError("Judge0 did not return a submission token")
 
-        logger.debug("Judge0 single-file submitted: lang=%s token=%s req=%s", language_id, token, request_id)
+        logger.debug(
+            "Judge0 single-file submitted: lang=%s token=%s req=%s",
+            language_id,
+            token,
+            request_id,
+        )
         result = self._poll_until_done(token, max_attempts=40, interval_seconds=0.5)
         status_id = (result.get("status") or {}).get("id")
-        logger.debug("Judge0 single-file done: token=%s status_id=%s req=%s", token, status_id, request_id)
+        logger.debug(
+            "Judge0 single-file done: token=%s status_id=%s req=%s",
+            token,
+            status_id,
+            request_id,
+        )
         return result
 
     # ------------------------------------------------------------------
@@ -212,7 +238,8 @@ class Judge0Service:
 
         entry_path = (entry_point or "").strip() or "test_solution.py"
         entry_present = any(
-            isinstance(entry, dict) and str(entry.get("path") or "").strip() == entry_path
+            isinstance(entry, dict)
+            and str(entry.get("path") or "").strip() == entry_path
             for entry in files
         )
         if not entry_present:
@@ -222,8 +249,11 @@ class Judge0Service:
         # Detect runner by scanning all files — for React, entry_point is the solution
         # file (e.g. "App.js"), not the test file, so we can't rely on entry_path alone.
         has_js_tests = any(
-            str(e.get("path") or "").strip().endswith((".test.js", ".test.jsx", ".test.ts", ".test.tsx"))
-            for e in files if isinstance(e, dict)
+            str(e.get("path") or "")
+            .strip()
+            .endswith((".test.js", ".test.jsx", ".test.ts", ".test.tsx"))
+            for e in files
+            if isinstance(e, dict)
         )
         if has_js_tests:
             run_script = (
@@ -233,11 +263,7 @@ class Judge0Service:
                 "npx -y jest --no-coverage\n"
             )
         else:
-            run_script = (
-                "#!/usr/bin/env bash\n"
-                "set -e\n"
-                "python3 -m pytest\n"
-            )
+            run_script = "#!/usr/bin/env bash\n" "set -e\n" "python3 -m pytest\n"
 
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -261,7 +287,9 @@ class Judge0Service:
         problem_id: str | None = None,
         request_id: str | None = None,
     ) -> dict[str, Any]:
-        additional_files = self._build_multifile_archive(files=files, entry_point=entry_point)
+        additional_files = self._build_multifile_archive(
+            files=files, entry_point=entry_point
+        )
 
         payload: dict[str, Any] = {
             "language_id": 89,
@@ -271,20 +299,36 @@ class Judge0Service:
         token_response = self._post_submission(payload)
         token = token_response.get("token")
         if not token:
-            raise RuntimeError("Judge0 did not return a submission token for multifile job")
+            raise RuntimeError(
+                "Judge0 did not return a submission token for multifile job"
+            )
 
-        logger.info("Judge0 multifile submitted: problem=%s token=%s req=%s", problem_id, token, request_id)
+        logger.info(
+            "Judge0 multifile submitted: problem=%s token=%s req=%s",
+            problem_id,
+            token,
+            request_id,
+        )
         result = self._poll_until_done(token, max_attempts=40, interval_seconds=1.0)
 
         normalized_status, normalized_error = map_status(result)
         status_obj = result.get("status")
-        status = status_obj if isinstance(status_obj, dict) else {"id": 0, "description": "Unknown"}
+        status = (
+            status_obj
+            if isinstance(status_obj, dict)
+            else {"id": 0, "description": "Unknown"}
+        )
         status_id = status.get("id")
         passed = status_id == 3
 
         logger.info(
             "Judge0 multifile done: problem=%s token=%s status=[%s]%s passed=%s req=%s",
-            problem_id, token, status_id, status.get("description", ""), passed, request_id,
+            problem_id,
+            token,
+            status_id,
+            status.get("description", ""),
+            passed,
+            request_id,
         )
 
         case_result = {
@@ -342,7 +386,11 @@ class Judge0Service:
                 stdin = str(case.get("input", ""))
                 out_raw = case.get("output", "")
                 if setup_sql and str(setup_sql).strip():
-                    expected_output = None if out_raw is None or not str(out_raw).strip() else str(out_raw)
+                    expected_output = (
+                        None
+                        if out_raw is None or not str(out_raw).strip()
+                        else str(out_raw)
+                    )
                 else:
                     expected_output = "" if out_raw is None else str(out_raw)
             else:
@@ -360,14 +408,22 @@ class Judge0Service:
             )
             normalized_status, normalized_error = map_status(result)
             status_obj = result.get("status")
-            status = status_obj if isinstance(status_obj, dict) else {"id": 0, "description": "Unknown"}
+            status = (
+                status_obj
+                if isinstance(status_obj, dict)
+                else {"id": 0, "description": "Unknown"}
+            )
             status_id = status.get("id")
             stdout_value = result.get("stdout")
             stderr_value = result.get("stderr")
             if expected_output is None:
                 passed = status_id == 3
             else:
-                passed = status_id == 3 and (result.get("stdout") or "").strip() == (expected_output or "").strip()
+                passed = (
+                    status_id == 3
+                    and (result.get("stdout") or "").strip()
+                    == (expected_output or "").strip()
+                )
 
             case_results.append(
                 {
@@ -401,7 +457,13 @@ class Judge0Service:
 
         logger.info(
             "Judge0 execute done: lang=%s problem=%s passed=%s/%s score=%s time_ms=%s req=%s",
-            language_id, problem_id, passed_count, total_tests, score, total_millis, request_id,
+            language_id,
+            problem_id,
+            passed_count,
+            total_tests,
+            score,
+            total_millis,
+            request_id,
         )
         return {
             "passed": passed_count == total_tests,

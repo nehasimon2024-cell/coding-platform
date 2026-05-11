@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from database import get_db
-from dependencies import require_candidate
-from models import AssessmentSession, Level, Submission, User, UserSkillProgress
-from schemas import SubmissionResultsResponse
+from app.db.database import get_db
+from app.dependencies import require_candidate
+from app.db.models import AssessmentSession, Level, Submission, User, UserSkillProgress
+from app.schemas import SubmissionResultsResponse
 
 router = APIRouter(tags=["submissions"])
 LEVEL_ORDER = [
@@ -34,7 +34,9 @@ def get_next_level(level: Level) -> Level | None:
     return LEVEL_ORDER[index + 1]
 
 
-@router.get("/submissions/{submission_id}/results", response_model=SubmissionResultsResponse)
+@router.get(
+    "/submissions/{submission_id}/results", response_model=SubmissionResultsResponse
+)
 def get_submission_results(
     submission_id: UUID,
     db: Session = Depends(get_db),
@@ -42,17 +44,25 @@ def get_submission_results(
 ) -> SubmissionResultsResponse:
     submission = db.scalar(select(Submission).where(Submission.id == submission_id))
     if submission is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found")
-    if submission.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Submission does not belong to current user")
-
-    attempts_used = db.scalar(
-        select(func.count(AssessmentSession.id)).where(
-            AssessmentSession.user_id == current_user.id,
-            AssessmentSession.skill_id == submission.skill_id,
-            AssessmentSession.level == submission.level,
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found"
         )
-    ) or 0
+    if submission.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Submission does not belong to current user",
+        )
+
+    attempts_used = (
+        db.scalar(
+            select(func.count(AssessmentSession.id)).where(
+                AssessmentSession.user_id == current_user.id,
+                AssessmentSession.skill_id == submission.skill_id,
+                AssessmentSession.level == submission.level,
+            )
+        )
+        or 0
+    )
     attempts_used = int(attempts_used)
     attempts_remaining = max(0, get_max_attempts() - attempts_used)
 
@@ -68,7 +78,11 @@ def get_submission_results(
         )
         next_level_unlocked = bool(next_progress.unlocked) if next_progress else False
 
-    cases = submission.judge_result.get("cases", []) if isinstance(submission.judge_result, dict) else []
+    cases = (
+        submission.judge_result.get("cases", [])
+        if isinstance(submission.judge_result, dict)
+        else []
+    )
     return SubmissionResultsResponse(
         submission_id=submission.id,
         status=submission.status,

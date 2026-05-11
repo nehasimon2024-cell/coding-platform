@@ -4,7 +4,6 @@ import {
   runCode,
   submitSession,
   getSession,
-  getTestQuestions,
   getSubmissionResults,
 } from "../services/assessmentService";
 import type { StartSessionPayload, SubmitSessionPayload } from "../types/assessment";
@@ -63,15 +62,6 @@ export const useSubmissionResults = (submission_id: string | null) => {
     queryKey: ["submission-results", submission_id],
     queryFn: () => getSubmissionResults(submission_id!),
     enabled: !!submission_id,
-    staleTime: 1000 * 60 * 5,
-    retry: false,
-  });
-};
-
-export const useGetTestQuestions = (skill: string | null) => {
-  return useQuery({
-    queryKey: ['test-questions', skill],
-    queryFn: () => getTestQuestions(skill),
     staleTime: 1000 * 60 * 5,
     retry: false,
   });

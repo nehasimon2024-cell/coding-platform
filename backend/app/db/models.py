@@ -65,19 +65,31 @@ class User(Base):
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole, native_enum=False), nullable=False)
+    role: Mapped[UserRole] = mapped_column(
+        SqlEnum(UserRole, native_enum=False), nullable=False
+    )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     employee_id: Mapped[str] = mapped_column(String(50), unique=True)
     gender: Mapped[str] = mapped_column(String(20))
     department: Mapped[str] = mapped_column(String(100))
     exp_indium_years: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     exp_overall_years: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
 
-    skill_progress: Mapped[list["UserSkillProgress"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    sessions: Mapped[list["AssessmentSession"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    submissions: Mapped[list["Submission"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    violations: Mapped[list["SessionViolation"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    skill_progress: Mapped[list["UserSkillProgress"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    sessions: Mapped[list["AssessmentSession"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    submissions: Mapped[list["Submission"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    violations: Mapped[list["SessionViolation"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
     badges: Mapped[list["UserBadge"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
@@ -91,35 +103,51 @@ class Skill(Base):
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     description: Mapped[str | None] = mapped_column(Text)
-    allowed_languages: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+    allowed_languages: Mapped[list[Any]] = mapped_column(
+        JSON, nullable=False, default=list
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
 
-    problems: Mapped[list["Problem"]] = relationship(back_populates="skill", cascade="all, delete-orphan")
-    progress_records: Mapped[list["UserSkillProgress"]] = relationship(back_populates="skill", cascade="all, delete-orphan")
+    problems: Mapped[list["Problem"]] = relationship(
+        back_populates="skill", cascade="all, delete-orphan"
+    )
+    progress_records: Mapped[list["UserSkillProgress"]] = relationship(
+        back_populates="skill", cascade="all, delete-orphan"
+    )
     sessions: Mapped[list["AssessmentSession"]] = relationship(back_populates="skill")
     submissions: Mapped[list["Submission"]] = relationship(back_populates="skill")
 
 
 class Problem(Base):
     __tablename__ = "problems"
-    __table_args__ = (
-        Index("ix_problems_skill_level", "skill_id", "level"),
-    )
+    __table_args__ = (Index("ix_problems_skill_level", "skill_id", "level"),)
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    skill_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("skills.id", ondelete="CASCADE"), nullable=False)
-    level: Mapped[Level] = mapped_column(SqlEnum(Level, native_enum=False), nullable=False)
+    skill_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("skills.id", ondelete="CASCADE"), nullable=False
+    )
+    level: Mapped[Level] = mapped_column(
+        SqlEnum(Level, native_enum=False), nullable=False
+    )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    sample_test_cases: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
-    hidden_test_cases: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
+    sample_test_cases: Mapped[list[Any]] = mapped_column(
+        JSON, nullable=False, default=list
+    )
+    hidden_test_cases: Mapped[list[Any]] = mapped_column(
+        JSON, nullable=False, default=list
+    )
     time_limit_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=45)
     tags: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
     starter_code: Mapped[dict[str, Any] | None] = mapped_column(JSON)
     difficulty_label: Mapped[str | None] = mapped_column(String(50))
     solution_text: Mapped[str | None] = mapped_column(Text)
-    question_type: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
-    
+    question_type: Mapped[str | None] = mapped_column(
+        String(50), nullable=True, default=None
+    )
+
     # MCQ Specific Fields
     options: Mapped[list[Any] | None] = mapped_column(JSON)
     correct_option_index: Mapped[int | None] = mapped_column(Integer)
@@ -131,8 +159,10 @@ class Problem(Base):
 
     # SQL Specific Fields
     database_schema: Mapped[list[Any] | None] = mapped_column(JSON)
-    
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
 
     skill: Mapped[Skill] = relationship(back_populates="problems")
     sessions: Mapped[list["AssessmentSession"]] = relationship(back_populates="problem")
@@ -142,14 +172,22 @@ class Problem(Base):
 class UserSkillProgress(Base):
     __tablename__ = "user_skill_progress"
     __table_args__ = (
-        UniqueConstraint("user_id", "skill_id", "level", name="uq_usp_user_skill_level"),
+        UniqueConstraint(
+            "user_id", "skill_id", "level", name="uq_usp_user_skill_level"
+        ),
         Index("ix_usp_user_skill", "user_id", "skill_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    skill_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("skills.id", ondelete="CASCADE"), nullable=False)
-    level: Mapped[Level] = mapped_column(SqlEnum(Level, native_enum=False), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    skill_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("skills.id", ondelete="CASCADE"), nullable=False
+    )
+    level: Mapped[Level] = mapped_column(
+        SqlEnum(Level, native_enum=False), nullable=False
+    )
     cleared: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     unlocked: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     cleared_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -166,13 +204,29 @@ class AssessmentSession(Base):
     )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    problem_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("problems.id"), nullable=False)
-    skill_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("skills.id"), nullable=False)
-    level: Mapped[Level] = mapped_column(SqlEnum(Level, native_enum=False), nullable=False)
-    status: Mapped[SessionStatus] = mapped_column(SqlEnum(SessionStatus, native_enum=False), nullable=False, default=SessionStatus.ACTIVE)
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
-    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    problem_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("problems.id"), nullable=False
+    )
+    skill_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("skills.id"), nullable=False
+    )
+    level: Mapped[Level] = mapped_column(
+        SqlEnum(Level, native_enum=False), nullable=False
+    )
+    status: Mapped[SessionStatus] = mapped_column(
+        SqlEnum(SessionStatus, native_enum=False),
+        nullable=False,
+        default=SessionStatus.ACTIVE,
+    )
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
+    expires_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     attempt_number: Mapped[int] = mapped_column(Integer, nullable=False)
     last_draft_code: Mapped[str | None] = mapped_column(Text)
@@ -183,7 +237,10 @@ class AssessmentSession(Base):
     problem: Mapped[Problem] = relationship(back_populates="sessions")
     skill: Mapped[Skill] = relationship(back_populates="sessions")
     submissions: Mapped[list["Submission"]] = relationship(back_populates="session")
-    violations: Mapped[list["SessionViolation"]] = relationship(back_populates="session", cascade="all, delete-orphan")
+    violations: Mapped[list["SessionViolation"]] = relationship(
+        back_populates="session", cascade="all, delete-orphan"
+    )
+
 
 class Submission(Base):
     __tablename__ = "submissions"
@@ -194,21 +251,37 @@ class Submission(Base):
     )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("assessment_sessions.id"), nullable=False)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    problem_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("problems.id"), nullable=False)
-    skill_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("skills.id"), nullable=False)
-    level: Mapped[Level] = mapped_column(SqlEnum(Level, native_enum=False), nullable=False)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("assessment_sessions.id"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    problem_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("problems.id"), nullable=False
+    )
+    skill_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("skills.id"), nullable=False
+    )
+    level: Mapped[Level] = mapped_column(
+        SqlEnum(Level, native_enum=False), nullable=False
+    )
     code: Mapped[str] = mapped_column(Text, nullable=False)
     language: Mapped[str] = mapped_column(String(50), nullable=False)
-    status: Mapped[SubmissionStatus] = mapped_column(SqlEnum(SubmissionStatus, native_enum=False), nullable=False)
+    status: Mapped[SubmissionStatus] = mapped_column(
+        SqlEnum(SubmissionStatus, native_enum=False), nullable=False
+    )
     score: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     passed_tests: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     total_tests: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     time_taken_seconds: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    judge_result: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
+    judge_result: Mapped[dict[str, Any]] = mapped_column(
+        JSON, nullable=False, default=dict
+    )
     ai_feedback: Mapped[str | None] = mapped_column(Text)
-    submitted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+    submitted_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
 
     session: Mapped[AssessmentSession] = relationship(back_populates="submissions")
     user: Mapped[User] = relationship(back_populates="submissions")
@@ -226,8 +299,12 @@ class SessionViolation(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    session_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("assessment_sessions.id", ondelete="CASCADE"), nullable=False)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("assessment_sessions.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     type: Mapped[str] = mapped_column(String(50), nullable=False)
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     metadata_: Mapped[dict[str, Any] | None] = mapped_column("metadata", JSON)
@@ -243,9 +320,13 @@ class Badge(Base):
     name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     description: Mapped[str | None] = mapped_column(Text)
     criteria: Mapped[str] = mapped_column(Text, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
 
-    user_badges: Mapped[list["UserBadge"]] = relationship(back_populates="badge", cascade="all, delete-orphan")
+    user_badges: Mapped[list["UserBadge"]] = relationship(
+        back_populates="badge", cascade="all, delete-orphan"
+    )
 
 
 class UserBadge(Base):
@@ -256,21 +337,17 @@ class UserBadge(Base):
     )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    badge_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("badges.id", ondelete="CASCADE"), nullable=False)
-    awarded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    badge_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("badges.id", ondelete="CASCADE"), nullable=False
+    )
+    awarded_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utcnow
+    )
     awarded_by: Mapped[uuid.UUID | None] = mapped_column(Uuid, ForeignKey("users.id"))
 
     user: Mapped[User] = relationship(back_populates="badges", foreign_keys=[user_id])
     badge: Mapped[Badge] = relationship(back_populates="user_badges")
-
-class CandidateQuestion(Base):
-    __tablename__ = 'candidate_questions'
-
-    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    candidate_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    selected_skill: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    question1_id: Mapped[str] = mapped_column(String(255), nullable=False)
-    question2_id: Mapped[str] = mapped_column(String(255), nullable=False)
-    assigned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
 

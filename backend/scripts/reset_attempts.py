@@ -13,8 +13,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Reset assessment session attempts for a candidate by email and optional skill.",
     )
-    parser.add_argument("--email", required=True, help="Candidate email (e.g. candidate@example.com)")
-    parser.add_argument("--skill", required=False, help="Optional skill name to reset (e.g. Java)")
+    parser.add_argument(
+        "--email", required=True, help="Candidate email (e.g. candidate@example.com)"
+    )
+    parser.add_argument(
+        "--skill", required=False, help="Optional skill name to reset (e.g. Java)"
+    )
     return parser.parse_args()
 
 
