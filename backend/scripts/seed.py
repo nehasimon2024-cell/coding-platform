@@ -12,7 +12,7 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 from app.db.database import get_session_local
-from app.db.models import Base, Level, Problem, Skill, User, UserRole, UserSkillProgress
+from app.db.models import Base, Difficulty, Level, Problem, Skill, User, UserRole, UserSkillProgress
 from app.security import hash_password
 
 LEVEL_ORDER = [
@@ -31,7 +31,7 @@ CANONICAL_LEVEL_KEYS = {
     "Specialist_2": Level.SPECIALIST_2,
 }
 
-CANONICAL_DIFFICULTIES = ["Easy", "Medium", "Hard"]
+CANONICAL_DIFFICULTIES = [Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD]
 
 # Seed directly from the new dataset payload
 DEFAULT_JSON_FILE = CURRENT_FILE.parent / "problem_dataset_new.json"
@@ -178,7 +178,7 @@ def seed_problems_from_payload(
                         tags=question.get("tags", []),
                         starter_code=question.get("starter_code", None),
                         difficulty_label=to_str(question.get("difficulty"))
-                        or difficulty,
+                        or difficulty.value,
                         solution_text=to_str(question.get("solution")) or None,
                         question_type=question_type,
                         options=question.get("options", None),
