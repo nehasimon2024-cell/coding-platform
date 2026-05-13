@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getSkills, getUserProgress } from "../candidateService";
 
 const LEVEL_LABELS: Record<string, string> = {
-  beginner: "Beginner",
-  intermediate_1: "Intermediate 1",
-  intermediate_2: "Intermediate 2",
-  specialist_1: "Specialist 1",
-  specialist_2: "Specialist 2",
+  "Beginner": "Beginner",
+  "Intermediate 1": "Intermediate 1",
+  "Intermediate 2": "Intermediate 2",
+  "Specialist 1": "Specialist 1",
+  "Specialist 2": "Specialist 2",
 };
 
 type LevelRow = {

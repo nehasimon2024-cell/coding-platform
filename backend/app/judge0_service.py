@@ -59,23 +59,43 @@ def _truncate_text(value: Any, limit: int = 2000) -> str:
     return f"{text[:limit]}...<truncated:{len(text) - limit}>"
 
 
-def map_status(result: dict[str, Any]) -> tuple[str, str | None]:
-    compile_output = result.get("compile_output")
-    if compile_output:
-        return ("compile_error", _truncate_text(compile_output))
+from app.schemas import ExecutionStatus
 
-    stderr = result.get("stderr")
-    if stderr:
-        return ("runtime_error", _truncate_text(stderr))
+def map_status(result: dict[str, Any]) -> tuple[ExecutionStatus, str | None]:
+    """Map a Judge0 result dict to a (ExecutionStatus, error_message) pair.
 
+    Status is derived from status.id first so that a passing run with stderr
+    (e.g. SQLite diagnostic output) is never mis-classified as runtime_error.
+
+    Full Judge0 status table (statuses 1/2 are non-terminal and never reach here):
+      3   Accepted              → success
+      4   Wrong Answer          → wrong_answer
+      5   Time Limit Exceeded   → time_limit_exceeded
+      6   Compilation Error     → compile_error
+      7   Runtime Error (SIGSEGV)  ⎤
+      8   Runtime Error (SIGXFSZ)  |
+      9   Runtime Error (SIGFPE)   |→ runtime_error
+      10  Runtime Error (SIGABRT)  |
+      11  Runtime Error (NZEC)     |
+      12  Runtime Error (Other)    ⎦
+      13  Internal Error           → runtime_error
+      14  Exec Format Error        → runtime_error
+    """
     status_obj = result.get("status")
     status_id = status_obj.get("id") if isinstance(status_obj, dict) else None
-    if status_id == 5:
-        return ("time_limit_exceeded", _truncate_text(result.get("message")))
-    if status_id == 3:
-        return ("success", None)
 
-    return ("runtime_error", _truncate_text(result.get("message")))
+    if status_id == 3:
+        return (ExecutionStatus.SUCCESS, None)
+    if status_id == 4:
+        return (ExecutionStatus.WRONG_ANSWER, _truncate_text(result.get("message")))
+    if status_id == 5:
+        return (ExecutionStatus.TIME_LIMIT_EXCEEDED, _truncate_text(result.get("message")))
+    if status_id == 6:
+        compile_output = result.get("compile_output")
+        return (ExecutionStatus.COMPILE_ERROR, _truncate_text(compile_output or result.get("message")))
+    # Statuses 7–12: named runtime errors; 13: Internal Error; 14: Exec Format Error
+    stderr = result.get("stderr")
+    return (ExecutionStatus.RUNTIME_ERROR, _truncate_text(stderr or result.get("message")))
 
 
 class Judge0Service:
@@ -100,6 +120,7 @@ class Judge0Service:
         """
         url = f"{self.base_url}/submissions?base64_encoded=true&wait=false"
         verify = _judge0_verify_ssl()
+
         response = requests.post(
             url,
             json=payload,
@@ -118,7 +139,8 @@ class Judge0Service:
                 f"{response.status_code} {response.reason} — Judge0 says: {detail[:500]}",
                 response=response,
             )
-        return response.json()
+        resp_json = response.json()
+        return resp_json
 
     def _get_submission(self, token: str) -> dict[str, Any]:
         """Poll GET /submissions/{token} with base64_encoded=true; auto-decodes text fields."""
@@ -131,7 +153,8 @@ class Judge0Service:
             verify=verify,
         )
         response.raise_for_status()
-        return _decode_response_fields(response.json())
+        decoded = _decode_response_fields(response.json())
+        return decoded
 
     def _poll_until_done(
         self,
@@ -143,7 +166,6 @@ class Judge0Service:
         """Poll until a terminal status or timeout. Logs one line per poll at DEBUG."""
         result: dict[str, Any] = {"token": token}
         for attempt in range(max_attempts):
-            time.sleep(interval_seconds)
             polled = self._get_submission(token)
             status_id = (polled.get("status") or {}).get("id")
             logger.debug(
@@ -156,6 +178,7 @@ class Judge0Service:
             result = polled
             if status_id in self.TERMINAL_STATUSES:
                 return result
+            time.sleep(interval_seconds)
         raise TimeoutError(
             f"Judge0 timed out after {max_attempts} poll attempts (token={token})"
         )
@@ -175,7 +198,7 @@ class Judge0Service:
         request_id: str | None = None,
     ) -> dict[str, Any]:
 
-        user_code = (code if code is not None else "") or ""
+        user_code = code or ""
         user_code_stripped = user_code.strip()
 
         if not user_code_stripped:
@@ -322,11 +345,10 @@ class Judge0Service:
         passed = status_id == 3
 
         logger.info(
-            "Judge0 multifile done: problem=%s token=%s status=[%s]%s passed=%s req=%s",
+            "Judge0 multifile done: problem=%s token=%s status=%s passed=%s req=%s",
             problem_id,
             token,
-            status_id,
-            status.get("description", ""),
+            normalized_status,
             passed,
             request_id,
         )
@@ -339,11 +361,9 @@ class Judge0Service:
             "stderr": result.get("stderr"),
             "compile_output": result.get("compile_output"),
             "message": result.get("message"),
-            "status": status,
+            "status": normalized_status,
             "time": result.get("time"),
             "memory": result.get("memory"),
-            "normalized_status": normalized_status,
-            "normalized_error": normalized_error,
             "passed": passed,
         }
 
@@ -385,16 +405,21 @@ class Judge0Service:
             if isinstance(case, dict):
                 stdin = str(case.get("input", ""))
                 out_raw = case.get("output", "")
-                if setup_sql and str(setup_sql).strip():
+                if setup_sql is not None:
+                    # SQL mode: each case's "input" IS its own DDL setup.
+                    # Use it per-case so hidden tests can have different seed data.
+                    effective_setup = stdin if stdin.strip() else setup_sql
                     expected_output = (
                         None
                         if out_raw is None or not str(out_raw).strip()
                         else str(out_raw)
                     )
                 else:
+                    effective_setup = None
                     expected_output = "" if out_raw is None else str(out_raw)
             else:
                 stdin = str(case)
+                effective_setup = setup_sql
                 expected_output = None
 
             result = self._execute_one(
@@ -402,7 +427,7 @@ class Judge0Service:
                 language_id=language_id,
                 stdin=stdin,
                 expected_output=expected_output,
-                setup_sql=setup_sql,
+                setup_sql=effective_setup,
                 problem_id=problem_id,
                 request_id=request_id,
             )
@@ -417,10 +442,10 @@ class Judge0Service:
             stdout_value = result.get("stdout")
             stderr_value = result.get("stderr")
             if expected_output is None:
-                passed = status_id == 3
+                passed = normalized_status == ExecutionStatus.SUCCESS
             else:
                 passed = (
-                    status_id == 3
+                    normalized_status == ExecutionStatus.SUCCESS
                     and (result.get("stdout") or "").strip()
                     == (expected_output or "").strip()
                 )
@@ -434,11 +459,9 @@ class Judge0Service:
                     "stderr": stderr_value,
                     "compile_output": result.get("compile_output"),
                     "message": result.get("message"),
-                    "status": status,
+                    "status": normalized_status,
                     "time": result.get("time"),
                     "memory": result.get("memory"),
-                    "normalized_status": normalized_status,
-                    "normalized_error": normalized_error,
                     "passed": passed,
                 }
             )

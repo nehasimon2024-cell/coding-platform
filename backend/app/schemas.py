@@ -3,9 +3,18 @@ from typing import Literal
 from typing import Any
 from uuid import UUID
 
+from enum import Enum
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from app.db.models import Level, SessionStatus, SubmissionStatus, UserRole
+from app.db.models import Level, SessionStatus, SubmissionStatus, UserRole, ViolationType, QuestionType
+
+
+class ExecutionStatus(str, Enum):
+    SUCCESS = "success"
+    WRONG_ANSWER = "wrong_answer"
+    TIME_LIMIT_EXCEEDED = "time_limit_exceeded"
+    COMPILE_ERROR = "compile_error"
+    RUNTIME_ERROR = "runtime_error"
 
 
 class LoginRequest(BaseModel):
@@ -98,7 +107,7 @@ class SessionProblemPayload(BaseModel):
     sample_test_cases: list[ProblemTestCase]
     time_limit_minutes: int
     schema_tables: list[SqlTableSchema] = Field(default_factory=list)
-    question_type: str | None = None
+    question_type: QuestionType | None = None
 
     # MCQ
     options: list[str] | None = None
@@ -146,7 +155,7 @@ class SessionDraftResponse(BaseModel):
 
 
 class ViolationCreate(BaseModel):
-    type: str
+    type: ViolationType
     timestamp: datetime
     metadata: dict[str, Any] | None = None
 
@@ -179,7 +188,7 @@ class TestCaseResult(BaseModel):
     stderr: str | None = None
     compile_output: str | None = None
     message: str | None = None
-    status: dict[str, Any]
+    status: ExecutionStatus
     time: str | None = None
     memory: int | None = None
     passed: bool
@@ -203,7 +212,7 @@ class SessionRunResponse(BaseModel):
     sql_run: bool = False
     stdout: str | None = None
     expected_output: str | None = None
-    overall_status: str | None = None
+    overall_status: ExecutionStatus | None = None
 
 
 class SubmissionResultsResponse(BaseModel):

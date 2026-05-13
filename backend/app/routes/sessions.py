@@ -1,12 +1,9 @@
-import os
-import random
-import logging
 import json
+import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any
-from uuid import UUID, uuid4
+from uuid import UUID
 
-import requests
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy import func, select
@@ -15,27 +12,23 @@ from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.dependencies import require_candidate
-from app.judge0_service import Judge0Service
 from app.db.models import (
     AssessmentSession,
-    Badge,
     Level,
     Problem,
     SessionStatus,
-    Skill,
     SessionViolation,
+    Skill,
     Submission,
     SubmissionStatus,
     User,
-    UserBadge,
     UserSkillProgress,
+    ViolationType,
 )
-
 from app.schemas import (
     SessionDetailResponse,
     SessionDraftRequest,
     SessionDraftResponse,
-    SessionProblemPayload,
     SessionRunRequest,
     SessionRunResponse,
     SessionStartRequest,
@@ -44,835 +37,32 @@ from app.schemas import (
     SessionSubmitResponse,
     ViolationCreate,
 )
+from app.services.session_service import (
+    _as_utc,
+    _compute_overall_status,
+    _redact_hidden_cases,
+    award_level_badge,
+    build_problem_payload,
+    build_question_set_payload,
+    choose_two_problems,
+    ensure_session_owner,
+    execute_problem,
+    get_max_attempts,
+    get_next_level,
+    get_pass_threshold,
+    get_session_problem_set,
+    load_problem_for_session_run,
+    resolve_problem_from_session,
+    score_submission,
+)
 
 router = APIRouter(tags=["sessions"])
-judge0_service = Judge0Service()
 logger = logging.getLogger(__name__)
-ALLOWED_VIOLATION_TYPES = {
-    "tab_switch",
-    "window_blur",
-    "tab_switch_shortcut",
-    "fullscreen_exit",
-    "paste",
-    "paste_attempt",
-    "copy",
-    "cut",
-    "select_all",
-    "devtools_shortcut",
-    "devtools",
-    "devtools_open",
-    "right_click",
-    "unknown",
-}
-LEVEL_ORDER = [
-    Level.BEGINNER,
-    Level.INTERMEDIATE_1,
-    Level.INTERMEDIATE_2,
-    Level.SPECIALIST_1,
-    Level.SPECIALIST_2,
-]
-MULTI_QUESTION_COUNT = 2
-LEVEL_BADGE_LABELS = {
-    Level.BEGINNER: "Beginner",
-    Level.INTERMEDIATE_1: "Intermediate 1",
-    Level.INTERMEDIATE_2: "Intermediate 2",
-    Level.SPECIALIST_1: "Specialist 1",
-    Level.SPECIALIST_2: "Specialist 2",
-}
 
 
-def preferred_difficulty_pair(level: Level) -> tuple[str, str]:
-    if level == Level.BEGINNER:
-        return ("easy", "hard")
-    if level in (Level.INTERMEDIATE_1, Level.INTERMEDIATE_2):
-        return ("medium", "hard")
-    return ("medium", "hard")
-
-
-def choose_two_problems(problems: list[Problem], level: Level) -> list[Problem]:
-    if len(problems) < MULTI_QUESTION_COUNT:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="At least 2 questions are required to start this assessment level",
-        )
-
-    grouped: dict[str, list[Problem]] = {}
-    for problem in problems:
-        difficulty = (problem.difficulty_label or "").strip().lower() or "unknown"
-        grouped.setdefault(difficulty, []).append(problem)
-
-    preferred_first, preferred_second = preferred_difficulty_pair(level)
-
-    if len(grouped) >= 2:
-        ordered_labels: list[str] = []
-        for label in [
-            preferred_first,
-            preferred_second,
-            "easy",
-            "medium",
-            "hard",
-            *sorted(grouped.keys()),
-        ]:
-            if label in grouped and label not in ordered_labels:
-                ordered_labels.append(label)
-
-        first = random.choice(grouped[ordered_labels[0]])
-
-        second_candidates: list[Problem] = []
-        for label in ordered_labels[1:]:
-            candidates = [
-                problem for problem in grouped[label] if problem.id != first.id
-            ]
-            if candidates:
-                second_candidates = candidates
-                break
-
-        if second_candidates:
-            second = random.choice(second_candidates)
-            return [first, second]
-
-    sampled = random.sample(problems, MULTI_QUESTION_COUNT)
-    return [sampled[0], sampled[1]]
-
-
-def build_question_set_payload(problem_ids: list[UUID]) -> str:
-    return json.dumps(
-        {
-            "format": "multi_question_v1",
-            "problem_ids": [str(problem_id) for problem_id in problem_ids],
-        }
-    )
-
-
-def parse_question_ids(raw: str | None, primary_problem_id: UUID) -> list[UUID]:
-    ordered_ids: list[UUID] = [primary_problem_id]
-    if not raw:
-        return ordered_ids
-
-    try:
-        parsed = json.loads(raw)
-    except (TypeError, ValueError):
-        return ordered_ids
-
-    if not isinstance(parsed, dict) or parsed.get("format") != "multi_question_v1":
-        return ordered_ids
-
-    values = parsed.get("problem_ids")
-    if not isinstance(values, list):
-        return ordered_ids
-
-    for value in values:
-        try:
-            parsed_id = UUID(str(value))
-        except (TypeError, ValueError):
-            continue
-        if parsed_id not in ordered_ids:
-            ordered_ids.append(parsed_id)
-        if len(ordered_ids) >= MULTI_QUESTION_COUNT:
-            break
-
-    return ordered_ids
-
-
-def build_problem_payload(problem: Problem) -> SessionProblemPayload:
-    is_sql_problem = str(problem.question_type or "").strip().lower() == "sql"
-    is_framework_problem = (
-        str(problem.question_type or "").strip().lower() == "framework"
-    )
-
-    if is_sql_problem:
-        schema_tables = [
-            entry
-            for entry in (problem.database_schema or [])
-            if isinstance(entry, dict)
-            and entry.get("table")
-            and isinstance(entry.get("columns"), list)
-        ]
-    else:
-        schema_tables = []
-
-    if is_sql_problem:
-        template_code = None
-        sanitized_starter = None
-    elif is_framework_problem:
-        sanitized_starter = problem.starter_code if isinstance(problem.starter_code, dict) else None
-        template_code = None
-        if isinstance(problem.starter_files, list) and problem.starter_files:
-            first_file = problem.starter_files[0]
-            if isinstance(first_file, dict):
-                val = first_file.get("content")
-                if isinstance(val, str):
-                    template_code = val
-    else:
-        sanitized_starter = problem.starter_code if isinstance(problem.starter_code, dict) else None
-        template_code = resolve_multifile_template_code(
-            sanitized_starter
-        ) or resolve_template_code(sanitized_starter or problem.starter_code)
-
-    if is_sql_problem:
-        sanitized_samples: list = []
-    else:
-        sanitized_samples = [
-            case
-            for case in (problem.sample_test_cases or [])
-            if not (isinstance(case, dict) and looks_like_raw_setup(case.get("input")))
-        ]
-
-    return SessionProblemPayload(
-        problem_id=problem.id,
-        title=problem.title,
-        description=problem.description,
-        templateCode=template_code,
-        starter_code=sanitized_starter,
-        tags=[str(tag) for tag in (problem.tags or [])],
-        sample_test_cases=sanitized_samples,
-        time_limit_minutes=problem.time_limit_minutes,
-        schema_tables=schema_tables,
-        question_type=problem.question_type,
-        options=problem.options,
-        starter_files=problem.starter_files,
-        entry_point=problem.entry_point,
-        test_harness=problem.test_harness,
-        database_schema=problem.database_schema,
-    )
-
-
-def resolve_multifile_template_code(starter_code: Any) -> str | None:
-    if not isinstance(starter_code, dict):
-        return None
-
-    files = starter_code.get("files")
-    if not isinstance(files, list):
-        return None
-
-    readonly = starter_code.get("readonly_files")
-    readonly_set = {str(p) for p in readonly} if isinstance(readonly, list) else set()
-
-    def read_file_content(target_path: str) -> str | None:
-        for entry in files:
-            if not isinstance(entry, dict):
-                continue
-            if str(entry.get("path") or "").strip() == target_path:
-                content = entry.get("content")
-                return content if isinstance(content, str) else None
-        return None
-
-    # Prefer solution.py when present, then any non-readonly file, then first file.
-    preferred = read_file_content("solution.py")
-    if preferred:
-        return preferred
-
-    for entry in files:
-        if not isinstance(entry, dict):
-            continue
-        path = str(entry.get("path") or "").strip()
-        if not path or path in readonly_set:
-            continue
-        content = entry.get("content")
-        if isinstance(content, str):
-            return content
-
-    for entry in files:
-        if not isinstance(entry, dict):
-            continue
-        content = entry.get("content")
-        if isinstance(content, str):
-            return content
-
-    return None
-
-
-def get_session_problem_set(
-    db: Session, session_obj: AssessmentSession
-) -> list[Problem]:
-    ordered_ids = parse_question_ids(
-        session_obj.last_draft_code, session_obj.problem_id
-    )
-    resolved: list[Problem] = []
-
-    for problem_id in ordered_ids:
-        problem = db.scalar(select(Problem).where(Problem.id == problem_id))
-        if problem is None:
-            continue
-        if (
-            problem.skill_id != session_obj.skill_id
-            or problem.level != session_obj.level
-        ):
-            continue
-        resolved.append(problem)
-
-    if not resolved:
-        primary = db.scalar(select(Problem).where(Problem.id == session_obj.problem_id))
-        if primary is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Problem not found"
-            )
-        resolved.append(primary)
-
-    return resolved
-
-
-def resolve_problem_from_session(
-    db: Session,
-    session_obj: AssessmentSession,
-    requested_problem_id: UUID | None,
-) -> Problem:
-    problems = get_session_problem_set(db, session_obj)
-    if requested_problem_id is None:
-        return problems[0]
-
-    for problem in problems:
-        if problem.id == requested_problem_id:
-            return problem
-
-    raise HTTPException(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        detail="Problem is not part of this session",
-    )
-
-
-def load_problem_for_session_run(
-    db: Session,
-    session_obj: AssessmentSession,
-    requested_problem_id: UUID | None,
-) -> Problem:
-    """Load the Problem row for POST /sessions/.../run (fresh SELECT by id).
-
-    Multi-question sessions must send ``problem_id`` so reference SQL/setup match the editor tab.
-    """
-    allowed = get_session_problem_set(db, session_obj)
-    if not allowed:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Problem not found"
-        )
-
-    if len(allowed) >= 2:
-        if requested_problem_id is None:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="problem_id is required when the session has multiple questions",
-            )
-        target_id = requested_problem_id
-    elif requested_problem_id is not None:
-        target_id = requested_problem_id
-        if not any(p.id == target_id for p in allowed):
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="Problem is not part of this session",
-            )
-    else:
-        target_id = allowed[0].id
-
-    problem = db.scalar(select(Problem).where(Problem.id == target_id))
-    if problem is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Problem not found"
-        )
-    if not any(p.id == problem.id for p in allowed):
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Problem is not part of this session",
-        )
-    return problem
-
-
-def execute_problem(
-    problem: Problem,
-    skill: Skill,
-    code: str,
-    language: str,
-    *,
-    use_hidden_cases: bool,
-) -> dict[str, Any]:
-    if problem.question_type == "mcq":
-        # MCQ evaluates against correct_option_index
-        selected_index_str = (code or "").strip()
-        passed = False
-        try:
-            if selected_index_str and problem.correct_option_index is not None:
-                passed = int(selected_index_str) == problem.correct_option_index
-        except ValueError:
-            pass
-
-        score = 100 if passed else 0
-        case = {
-            "stdin": selected_index_str,
-            "expected_output": (
-                str(problem.correct_option_index)
-                if problem.correct_option_index is not None
-                else ""
-            ),
-            "stdout": selected_index_str,
-            "stderr": None,
-            "compile_output": None,
-            "status": {
-                "id": 3 if passed else 4,
-                "description": "Accepted" if passed else "Wrong Answer",
-            },
-            "passed": passed,
-            "time": "0",
-            "memory": "0",
-        }
-        return {
-            "resolved_monaco": (language or "mcq").strip().lower() or "mcq",
-            "passed": passed,
-            "passed_tests": 1 if passed else 0,
-            "total_tests": 1,
-            "score": score,
-            "time_taken": 0,
-            "cases": [case],
-        }
-
-    resolved_monaco, resolved_language_id = resolve_language_from_skill(
-        language, skill.allowed_languages or []
-    )
-
-    sample_cases_list = list(problem.sample_test_cases or [])
-    hidden_cases_list = (
-        list(problem.hidden_test_cases or []) if use_hidden_cases else []
-    )
-    test_inputs = (
-        sample_cases_list + hidden_cases_list if use_hidden_cases else sample_cases_list
-    )
-    sample_count = len(sample_cases_list)
-
-    is_sql = str(problem.question_type or "").strip().lower() == "sql"
-    is_framework = str(problem.question_type or "").strip().lower() == "framework"
-    setup_snapshot = ""
-
-    if is_framework:
-        request_id = uuid4().hex[:8]
-        files = build_framework_payload_files(problem, code)
-        entry = str(problem.entry_point or "test_main.py").strip()
-        effective_entry = entry if entry else "test_main.py"
-
-        execution_result = judge0_service.execute_multifile(
-            files=files,
-            entry_point=effective_entry,
-            problem_id=str(problem.id),
-            request_id=request_id,
-        )
-
-        cases: list[Any] = list(execution_result.get("cases") or [])
-        return {
-            "resolved_monaco": resolved_monaco,
-            "score": int(execution_result.get("score", 0)),
-            "passed_tests": int(execution_result.get("passed_tests", 0)),
-            "total_tests": int(execution_result.get("total_tests", 0)),
-            "time_taken": int(execution_result.get("time_taken", 0)),
-            "cases": cases,
-            "is_sql_execution": False,
-        }
-
-    if is_sql:
-        first_tc = (problem.sample_test_cases or [None])[0]
-        setup_snapshot = first_tc.get("input", "") if isinstance(first_tc, dict) else ""
-
-    request_id = uuid4().hex[:8]
-
-    try:
-        if resolved_monaco in ("html_css_js", "html", "css", "javascript_web"):
-            cases = [
-                {
-                    "stdin": str(case.get("input", "")),
-                    "expected_output": str(case.get("output", "")),
-                    "stdout": "Pending AI feedback",
-                    "stderr": None,
-                    "compile_output": None,
-                    "message": None,
-                    "status": {"id": 3, "description": "Accepted"},
-                    "time": "0",
-                    "memory": None,
-                    "passed": True,
-                }
-                for case in (test_inputs or [])
-                if isinstance(case, dict)
-            ]
-            execution_result = {
-                "score": 100,
-                "passed_tests": len(cases),
-                "total_tests": len(cases),
-                "time_taken": 0,
-                "cases": cases,
-            }
-        else:
-            execution_result = judge0_service.execute(
-                code=code,
-                language_id=resolved_language_id,
-                test_inputs=test_inputs or [],
-                setup_sql=setup_snapshot if is_sql and setup_snapshot else None,
-                problem_id=str(problem.id),
-                request_id=request_id,
-            )
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)
-        ) from exc
-    except (requests.RequestException, TimeoutError, RuntimeError) as exc:
-        logger.error("Judge0 execution failed: problem=%s error=%s", problem.id, exc)
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Judge0 execution failed: {str(exc)}",
-        ) from exc
-    except HTTPException:
-        raise
-    except Exception as exc:
-        logger.exception("Unexpected execution error: problem=%s", problem.id)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Execution failed: {str(exc)}",
-        ) from exc
-
-    cases: list[Any] = list(execution_result.get("cases") or [])
-
-    for idx, case in enumerate(cases):
-        if isinstance(case, dict):
-            case["is_hidden"] = idx >= sample_count
-
-    sql_stdout: str | None = None
-    if is_sql and cases and isinstance(cases[0], dict):
-        raw = cases[0].get("stdout")
-        sql_stdout = None if raw is None else str(raw)
-
-    out: dict[str, Any] = {
-        "resolved_monaco": resolved_monaco,
-        "score": int(execution_result.get("score", 0)),
-        "passed_tests": int(execution_result.get("passed_tests", 0)),
-        "total_tests": int(execution_result.get("total_tests", 0)),
-        "time_taken": int(execution_result.get("time_taken", 0)),
-        "cases": cases,
-        "is_sql_execution": is_sql,
-        "sample_count": sample_count,
-    }
-    if is_sql:
-        out["stdout"] = sql_stdout
-        out["expected_output"] = None
-    return out
-
-
-def build_framework_payload_files(
-    problem: Problem,
-    updated_solution: str,
-) -> list[dict[str, Any]]:
-    payload_files: list[dict[str, Any]] = []
-
-    files = problem.starter_files if isinstance(problem.starter_files, list) else []
-    for i, entry in enumerate(files):
-        if not isinstance(entry, dict):
-            continue
-        path = str(entry.get("path") or "").strip()
-        content = entry.get("content")
-        if not path:
-            continue
-
-        # We assume the user submitted code completely replaces the first file's content
-        if i == 0:
-            payload_files.append({"path": path, "content": updated_solution})
-            continue
-
-        if isinstance(content, str):
-            payload_files.append({"path": path, "content": content})
-
-    # Inject the test harness only when it contains actual code content.
-    # For FastAPI-style problems: test_harness holds the full pytest source → inject at entry_point.
-    # For React-style problems: test_harness is just a filename (e.g. "App.test.jsx") that is
-    # already present in starter_files → skip to avoid overwriting the file with a path string.
-    harness = str(problem.test_harness or "").strip()
-    entry_point = str(problem.entry_point or "test_main.py").strip() or "test_main.py"
-    if harness:
-        existing_paths = {
-            str(f.get("path") or "").strip()
-            for f in payload_files
-            if isinstance(f, dict)
-        }
-        harness_is_path_ref = "\n" not in harness and harness in existing_paths
-        if not harness_is_path_ref:
-            payload_files.append({"path": entry_point, "content": harness})
-    else:
-        logger.warning(
-            "No test_harness for problem %s — multifile execution will likely fail",
-            problem.id,
-        )
-
-    return payload_files
-
-
-def _truncate_text(value: Any, limit: int = 2000) -> str:
-    text = "" if value is None else str(value)
-    if len(text) <= limit:
-        return text
-    return f"{text[:limit]}...<truncated:{len(text) - limit}>"
-
-
-def _compute_overall_status(cases: list[dict[str, Any]]) -> str:
-    if not cases:
-        return "runtime_error"
-
-    statuses = [
-        str(case.get("normalized_status") or "").strip()
-        for case in cases
-        if isinstance(case, dict)
-    ]
-    if any(status == "compile_error" for status in statuses):
-        return "compile_error"
-    if any(status == "runtime_error" for status in statuses):
-        return "runtime_error"
-    if any(status == "time_limit_exceeded" for status in statuses):
-        return "time_limit_exceeded"
-    if statuses and all(status == "success" for status in statuses):
-        return "success"
-    return "runtime_error"
-
-
-def resolve_template_code(starter_code: object) -> str | None:
-    if isinstance(starter_code, dict):
-        for key in ("python", "default", "javascript", "java"):
-            value = starter_code.get(key)
-            if isinstance(value, str) and value.strip():
-                return value
-        for value in starter_code.values():
-            if isinstance(value, str) and value.strip():
-                return value
-        return None
-    if isinstance(starter_code, str) and starter_code.strip():
-        return starter_code
-    return None
-
-
-def get_max_attempts() -> int:
-    try:
-        return int(os.getenv("MAX_ATTEMPTS_PER_LEVEL", "5"))
-    except ValueError:
-        return 5
-
-
-def get_pass_threshold() -> int:
-    try:
-        return int(os.getenv("SCORE_PASS_THRESHOLD", "70"))
-    except ValueError:
-        return 70
-
-
-def get_next_level(level: Level) -> Level | None:
-    index = LEVEL_ORDER.index(level)
-    if index + 1 >= len(LEVEL_ORDER):
-        return None
-    return LEVEL_ORDER[index + 1]
-
-
-def award_level_badge(
-    db: Session,
-    *,
-    user_id: UUID,
-    skill: Skill,
-    level: Level,
-    awarded_at: datetime,
-) -> None:
-    level_label = LEVEL_BADGE_LABELS.get(level, level.value.replace("_", " ").title())
-    badge_name = f"{skill.name} - {level_label} Cleared"
-    description = f"Awarded for clearing {level_label} level in {skill.name}."
-    criteria = json.dumps(
-        {
-            "event": "level_cleared",
-            "skill_id": str(skill.id),
-            "skill_name": skill.name,
-            "level": level.value,
-        }
-    )
-
-    badge = db.scalar(select(Badge).where(Badge.name == badge_name))
-    if badge is None:
-        badge = Badge(
-            name=badge_name,
-            description=description,
-            criteria=criteria,
-        )
-        db.add(badge)
-        db.flush()
-
-    existing_award = db.scalar(
-        select(UserBadge).where(
-            UserBadge.user_id == user_id,
-            UserBadge.badge_id == badge.id,
-        )
-    )
-    if existing_award is None:
-        db.add(
-            UserBadge(
-                user_id=user_id,
-                badge_id=badge.id,
-                awarded_at=awarded_at,
-            )
-        )
-
-
-def ensure_session_owner(session_obj: AssessmentSession, current_user: User) -> None:
-    if session_obj.user_id != current_user.id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Session does not belong to current user",
-        )
-
-
-def resolve_language_from_skill(
-    language: str, allowed_languages: list[Any]
-) -> tuple[str, int]:
-    requested = (language or "").strip().lower()
-    if not requested:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Language is required",
-        )
-
-    for item in allowed_languages or []:
-        if not isinstance(item, dict):
-            continue
-        lang_id = item.get("id")
-        monaco = str(item.get("monaco") or "").strip().lower()
-        name = str(item.get("name") or "").strip().lower()
-        if lang_id is None:
-            continue
-
-        if (
-            requested == monaco
-            or requested == name
-            or requested == str(lang_id).strip().lower()
-        ):
-            try:
-                return (monaco or requested), int(lang_id)
-            except (TypeError, ValueError):
-                continue
-
-    raise HTTPException(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        detail="Selected language is not allowed for this skill",
-    )
-
-
-def score_submission(
-    db: Session,
-    session_obj: AssessmentSession,
-    code: str,
-    language: str,
-    forced_status: SubmissionStatus | None = None,
-) -> Submission:
-    if session_obj.submissions:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="Session already submitted"
-        )
-
-    problem = resolve_problem_from_session(db, session_obj, None)
-    skill = db.scalar(select(Skill).where(Skill.id == session_obj.skill_id))
-    if skill is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
-        )
-
-    execution_result = execute_problem(
-        problem=problem,
-        skill=skill,
-        code=code,
-        language=language,
-        use_hidden_cases=True,
-    )
-
-    score = int(execution_result.get("score", 0))
-    passed_tests = int(execution_result.get("passed_tests", 0))
-    total_tests = int(execution_result.get("total_tests", 0))
-
-    default_status = (
-        SubmissionStatus.CLEARED
-        if score >= get_pass_threshold()
-        else SubmissionStatus.FAILED
-    )
-    submission_status = forced_status or default_status
-
-    current_time = datetime.now(timezone.utc)
-    started_at = (
-        session_obj.started_at.astimezone(timezone.utc)
-        if session_obj.started_at.tzinfo
-        else session_obj.started_at.replace(tzinfo=timezone.utc)
-    )
-    time_taken_seconds = max(0, int((current_time - started_at).total_seconds()))
-
-    submission = Submission(
-        session_id=session_obj.id,
-        user_id=session_obj.user_id,
-        problem_id=session_obj.problem_id,
-        skill_id=session_obj.skill_id,
-        level=session_obj.level,
-        code=code,
-        language=execution_result["resolved_monaco"],
-        status=submission_status,
-        score=score,
-        passed_tests=passed_tests,
-        total_tests=total_tests,
-        time_taken_seconds=time_taken_seconds,
-        judge_result={"cases": execution_result.get("cases", [])},
-    )
-    db.add(submission)
-
-    if submission_status == SubmissionStatus.TIMED_OUT:
-        session_obj.status = SessionStatus.TIMED_OUT
-        session_obj.submitted_at = current_time
-    else:
-        # Keep submitted state for analytics compatibility while allowing additional submits/runs.
-        session_obj.status = SessionStatus.SUBMITTED
-        session_obj.submitted_at = current_time
-
-    if submission_status == SubmissionStatus.CLEARED:
-        progress = db.scalar(
-            select(UserSkillProgress).where(
-                UserSkillProgress.user_id == session_obj.user_id,
-                UserSkillProgress.skill_id == session_obj.skill_id,
-                UserSkillProgress.level == session_obj.level,
-            )
-        )
-        if progress is None:
-            progress = UserSkillProgress(
-                user_id=session_obj.user_id,
-                skill_id=session_obj.skill_id,
-                level=session_obj.level,
-                unlocked=True,
-                cleared=True,
-                cleared_at=current_time,
-            )
-            db.add(progress)
-        else:
-            progress.unlocked = True
-            progress.cleared = True
-            progress.cleared_at = current_time
-
-        next_level = get_next_level(session_obj.level)
-        if next_level is not None:
-            next_progress = db.scalar(
-                select(UserSkillProgress).where(
-                    UserSkillProgress.user_id == session_obj.user_id,
-                    UserSkillProgress.skill_id == session_obj.skill_id,
-                    UserSkillProgress.level == next_level,
-                )
-            )
-            if next_progress is None:
-                next_progress = UserSkillProgress(
-                    user_id=session_obj.user_id,
-                    skill_id=session_obj.skill_id,
-                    level=next_level,
-                    unlocked=True,
-                    cleared=False,
-                )
-                db.add(next_progress)
-            else:
-                next_progress.unlocked = True
-
-        award_level_badge(
-            db,
-            user_id=session_obj.user_id,
-            skill=skill,
-            level=session_obj.level,
-            awarded_at=current_time,
-        )
-
-    return submission
+# ---------------------------------------------------------------------------
+# POST /sessions/start
+# ---------------------------------------------------------------------------
 
 
 @router.post(
@@ -954,9 +144,7 @@ def start_session(
         started_at=started,
         expires_at=expires_at,
         attempt_number=int(attempts_used) + 1,
-        last_draft_code=build_question_set_payload(
-            [problem.id for problem in selected_problems]
-        ),
+        last_draft_code=build_question_set_payload([p.id for p in selected_problems]),
     )
 
     try:
@@ -974,11 +162,11 @@ def start_session(
     return SessionStartResponse(
         session_id=session_obj.id,
         problem_id=selected_problem.id,
-        expires_at=session_obj.expires_at,
+        expires_at=_as_utc(session_obj.expires_at),
         attempt_number=session_obj.attempt_number,
         attempts_remaining=attempts_remaining,
         problem=build_problem_payload(selected_problem),
-        problems=[build_problem_payload(problem) for problem in selected_problems],
+        problems=[build_problem_payload(p) for p in selected_problems],
         allowed_languages=skill.allowed_languages or [],
     )
 
@@ -989,7 +177,6 @@ def get_session(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_candidate),
 ) -> SessionDetailResponse:
-
     session_obj = db.scalar(
         select(AssessmentSession).where(AssessmentSession.id == session_id)
     )
@@ -1000,11 +187,7 @@ def get_session(
     ensure_session_owner(session_obj, current_user)
 
     current_time = datetime.now(timezone.utc)
-    expires_at = (
-        session_obj.expires_at.astimezone(timezone.utc)
-        if session_obj.expires_at.tzinfo
-        else session_obj.expires_at.replace(tzinfo=timezone.utc)
-    )
+    expires_at = _as_utc(session_obj.expires_at)
     if session_obj.status == SessionStatus.ACTIVE and expires_at <= current_time:
         session_obj.status = SessionStatus.TIMED_OUT
         db.commit()
@@ -1012,11 +195,7 @@ def get_session(
     seconds_remaining = max(0, int((expires_at - current_time).total_seconds()))
     problems = get_session_problem_set(db, session_obj)
     primary_problem = problems[0]
-    skill = db.scalar(select(Skill).where(Skill.id == session_obj.skill_id))
-    if skill is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
-        )
+    skill = session_obj.skill
 
     return SessionDetailResponse(
         session_id=session_obj.id,
@@ -1024,7 +203,7 @@ def get_session(
         expires_at=expires_at,
         seconds_remaining=seconds_remaining,
         problem=build_problem_payload(primary_problem),
-        problems=[build_problem_payload(problem) for problem in problems],
+        problems=[build_problem_payload(p) for p in problems],
         allowed_languages=skill.allowed_languages or [],
         last_draft_code=session_obj.last_draft_code,
         last_draft_lang=session_obj.last_draft_lang,
@@ -1076,10 +255,7 @@ def log_violation(
         )
     ensure_session_owner(session_obj, current_user)
 
-    requested_type = str(payload.type or "").strip().lower()
-    violation_type = (
-        requested_type if requested_type in ALLOWED_VIOLATION_TYPES else "unknown"
-    )
+    violation_type = payload.type
 
     now_utc = datetime.now(timezone.utc)
     try:
@@ -1144,6 +320,7 @@ def log_violation(
         return {"status": "failed"}
 
 
+
 @router.post("/sessions/{session_id}/submit", response_model=SessionSubmitResponse)
 def submit_session(
     session_id: UUID,
@@ -1174,21 +351,15 @@ def submit_session(
     )
 
     current_time = datetime.now(timezone.utc)
-    expires_at = (
-        session_obj.expires_at.astimezone(timezone.utc)
-        if session_obj.expires_at.tzinfo
-        else session_obj.expires_at.replace(tzinfo=timezone.utc)
-    )
+    expires_at = _as_utc(session_obj.expires_at)
     answer_items = payload.answers or []
     if expires_at <= current_time:
-        code_to_submit = payload.code
-        lang_to_submit = payload.language
         try:
             score_submission(
                 db=db,
                 session_obj=session_obj,
-                code=code_to_submit,
-                language=lang_to_submit,
+                code=payload.code,
+                language=payload.language,
                 forced_status=SubmissionStatus.TIMED_OUT,
             )
             db.commit()
@@ -1205,14 +376,10 @@ def submit_session(
 
     try:
         if answer_items:
-            skill = db.scalar(select(Skill).where(Skill.id == session_obj.skill_id))
-            if skill is None:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
-                )
+            skill = session_obj.skill
 
             session_problem_set = get_session_problem_set(db, session_obj)
-            allowed_problem_ids = {problem.id for problem in session_problem_set}
+            allowed_problem_ids = {p.id for p in session_problem_set}
             deduped_answers: list[tuple[Problem, str, str]] = []
             seen_problem_ids: set[UUID] = set()
 
@@ -1224,13 +391,18 @@ def submit_session(
                         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                         detail="Answer contains an invalid problem",
                     )
-                problem = resolve_problem_from_session(
-                    db, session_obj, answer.problem_id
-                )
+                # Use the already-loaded set — avoids re-running get_session_problem_set
+                # per answer (which would be 1 extra IN query per resolve call).
+                problem = next((p for p in session_problem_set if p.id == answer.problem_id), None)
+                if problem is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        detail="Problem not found in session",
+                    )
                 deduped_answers.append((problem, answer.code, answer.language))
                 seen_problem_ids.add(answer.problem_id)
 
-            if len(deduped_answers) < MULTI_QUESTION_COUNT:
+            if len(deduped_answers) < 2:
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                     detail="Please submit solutions for both questions",
@@ -1247,26 +419,19 @@ def submit_session(
                 for problem, code, language in deduped_answers
             ]
 
-            score = int(
-                round(sum(item["score"] for item in executions) / len(executions))
-            )
-            passed_tests = int(sum(item["passed_tests"] for item in executions))
-            total_tests = int(sum(item["total_tests"] for item in executions))
+            score = int(round(sum(e["score"] for e in executions) / len(executions)))
+            passed_tests = int(sum(e["passed_tests"] for e in executions))
+            total_tests = int(sum(e["total_tests"] for e in executions))
             merged_cases: list[Any] = []
             for execution in executions:
                 merged_cases.extend(execution.get("cases", []))
 
-            default_status = (
+            submission_status = (
                 SubmissionStatus.CLEARED
                 if score >= get_pass_threshold()
                 else SubmissionStatus.FAILED
             )
-            submission_status = default_status
-            started_at = (
-                session_obj.started_at.astimezone(timezone.utc)
-                if session_obj.started_at.tzinfo
-                else session_obj.started_at.replace(tzinfo=timezone.utc)
-            )
+            started_at = _as_utc(session_obj.started_at)
             time_taken_seconds = max(
                 0, int((datetime.now(timezone.utc) - started_at).total_seconds())
             )
@@ -1274,11 +439,7 @@ def submit_session(
             primary_execution = executions[0]
             combined_code = json.dumps(
                 [
-                    {
-                        "problem_id": str(problem.id),
-                        "code": code,
-                        "language": language,
-                    }
+                    {"problem_id": str(problem.id), "code": code, "language": language}
                     for problem, code, language in deduped_answers
                 ]
             )
@@ -1304,6 +465,7 @@ def submit_session(
             session_obj.submitted_at = datetime.now(timezone.utc)
 
             if submission_status == SubmissionStatus.CLEARED:
+                current_time = datetime.now(timezone.utc)
                 progress = db.scalar(
                     select(UserSkillProgress).where(
                         UserSkillProgress.user_id == session_obj.user_id,
@@ -1311,7 +473,6 @@ def submit_session(
                         UserSkillProgress.level == session_obj.level,
                     )
                 )
-                current_time = datetime.now(timezone.utc)
                 if progress is None:
                     progress = UserSkillProgress(
                         user_id=session_obj.user_id,
@@ -1347,6 +508,14 @@ def submit_session(
                         db.add(next_progress)
                     else:
                         next_progress.unlocked = True
+
+                award_level_badge(
+                    db,
+                    user_id=session_obj.user_id,
+                    skill=skill,
+                    level=session_obj.level,
+                    awarded_at=datetime.now(timezone.utc),
+                )
         else:
             submission = score_submission(
                 db=db,
@@ -1380,30 +549,7 @@ def submit_session(
         else []
     )
     normalized_cases = [case for case in raw_cases if isinstance(case, dict)]
-    overall_status = _compute_overall_status(normalized_cases)
-
-    # Redact hidden test cases: never send input/output details to the frontend.
-    # Only pass/fail status and the is_hidden flag are retained.
-    sanitized_cases: list[Any] = []
-    for case in normalized_cases:
-        if case.get("is_hidden"):
-            sanitized_cases.append(
-                {
-                    "stdin": "",
-                    "expected_output": None,
-                    "stdout": None,
-                    "stderr": None,
-                    "compile_output": None,
-                    "message": None,
-                    "status": case.get("status", {"id": 0, "description": "Hidden"}),
-                    "time": case.get("time"),
-                    "memory": case.get("memory"),
-                    "passed": bool(case.get("passed", False)),
-                    "is_hidden": True,
-                }
-            )
-        else:
-            sanitized_cases.append(case)
+    sanitized_cases = _redact_hidden_cases(normalized_cases)
 
     response_payload = SessionSubmitResponse(
         submission_id=submission.id,
@@ -1431,7 +577,6 @@ def submit_session(
 @router.post(
     "/sessions/{session_id}/run",
     response_model=SessionRunResponse,
-    response_model_exclude_unset=True,
 )
 def run_session_code(
     session_id: UUID,
@@ -1439,13 +584,6 @@ def run_session_code(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_candidate),
 ) -> SessionRunResponse:
-    logger.info(
-        "POST /run session=%s problem=%s lang=%s user=%s",
-        session_id,
-        payload.problem_id,
-        payload.language,
-        current_user.id,
-    )
     session_obj = db.scalar(
         select(AssessmentSession).where(AssessmentSession.id == session_id)
     )
@@ -1456,11 +594,7 @@ def run_session_code(
     ensure_session_owner(session_obj, current_user)
 
     current_time = datetime.now(timezone.utc)
-    expires_at = (
-        session_obj.expires_at.astimezone(timezone.utc)
-        if session_obj.expires_at.tzinfo
-        else session_obj.expires_at.replace(tzinfo=timezone.utc)
-    )
+    expires_at = _as_utc(session_obj.expires_at)
     if expires_at <= current_time:
         session_obj.status = SessionStatus.TIMED_OUT
         db.commit()
@@ -1470,11 +604,7 @@ def run_session_code(
         )
 
     problem = load_problem_for_session_run(db, session_obj, payload.problem_id)
-    skill = db.scalar(select(Skill).where(Skill.id == session_obj.skill_id))
-    if skill is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
-        )
+    skill = session_obj.skill
 
     try:
         execution_result = execute_problem(
@@ -1501,28 +631,7 @@ def run_session_code(
     normalized_cases = [case for case in raw_cases if isinstance(case, dict)]
     overall_status = _compute_overall_status(normalized_cases)
 
-    # Redact hidden case details when use_hidden was requested (Submit Question flow).
-    # Only pass/fail + status + is_hidden flag are sent; inputs/outputs are stripped.
-    cases_for_response: list[Any] = []
-    for case in normalized_cases:
-        if case.get("is_hidden"):
-            cases_for_response.append(
-                {
-                    "stdin": "",
-                    "expected_output": None,
-                    "stdout": None,
-                    "stderr": None,
-                    "compile_output": None,
-                    "message": None,
-                    "status": case.get("status", {"id": 0, "description": "Hidden"}),
-                    "time": case.get("time"),
-                    "memory": case.get("memory"),
-                    "passed": bool(case.get("passed", False)),
-                    "is_hidden": True,
-                }
-            )
-        else:
-            cases_for_response.append(case)
+    cases_for_response = _redact_hidden_cases(normalized_cases)
 
     payload_kwargs: dict[str, Any] = {
         "cases": cases_for_response,
@@ -1534,6 +643,7 @@ def run_session_code(
         payload_kwargs["stdout"] = execution_result["stdout"]
     if "expected_output" in execution_result:
         payload_kwargs["expected_output"] = execution_result["expected_output"]
+
     response_payload = SessionRunResponse(**payload_kwargs)
     logger.info(
         "Run done: session=%s problem=%s status=%s cases=%s time_ms=%s",

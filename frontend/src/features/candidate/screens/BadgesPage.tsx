@@ -45,31 +45,31 @@ type TierRow = {
 
 const TIER_ORDER: BadgeTier[] = [
   {
-    level: "beginner",
+    level: "Beginner",
     rank: "Iron",
     subtitle: "Beginner",
     IconComponent: IronBadge,
   },
   {
-    level: "intermediate_1",
+    level: "Intermediate 1",
     rank: "Bronze",
     subtitle: "Intermediate 1",
     IconComponent: BronzeBadge,
   },
   {
-    level: "intermediate_2",
+    level: "Intermediate 2",
     rank: "Silver",
     subtitle: "Intermediate 2",
     IconComponent: SilverBadge,
   },
   {
-    level: "specialist_1",
+    level: "Specialist 1",
     rank: "Gold",
     subtitle: "Specialist 1",
     IconComponent: GoldBadge,
   },
   {
-    level: "specialist_2",
+    level: "Specialist 2",
     rank: "Platinum",
     subtitle: "Specialist 2",
     IconComponent: PlatinumBadge,

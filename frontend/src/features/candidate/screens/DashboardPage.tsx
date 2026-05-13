@@ -9,27 +9,27 @@ const LEVEL_META: Record<
   string,
   { label: string; desc: string; color: string }
 > = {
-  beginner: {
+  "Beginner": {
     label: "Beginner",
     desc: "Foundational concepts and basics",
     color: "#22c55e",
   },
-  intermediate_1: {
+  "Intermediate 1": {
     label: "Intermediate 1",
     desc: "Core proficiency with common patterns",
     color: "#3b82f6",
   },
-  intermediate_2: {
+  "Intermediate 2": {
     label: "Intermediate 2",
     desc: "Advanced problem solving and application",
     color: "#8b5cf6",
   },
-  specialist_1: {
+  "Specialist 1": {
     label: "Specialist 1",
     desc: "Expert-level depth and architecture",
     color: "#f59e0b",
   },
-  specialist_2: {
+  "Specialist 2": {
     label: "Specialist 2",
     desc: "Master-level execution and mentorship",
     color: "#E8620A",

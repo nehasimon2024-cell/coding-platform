@@ -1,9 +1,9 @@
 export type BackendLevel =
-  | "beginner"
-  | "intermediate_1"
-  | "intermediate_2"
-  | "specialist_1"
-  | "specialist_2";
+  | "Beginner"
+  | "Intermediate 1"
+  | "Intermediate 2"
+  | "Specialist 1"
+  | "Specialist 2";
 
 export type CandidateScreen = "home" | "instructions" | "confirmed" | "past_assessments" | "badges";
 

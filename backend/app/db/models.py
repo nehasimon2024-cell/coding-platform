@@ -1,4 +1,4 @@
-﻿import uuid
+import uuid
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
@@ -33,11 +33,11 @@ class UserRole(str, Enum):
 
 
 class Level(str, Enum):
-    BEGINNER = "beginner"
-    INTERMEDIATE_1 = "intermediate_1"
-    INTERMEDIATE_2 = "intermediate_2"
-    SPECIALIST_1 = "specialist_1"
-    SPECIALIST_2 = "specialist_2"
+    BEGINNER = "Beginner"
+    INTERMEDIATE_1 = "Intermediate 1"
+    INTERMEDIATE_2 = "Intermediate 2"
+    SPECIALIST_1 = "Specialist 1"
+    SPECIALIST_2 = "Specialist 2"
 
 
 class SessionStatus(str, Enum):
@@ -52,6 +52,34 @@ class SubmissionStatus(str, Enum):
     FAILED = "failed"
     TIMED_OUT = "timed_out"
     AUTO_SUBMITTED = "auto_submitted"
+
+
+class ViolationType(str, Enum):
+    TAB_SWITCH = "tab_switch"
+    WINDOW_BLUR = "window_blur"
+    TAB_SWITCH_SHORTCUT = "tab_switch_shortcut"
+    FULLSCREEN_EXIT = "fullscreen_exit"
+    PASTE = "paste"
+    PASTE_ATTEMPT = "paste_attempt"
+    COPY = "copy"
+    CUT = "cut"
+    SELECT_ALL = "select_all"
+    DEVTOOLS_SHORTCUT = "devtools_shortcut"
+    CONTEXT_MENU = "context_menu"
+    VISIBILITY_HIDDEN = "visibility_hidden"
+
+
+class QuestionType(str, Enum):
+    CODING = "coding"
+    MCQ = "mcq"
+    FRAMEWORK = "framework"
+    SQL = "sql"
+
+
+class Difficulty(str, Enum):
+    EASY = "Easy"
+    MEDIUM = "Medium"
+    HARD = "Hard"
 
 
 class User(Base):
@@ -142,10 +170,12 @@ class Problem(Base):
     time_limit_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=45)
     tags: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
     starter_code: Mapped[dict[str, Any] | None] = mapped_column(JSON)
-    difficulty_label: Mapped[str | None] = mapped_column(String(50))
+    difficulty_label: Mapped[Difficulty] = mapped_column(
+        SqlEnum(Difficulty, native_enum=False), nullable=False
+    )
     solution_text: Mapped[str | None] = mapped_column(Text)
-    question_type: Mapped[str | None] = mapped_column(
-        String(50), nullable=True, default=None
+    question_type: Mapped[QuestionType | None] = mapped_column(
+        SqlEnum(QuestionType, native_enum=False), nullable=True, default=None
     )
 
     # MCQ Specific Fields
@@ -305,7 +335,9 @@ class SessionViolation(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
-    type: Mapped[str] = mapped_column(String(50), nullable=False)
+    type: Mapped[ViolationType] = mapped_column(
+        SqlEnum(ViolationType, native_enum=False), nullable=False
+    )
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     metadata_: Mapped[dict[str, Any] | None] = mapped_column("metadata", JSON)
 

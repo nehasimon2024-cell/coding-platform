@@ -219,12 +219,14 @@ function TestCaseRow({
   label?: string;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const statusDescription =
-    typeof tc.status?.description === "string"
-      ? tc.status.description
-      : tc.passed
-        ? "Accepted"
-        : "Wrong Answer";
+  const STATUS_LABELS: Record<string, string> = {
+    success: "Accepted",
+    wrong_answer: "Wrong Answer",
+    time_limit_exceeded: "Time Limit Exceeded",
+    compile_error: "Compilation Error",
+    runtime_error: "Runtime Error",
+  };
+  const statusDescription = STATUS_LABELS[tc.status] ?? "Unknown Error";
   const actualOutput = tc.stdout ?? (!tc.passed ? tc.stderr ?? tc.compile_output ?? tc.message ?? statusDescription : null);
 
   return (

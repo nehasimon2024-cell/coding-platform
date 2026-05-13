@@ -1,3 +1,27 @@
+export type ExecutionStatus =
+  | "success"
+  | "wrong_answer"
+  | "time_limit_exceeded"
+  | "compile_error"
+  | "runtime_error";
+
+export type ViolationType =
+  | "tab_switch"
+  | "window_blur"
+  | "tab_switch_shortcut"
+  | "fullscreen_exit"
+  | "paste"
+  | "paste_attempt"
+  | "copy"
+  | "cut"
+  | "select_all"
+  | "devtools_shortcut"
+  | "context_menu"
+  | "visibility_hidden";
+
+export type QuestionType = "coding" | "mcq" | "framework" | "sql";
+export type Difficulty = "Easy" | "Medium" | "Hard";
+
 export interface Problem {
   id: string;
   title: string;
@@ -28,7 +52,7 @@ export interface TestCaseResult {
   stderr: string | null;
   compile_output?: string | null;
   message: string | null;
-  status: { description?: string } & Record<string, unknown>;
+  status: ExecutionStatus;
   passed: boolean;
   is_hidden?: boolean;
 }
@@ -65,7 +89,7 @@ export interface SessionProblemPayload {
   sample_test_cases: SampleTestCase[];
   time_limit_minutes: number;
   schema_tables?: SqlTableSchema[];
-  question_type?: string | null;
+  question_type?: QuestionType | null;
   
   // MCQ specific
   options?: string[] | null;
@@ -124,7 +148,7 @@ export interface SessionRunResponse {
   sql_run?: boolean;
   stdout?: string | null;
   expected_output?: string | null;
-  overall_status?: string | null;
+  overall_status?: ExecutionStatus | null;
   
   // Custom properties added by UI
   _isSubmit?: boolean;
