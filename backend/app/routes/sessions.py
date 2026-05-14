@@ -329,9 +329,9 @@ def submit_session(
     current_user: User = Depends(require_candidate),
 ) -> SessionSubmitResponse:
     logger.info(
-        "POST /submit session=%s lang=%s user=%s",
+        "POST /submit session=%s answers=%d user=%s",
         session_id,
-        payload.language,
+        len(payload.answers),
         current_user.id,
     )
     session_obj = db.scalar(
@@ -352,14 +352,14 @@ def submit_session(
 
     current_time = datetime.now(timezone.utc)
     expires_at = _as_utc(session_obj.expires_at)
-    answer_items = payload.answers or []
     if expires_at <= current_time:
         try:
+            first = payload.answers[0]
             score_submission(
                 db=db,
                 session_obj=session_obj,
-                code=payload.code,
-                language=payload.language,
+                code=first.code,
+                language=first.language,
                 forced_status=SubmissionStatus.TIMED_OUT,
             )
             db.commit()
@@ -375,153 +375,145 @@ def submit_session(
         )
 
     try:
-        if answer_items:
-            skill = session_obj.skill
+        skill = session_obj.skill
 
-            session_problem_set = get_session_problem_set(db, session_obj)
-            allowed_problem_ids = {p.id for p in session_problem_set}
-            deduped_answers: list[tuple[Problem, str, str]] = []
-            seen_problem_ids: set[UUID] = set()
+        session_problem_set = get_session_problem_set(db, session_obj)
+        allowed_problem_ids = {p.id for p in session_problem_set}
+        deduped_answers: list[tuple[Problem, str, str]] = []
+        seen_problem_ids: set[UUID] = set()
 
-            for answer in answer_items:
-                if answer.problem_id in seen_problem_ids:
-                    continue
-                if answer.problem_id not in allowed_problem_ids:
-                    raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                        detail="Answer contains an invalid problem",
-                    )
-                # Use the already-loaded set — avoids re-running get_session_problem_set
-                # per answer (which would be 1 extra IN query per resolve call).
-                problem = next((p for p in session_problem_set if p.id == answer.problem_id), None)
-                if problem is None:
-                    raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                        detail="Problem not found in session",
-                    )
-                deduped_answers.append((problem, answer.code, answer.language))
-                seen_problem_ids.add(answer.problem_id)
-
-            if len(deduped_answers) < 2:
+        for answer in payload.answers:
+            if answer.problem_id in seen_problem_ids:
+                continue
+            if answer.problem_id not in allowed_problem_ids:
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="Please submit solutions for both questions",
+                    detail="Answer contains an invalid problem",
                 )
+            # Use the already-loaded set — avoids re-running get_session_problem_set
+            # per answer (which would be 1 extra IN query per resolve call).
+            problem = next((p for p in session_problem_set if p.id == answer.problem_id), None)
+            if problem is None:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="Problem not found in session",
+                )
+            deduped_answers.append((problem, answer.code, answer.language))
+            seen_problem_ids.add(answer.problem_id)
 
-            executions = [
-                execute_problem(
-                    problem=problem,
-                    skill=skill,
-                    code=code,
-                    language=language,
-                    use_hidden_cases=True,
-                )
+        if len(deduped_answers) < 2:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Please submit solutions for both questions",
+            )
+
+        executions = [
+            execute_problem(
+                problem=problem,
+                skill=skill,
+                code=code,
+                language=language,
+                use_hidden_cases=True,
+            )
+            for problem, code, language in deduped_answers
+        ]
+
+        score = int(round(sum(e["score"] for e in executions) / len(executions)))
+        passed_tests = int(sum(e["passed_tests"] for e in executions))
+        total_tests = int(sum(e["total_tests"] for e in executions))
+        merged_cases: list[Any] = []
+        for execution in executions:
+            merged_cases.extend(execution.get("cases", []))
+
+        submission_status = (
+            SubmissionStatus.CLEARED
+            if score >= get_pass_threshold()
+            else SubmissionStatus.FAILED
+        )
+        started_at = _as_utc(session_obj.started_at)
+        time_taken_seconds = max(
+            0, int((datetime.now(timezone.utc) - started_at).total_seconds())
+        )
+
+        primary_execution = executions[0]
+        combined_code = json.dumps(
+            [
+                {"problem_id": str(problem.id), "code": code, "language": language}
                 for problem, code, language in deduped_answers
             ]
+        )
 
-            score = int(round(sum(e["score"] for e in executions) / len(executions)))
-            passed_tests = int(sum(e["passed_tests"] for e in executions))
-            total_tests = int(sum(e["total_tests"] for e in executions))
-            merged_cases: list[Any] = []
-            for execution in executions:
-                merged_cases.extend(execution.get("cases", []))
+        submission = Submission(
+            session_id=session_obj.id,
+            user_id=session_obj.user_id,
+            problem_id=session_obj.problem_id,
+            skill_id=session_obj.skill_id,
+            level=session_obj.level,
+            code=combined_code,
+            language=primary_execution["resolved_monaco"],
+            status=submission_status,
+            score=score,
+            passed_tests=passed_tests,
+            total_tests=total_tests,
+            time_taken_seconds=time_taken_seconds,
+            judge_result={"cases": merged_cases},
+        )
+        db.add(submission)
 
-            submission_status = (
-                SubmissionStatus.CLEARED
-                if score >= get_pass_threshold()
-                else SubmissionStatus.FAILED
+        session_obj.status = SessionStatus.SUBMITTED
+        session_obj.submitted_at = datetime.now(timezone.utc)
+
+        if submission_status == SubmissionStatus.CLEARED:
+            current_time = datetime.now(timezone.utc)
+            progress = db.scalar(
+                select(UserSkillProgress).where(
+                    UserSkillProgress.user_id == session_obj.user_id,
+                    UserSkillProgress.skill_id == session_obj.skill_id,
+                    UserSkillProgress.level == session_obj.level,
+                )
             )
-            started_at = _as_utc(session_obj.started_at)
-            time_taken_seconds = max(
-                0, int((datetime.now(timezone.utc) - started_at).total_seconds())
-            )
+            if progress is None:
+                progress = UserSkillProgress(
+                    user_id=session_obj.user_id,
+                    skill_id=session_obj.skill_id,
+                    level=session_obj.level,
+                    unlocked=True,
+                    cleared=True,
+                    cleared_at=current_time,
+                )
+                db.add(progress)
+            else:
+                progress.unlocked = True
+                progress.cleared = True
+                progress.cleared_at = current_time
 
-            primary_execution = executions[0]
-            combined_code = json.dumps(
-                [
-                    {"problem_id": str(problem.id), "code": code, "language": language}
-                    for problem, code, language in deduped_answers
-                ]
-            )
-
-            submission = Submission(
-                session_id=session_obj.id,
-                user_id=session_obj.user_id,
-                problem_id=session_obj.problem_id,
-                skill_id=session_obj.skill_id,
-                level=session_obj.level,
-                code=combined_code,
-                language=primary_execution["resolved_monaco"],
-                status=submission_status,
-                score=score,
-                passed_tests=passed_tests,
-                total_tests=total_tests,
-                time_taken_seconds=time_taken_seconds,
-                judge_result={"cases": merged_cases},
-            )
-            db.add(submission)
-
-            session_obj.status = SessionStatus.SUBMITTED
-            session_obj.submitted_at = datetime.now(timezone.utc)
-
-            if submission_status == SubmissionStatus.CLEARED:
-                current_time = datetime.now(timezone.utc)
-                progress = db.scalar(
+            next_level = get_next_level(session_obj.level)
+            if next_level is not None:
+                next_progress = db.scalar(
                     select(UserSkillProgress).where(
                         UserSkillProgress.user_id == session_obj.user_id,
                         UserSkillProgress.skill_id == session_obj.skill_id,
-                        UserSkillProgress.level == session_obj.level,
+                        UserSkillProgress.level == next_level,
                     )
                 )
-                if progress is None:
-                    progress = UserSkillProgress(
+                if next_progress is None:
+                    next_progress = UserSkillProgress(
                         user_id=session_obj.user_id,
                         skill_id=session_obj.skill_id,
-                        level=session_obj.level,
+                        level=next_level,
                         unlocked=True,
-                        cleared=True,
-                        cleared_at=current_time,
+                        cleared=False,
                     )
-                    db.add(progress)
+                    db.add(next_progress)
                 else:
-                    progress.unlocked = True
-                    progress.cleared = True
-                    progress.cleared_at = current_time
+                    next_progress.unlocked = True
 
-                next_level = get_next_level(session_obj.level)
-                if next_level is not None:
-                    next_progress = db.scalar(
-                        select(UserSkillProgress).where(
-                            UserSkillProgress.user_id == session_obj.user_id,
-                            UserSkillProgress.skill_id == session_obj.skill_id,
-                            UserSkillProgress.level == next_level,
-                        )
-                    )
-                    if next_progress is None:
-                        next_progress = UserSkillProgress(
-                            user_id=session_obj.user_id,
-                            skill_id=session_obj.skill_id,
-                            level=next_level,
-                            unlocked=True,
-                            cleared=False,
-                        )
-                        db.add(next_progress)
-                    else:
-                        next_progress.unlocked = True
-
-                award_level_badge(
-                    db,
-                    user_id=session_obj.user_id,
-                    skill=skill,
-                    level=session_obj.level,
-                    awarded_at=datetime.now(timezone.utc),
-                )
-        else:
-            submission = score_submission(
-                db=db,
-                session_obj=session_obj,
-                code=payload.code,
-                language=payload.language,
+            award_level_badge(
+                db,
+                user_id=session_obj.user_id,
+                skill=skill,
+                level=session_obj.level,
+                awarded_at=datetime.now(timezone.utc),
             )
 
         db.commit()

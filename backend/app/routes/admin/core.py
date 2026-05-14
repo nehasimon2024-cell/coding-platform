@@ -1,9 +1,8 @@
 import logging
-import os
 from datetime import datetime, timezone
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
@@ -25,14 +24,11 @@ from app.schemas import (
     AdminCredentialsResponse,
     AdminStatsResponse,
 )
-from scripts.seed import DEFAULT_JSON_FILE, run_seed
-
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 from .reports import router as reports_router
 
 router.include_router(reports_router)
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -59,21 +55,6 @@ VIOLATION_TYPES = [
 ]
 
 
-@router.post("/seed")
-def seed_database(
-    x_api_key: str | None = Header(default=None, alias="X-API-Key"),
-) -> dict[str, str]:
-    admin_seed_key = os.getenv("ADMIN_SEED_KEY")
-    if not x_api_key or x_api_key != admin_seed_key:
-        raise HTTPException(status_code=401, detail="Invalid API key")
-
-    try:
-        run_seed(DEFAULT_JSON_FILE)
-        return {"message": "Database seeded successfully"}
-    except HTTPException:
-        raise
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail="Failed to seed database") from exc
 
 
 @router.get("/stats", response_model=AdminStatsResponse)

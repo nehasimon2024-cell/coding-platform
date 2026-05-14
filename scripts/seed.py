@@ -5,15 +5,30 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# Allow running as: python scripts/seed.py from backend/
-CURRENT_FILE = Path(__file__).resolve()
-BACKEND_DIR = CURRENT_FILE.parent.parent
+SCRIPTS_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPTS_DIR.parent
+BACKEND_DIR = REPO_ROOT / "backend"
+
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
-from app.db.database import get_session_local
-from app.db.models import Base, Difficulty, Level, Problem, Skill, User, UserRole, UserSkillProgress
-from app.security import hash_password
+# Load backend .env so DATABASE_URL etc. are available before importing app modules
+from dotenv import load_dotenv  
+
+load_dotenv(dotenv_path=BACKEND_DIR / ".env", override=False)
+
+from app.db.database import get_session_local  
+from app.db.models import (  
+    Base,
+    Difficulty,
+    Level,
+    Problem,
+    Skill,
+    User,
+    UserRole,
+    UserSkillProgress,
+)
+from app.security import hash_password  
 
 LEVEL_ORDER = [
     Level.BEGINNER,
@@ -33,8 +48,7 @@ CANONICAL_LEVEL_KEYS = {
 
 CANONICAL_DIFFICULTIES = [Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD]
 
-# Seed directly from the new dataset payload
-DEFAULT_JSON_FILE = CURRENT_FILE.parent / "problem_dataset_new.json"
+DEFAULT_JSON_FILE = SCRIPTS_DIR / "problem_dataset_new.json"
 
 
 def to_str(value: Any) -> str:
@@ -162,7 +176,6 @@ def seed_problems_from_payload(
 
                     title = to_str(question.get("title")) or "Untitled Problem"
                     description = to_str(question.get("description"))
-
                     question_type = (
                         str(question.get("question_type") or "coding").strip().lower()
                     )
@@ -172,7 +185,9 @@ def seed_problems_from_payload(
                         level=level,
                         title=title[:255],
                         description=description,
-                        sample_test_cases=question.get("test_cases") or question.get("sample_test_cases") or [],
+                        sample_test_cases=question.get("test_cases")
+                        or question.get("sample_test_cases")
+                        or [],
                         hidden_test_cases=question.get("hidden_test_cases", []),
                         time_limit_minutes=45,
                         tags=question.get("tags", []),
@@ -293,23 +308,25 @@ def run_seed(input_json: Path) -> None:
 
         db.commit()
 
-        print("Seeding complete (seed.py).")
-        print(f"- Input JSON: {input_json.resolve()}")
-        print(f"- Users created: {counts['users_created']}")
-        print(f"- Skills created: {counts['skills_created']}")
-        print(f"- Problems created: {counts['problems_created']}")
-        print(f"- Problems skipped (invalid): {counts['problems_skipped_invalid']}")
-        print(
-            f"- Problems skipped (unknown skill): {counts['problems_skipped_unknown_skill']}"
-        )
-        print(
-            f"- Problems skipped (unknown level): {counts['problems_skipped_unknown_level']}"
-        )
-        print(f"- Progress rows created: {counts['progress_created']}")
-        print("Seeded login credentials:")
-        print(f"- Admin: {admin_email} / {admin_password}")
-        print(f"- Candidate: {candidate_email} / {candidate_password}")
-        print(f"Timestamp (UTC): {datetime.now(timezone.utc).isoformat()}")
+        print("Seeding complete.")
+        print(f"  Input JSON : {input_json.resolve()}")
+        print(f"  Users      : {counts['users_created']}")
+        print(f"  Skills     : {counts['skills_created']}")
+        print(f"  Problems   : {counts['problems_created']}")
+        print(f"  Progress   : {counts['progress_created']}")
+        if counts["problems_skipped_invalid"]:
+            print(f"  Skipped (invalid)        : {counts['problems_skipped_invalid']}")
+        if counts["problems_skipped_unknown_skill"]:
+            print(
+                f"  Skipped (unknown skill)  : {counts['problems_skipped_unknown_skill']}"
+            )
+        if counts["problems_skipped_unknown_level"]:
+            print(
+                f"  Skipped (unknown level)  : {counts['problems_skipped_unknown_level']}"
+            )
+        print(f"  Admin     : {admin_email} / {admin_password}")
+        print(f"  Candidate : {candidate_email} / {candidate_password}")
+        print(f"  Timestamp : {datetime.now(timezone.utc).isoformat()}")
     except Exception:
         db.rollback()
         raise

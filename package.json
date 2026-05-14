@@ -10,7 +10,7 @@
     "start:frontend": "cd frontend && npm run dev",
     "start:backend": "cd backend && venv\\Scripts\\activate && uvicorn app.main:app --reload --host localhost --port 9515",
     "start": "start cmd /k \"npm run start:backend\" && npm run start:frontend",
-    "seed": "cd backend && venv\\Scripts\\python scripts\\seed.py",
+    "seed": "cd backend && venv\\Scripts\\python ../scripts/seed.py",
 
     "setup:backend:linux": "bash scripts/linux/setup-backend.sh",
     "setup:linux": "npm run setup:frontend && npm run setup:backend:linux",

@@ -167,10 +167,8 @@ class SessionQuestionAnswer(BaseModel):
 
 
 class SessionSubmitRequest(BaseModel):
-    code: str
-    language: str = Field(min_length=1)
     metadata: dict[str, Any] | None = None
-    answers: list[SessionQuestionAnswer] = Field(default_factory=list)
+    answers: list[SessionQuestionAnswer] = Field(min_length=1)
 
 
 class SessionRunRequest(BaseModel):
