@@ -1,0 +1,92 @@
+# ---------------------------------------------------------------------------
+# Coding Assessment Platform — Local / On-Premise VM
+#
+# Services
+#   postgres   Shared database (internal only)
+#   backend    FastAPI + Gunicorn  → host port 9515
+#   frontend   React SPA via Nginx → host port 9514
+#
+# Host Nginx (installed on the VM) handles SSL termination and routing.
+# It listens on 9513 (HTTPS) and acts as the edge proxy:
+#   /api/*  →  http://localhost:9515   (backend)
+#   /*      →  http://localhost:9514   (frontend)
+#
+# Judge0 CE is NOT included — set JUDGE0_BASE_URL in .env to a running instance.
+#
+# Quick start
+#   cp .env.example .env                               # fill in required secrets
+#   docker compose up -d
+#   docker compose exec backend alembic upgrade head   # first run only
+# ---------------------------------------------------------------------------
+
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: "50m"
+      max-file: "3"
+
+services:
+
+  # --------------------------------------------------------------------------
+  # Database
+  # --------------------------------------------------------------------------
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB:       codingplatform
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d codingplatform"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    <<: *default-logging
+
+  # --------------------------------------------------------------------------
+  # Backend — FastAPI (Gunicorn + Uvicorn workers)
+  # Host Nginx proxies /api/* → http://localhost:9515/
+  # --------------------------------------------------------------------------
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL:                postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/codingplatform
+      JUDGE0_BASE_URL:             ${JUDGE0_BASE_URL:?JUDGE0_BASE_URL is required}
+      JWT_SECRET_KEY:              ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-15}
+      REFRESH_TOKEN_EXPIRE_DAYS:   ${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      SCORE_PASS_THRESHOLD:        ${SCORE_PASS_THRESHOLD:-70}
+      MAX_ATTEMPTS_PER_LEVEL:      ${MAX_ATTEMPTS_PER_LEVEL:-5}
+      ENV:                         ${ENV:-production}
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - "9515:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    <<: *default-logging
+
+  # --------------------------------------------------------------------------
+  # Frontend — React SPA served by Nginx
+  # Host Nginx proxies /* → http://localhost:9514/
+  # --------------------------------------------------------------------------
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "9514:3000"
+    restart: unless-stopped
+    <<: *default-logging
+
+volumes:
+  postgres_data:

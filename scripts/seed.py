@@ -7,7 +7,12 @@ from typing import Any
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parent
-BACKEND_DIR = REPO_ROOT / "backend"
+
+# Support running inside the Docker container where backend code is at /app
+if os.path.exists("/app/app/main.py"):
+    BACKEND_DIR = Path("/app")
+else:
+    BACKEND_DIR = REPO_ROOT / "backend"
 
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
@@ -239,6 +244,16 @@ def run_seed(input_json: Path) -> None:
         reset_db_session.close()
         Base.metadata.drop_all(bind=engine)
         Base.metadata.create_all(bind=engine)
+        
+        # Stamp Alembic to "head" so it doesn't try to run historical migrations on this fresh schema
+        try:
+            from alembic.config import Config
+            from alembic import command
+            alembic_cfg = Config(str(BACKEND_DIR / "alembic.ini"))
+            command.stamp(alembic_cfg, "head")
+            print("Successfully stamped Alembic to head.")
+        except Exception as e:
+            print(f"Warning: Failed to stamp Alembic: {e}")
     finally:
         reset_db_session.close()
 

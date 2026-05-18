@@ -174,11 +174,32 @@ App available at: **http://localhost:9514**
 
 ## Deployment
 
-See [`aws-infra/DOCS.md`](./aws-infra/DOCS.md) for the full CDK-based EC2 deployment guide.
+The platform supports two deployment models:
 
-The production stack runs everything (PostgreSQL, Redis, Judge0, backend) in Docker Compose on a single Ubuntu EC2 instance, with Nginx as the reverse proxy.
+### Option A — Local / On-Premise VM (Docker Compose)
 
----
+Run the full stack on any VM with Docker and Nginx installed.
+
+```bash
+cp .env.example .env          # fill in POSTGRES_PASSWORD, JWT_SECRET_KEY, JUDGE0_BASE_URL
+docker compose up -d --build
+docker compose exec backend python /scripts/seed.py     # first run only (creates tables, stamps alembic, seeds data)
+```
+Configure the host VM's Nginx to route traffic to the containers using the provided [`nginx.conf`](./nginx.conf):
+
+```bash
+sudo cp nginx.conf /etc/nginx/sites-available/coding-platform
+sudo ln -s /etc/nginx/sites-available/coding-platform /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+See [`.env.example`](./.env.example) for all configurable settings.
+
+### Option B — AWS (CDK + EC2)
+
+Automated single-instance deployment via AWS CDK. See [`aws-infra/DOCS.md`](./aws-infra/DOCS.md) for the full guide.
+
 
 ## Tech Stack Summary
 

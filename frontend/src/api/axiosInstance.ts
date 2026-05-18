@@ -3,7 +3,7 @@ import axios, { type AxiosError } from "axios";
 import useUserStore from "../stores/userStore";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: "/api",
   withCredentials: true,
 });
 
@@ -67,8 +67,8 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/refresh`,
+        const response = await axiosInstance.post(
+          "/auth/refresh",
           {},
           { withCredentials: true }
         );

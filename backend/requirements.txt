@@ -8,3 +8,4 @@ boto3
 bcrypt
 python-jose[cryptography]
 psycopg2-binary
+alembic
