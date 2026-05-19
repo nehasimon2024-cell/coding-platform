@@ -92,14 +92,14 @@ class User(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     role: Mapped[UserRole] = mapped_column(
         SqlEnum(UserRole, native_enum=False), nullable=False
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    employee_id: Mapped[str] = mapped_column(String(50), unique=True)
-    gender: Mapped[str] = mapped_column(String(20))
-    department: Mapped[str] = mapped_column(String(100))
+    employee_id: Mapped[str | None] = mapped_column(String(50), unique=True, nullable=True)
+    gender: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    department: Mapped[str | None] = mapped_column(String(100), nullable=True)
     exp_indium_years: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     exp_overall_years: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(

@@ -65,6 +65,8 @@ services:
       SCORE_PASS_THRESHOLD:        ${SCORE_PASS_THRESHOLD:-70}
       MAX_ATTEMPTS_PER_LEVEL:      ${MAX_ATTEMPTS_PER_LEVEL:-5}
       ENV:                         ${ENV:-production}
+      AZURE_TENANT_ID:             ${AZURE_TENANT_ID}
+      AZURE_CLIENT_ID:             ${AZURE_CLIENT_ID}
     volumes:
       - ./scripts:/scripts
     ports:
@@ -83,6 +85,9 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        VITE_AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
+        VITE_AZURE_TENANT_ID: ${AZURE_TENANT_ID}
     ports:
       - "9514:3000"
     restart: unless-stopped

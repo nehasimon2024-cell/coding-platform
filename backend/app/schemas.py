@@ -22,6 +22,10 @@ class LoginRequest(BaseModel):
     password: str = Field(min_length=1)
 
 
+class SSOLoginRequest(BaseModel):
+    id_token: str = Field(min_length=1)
+
+
 class LoginUser(BaseModel):
     user_id: UUID
     role: UserRole

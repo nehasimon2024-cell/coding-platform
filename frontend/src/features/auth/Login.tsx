@@ -1,22 +1,29 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import useUserStore from "../../stores/userStore";
 
 import SSOButton from "./SSOButton";
 import { loginWithCredentials, loginWithSSO } from "./authService";
 import type { User } from "../../types/user";
 
-const getRedirectPathByRole = (user: User): string => {
+const getRedirectPathByRole = (user: User | { role: string }): string => {
   if (user.role === "admin") return "/admin/dashboard";
   return "/candidate/dashboard";
 };
 
 const Login = () => {
   const navigate = useNavigate();
+  const token = useUserStore((state) => state.token);
+  const role = useUserStore((state) => state.role);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  if (token && role) {
+    return <Navigate to={getRedirectPathByRole({ role })} replace />;
+  }
 
   const handleCredentialLogin = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -33,18 +40,13 @@ const Login = () => {
     }
   };
 
-  const handleSSOLogin = async () => {
+  const handleSSOLogin = () => {
     setError(null);
     setLoading(true);
-
-    try {
-      const user = await loginWithSSO();
-      navigate(getRedirectPathByRole(user), { replace: true });
-    } catch {
+    loginWithSSO().catch(() => {
       setError("SSO login failed. Please try again.");
-    } finally {
       setLoading(false);
-    }
+    });
   };
 
   return (
