@@ -6,11 +6,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc g++ make pkg-config libcairo2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-# Copy the uv config files
-COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
 
 FROM python:3.14-slim AS production
 WORKDIR /app
@@ -19,12 +16,12 @@ WORKDIR /app
 RUN addgroup --system app && adduser --system --group app
 
 # Copy installed Python packages from builder
-COPY --from=builder --chown=app:app /app/.venv /home/app/.venv
+COPY --from=builder --chown=app:app /root/.local /home/app/.local
 
 # Copy application code
 COPY --chown=app:app . .
 
-ENV PATH=/home/app/.venv/bin:$PATH
+ENV PATH=/home/app/.local/bin:$PATH
 ENV HOME=/home/app
 USER app
 
