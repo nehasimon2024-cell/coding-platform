@@ -14,10 +14,19 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "mcq",
-              "tags": ["agile", "beginner", "easy"],
+              "tags": [
+                "agile",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Agile. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
-              "options": ["", "", "", ""],
+              "options": [
+                "",
+                "",
+                "",
+                ""
+              ],
               "correct_option_index": 0
             }
           ],
@@ -75,7 +84,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["html-css-js", "beginner", "easy"],
+              "tags": [
+                "html-css-js",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for HTML, CSS, JS. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -142,7 +155,12 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["react-js", "jsx", "components", "beginner"],
+              "tags": [
+                "react-js",
+                "jsx",
+                "components",
+                "beginner"
+              ],
               "description": "Create a React component named App that renders a heading with the text 'Welcome to React' and a paragraph with the text 'This is your first React challenge.'.",
               "solution": "import React from 'react';\n\nfunction App() {\n  return (\n    <div>\n      <h1>Welcome to React</h1>\n      <p>This is your first React challenge.</p>\n    </div>\n  );\n}\n\nexport default App;",
               "starter_files": [
@@ -177,7 +195,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["react-js", "props", "jsx"],
+              "tags": [
+                "react-js",
+                "props",
+                "jsx"
+              ],
               "description": "Create a React component that displays the name 'John Doe' inside an h2 tag.",
               "solution": "import React from 'react';\n\nfunction App() {\n  return <h2>John Doe</h2>;\n}\n\nexport default App;",
               "starter_files": [
@@ -260,7 +282,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["react-js-with-redux", "beginner", "easy"],
+              "tags": [
+                "react-js-with-redux",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for React JS with Redux. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -362,8 +388,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["arrays", "math", "typescript", "easy"],
-              "description": "Problem Statement\nGiven space-separated values, compute the sum of valid numbers.\n\nRules\n- Ignore invalid numbers\n- Empty input → 0\n\nExample\nInput:\n1 a 2\nOutput:\n3",
+              "tags": [
+                "arrays",
+                "math",
+                "typescript",
+                "easy"
+              ],
+              "description": "Problem Statement\nGiven space-separated values, compute the sum of valid numbers.\n\nRules\n- Ignore invalid numbers\n- Empty input \u00e2\u2020\u2019 0\n\nExample\nInput:\n1 a 2\nOutput:\n3",
               "solution": "function solution(input: string): string {\n  const nums = input.trim().split(/\\s+/).map(Number);\n  let sum = 0;\n  for (const n of nums) {\n    if (!isNaN(n)) sum += n;\n  }\n  return String(sum);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse input and compute sum\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -396,8 +427,12 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["boolean", "logic", "typescript"],
-              "description": "Problem Statement\nToggle a boolean string.\n\nRules\n- true → false\n- false → true\n- otherwise → invalid\n\nExample\nInput:\ntrue\nOutput:\nfalse",
+              "tags": [
+                "boolean",
+                "logic",
+                "typescript"
+              ],
+              "description": "Problem Statement\nToggle a boolean string.\n\nRules\n- true \u00e2\u2020\u2019 false\n- false \u00e2\u2020\u2019 true\n- otherwise \u00e2\u2020\u2019 invalid\n\nExample\nInput:\ntrue\nOutput:\nfalse",
               "solution": "function solution(input: string): string {\n  const val = input.trim().toLowerCase();\n  if (val === 'true') return 'false';\n  if (val === 'false') return 'true';\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: toggle boolean string\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -430,8 +465,12 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["objects", "json", "typescript"],
-              "description": "Problem Statement\nExtract \"name\" from JSON input.\n\nRules\n- Missing → unknown\n- Invalid JSON → invalid\n\nExample\nInput:\n{\"name\":\"John\"}\nOutput:\nJohn",
+              "tags": [
+                "objects",
+                "json",
+                "typescript"
+              ],
+              "description": "Problem Statement\nExtract \"name\" from JSON input.\n\nRules\n- Missing \u00e2\u2020\u2019 unknown\n- Invalid JSON \u00e2\u2020\u2019 invalid\n\nExample\nInput:\n{\"name\":\"John\"}\nOutput:\nJohn",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return obj.name ? String(obj.name) : 'unknown';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse JSON and extract name\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -464,8 +503,12 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["functions", "optional", "strings"],
-              "description": "Problem Statement\nGenerate greeting with optional title.\n\nRules\n- Both → Hello <title> <name>\n- Only name → Hello <name>\n- Empty → Hello Guest\n\nExample\nInput:\nAlice\nOutput:\nHello Alice",
+              "tags": [
+                "functions",
+                "optional",
+                "strings"
+              ],
+              "description": "Problem Statement\nGenerate greeting with optional title.\n\nRules\n- Both \u00e2\u2020\u2019 Hello <title> <name>\n- Only name \u00e2\u2020\u2019 Hello <name>\n- Empty \u00e2\u2020\u2019 Hello Guest\n\nExample\nInput:\nAlice\nOutput:\nHello Alice",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(' ');\n  const name = parts[0] || 'Guest';\n  const title = parts[1] || '';\n  return title ? `Hello ${title} ${name}` : `Hello ${name}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: generate greeting with optional title\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -500,8 +543,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["typescript", "parsing", "math", "medium"],
-              "description": "Problem Statement\nYou are given a string representing a mathematical operation.\n\nRules\n- Supported operations: add, sub, mul, div\n- Format: <operation> <num1> <num2>\n- Return result as string\n- Division is integer division\n- Invalid input → return \"invalid\"\n\nExamples\nInput:\nadd 2 3\nOutput:\n5\n\nInput:\ndiv 5 0\nOutput:\ninvalid",
+              "tags": [
+                "typescript",
+                "parsing",
+                "math",
+                "medium"
+              ],
+              "description": "Problem Statement\nYou are given a string representing a mathematical operation.\n\nRules\n- Supported operations: add, sub, mul, div\n- Format: <operation> <num1> <num2>\n- Return result as string\n- Division is integer division\n- Invalid input \u00e2\u2020\u2019 return \"invalid\"\n\nExamples\nInput:\nadd 2 3\nOutput:\n5\n\nInput:\ndiv 5 0\nOutput:\ninvalid",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/);\n  if (parts.length !== 3) return \"invalid\";\n  const [op, aStr, bStr] = parts;\n  const a = Number(aStr);\n  const b = Number(bStr);\n  if (isNaN(a) || isNaN(b)) return \"invalid\";\n\n  switch (op) {\n    case 'add': return String(a + b);\n    case 'sub': return String(a - b);\n    case 'mul': return String(a * b);\n    case 'div': return b === 0 ? \"invalid\" : String(Math.floor(a / b));\n    default: return \"invalid\";\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse operation and numbers, then compute result\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -534,7 +582,11 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["arrays", "filtering", "typescript"],
+              "tags": [
+                "arrays",
+                "filtering",
+                "typescript"
+              ],
               "description": "Problem Statement\nYou are given space-separated values of mixed types.\n\nYour task is to return only the valid strings.\n\nRules\n- A valid string contains only alphabetic characters\n- Ignore numbers and boolean-like values\n- Maintain original order\n\nExamples\nInput:\n1 hello true world\nOutput:\nhello world\n\nInput:\n1 2 3\nOutput:\n(empty string)",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/);\n  const result = parts.filter(p => /^[a-zA-Z]+$/.test(p));\n  return result.join(' ');\n}",
               "starter_code": {
@@ -568,8 +620,12 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["json", "objects", "typescript"],
-              "description": "Problem Statement\nYou are given a JSON API response.\n\nRules\n- If status = success → return data field\n- If status = error → return message field\n- Invalid JSON → return \"invalid\"\n\nExamples\nInput:\n{\"status\":\"success\",\"data\":\"ok\"}\nOutput:\nok\n\nInput:\n{\"status\":\"error\",\"message\":\"fail\"}\nOutput:\nfail",
+              "tags": [
+                "json",
+                "objects",
+                "typescript"
+              ],
+              "description": "Problem Statement\nYou are given a JSON API response.\n\nRules\n- If status = success \u00e2\u2020\u2019 return data field\n- If status = error \u00e2\u2020\u2019 return message field\n- Invalid JSON \u00e2\u2020\u2019 return \"invalid\"\n\nExamples\nInput:\n{\"status\":\"success\",\"data\":\"ok\"}\nOutput:\nok\n\nInput:\n{\"status\":\"error\",\"message\":\"fail\"}\nOutput:\nfail",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.status === 'success') return obj.data;\n    if (obj.status === 'error') return obj.message;\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse JSON and extract success message\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -602,7 +658,11 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["arrays", "mapping", "typescript"],
+              "tags": [
+                "arrays",
+                "mapping",
+                "typescript"
+              ],
               "description": "Problem Statement\nGiven space-separated values, square each valid number.\n\nRules\n- Ignore invalid values\n- Maintain order\n\nExamples\nInput:\n1 2 3\nOutput:\n1 4 9\n\nInput:\n1 a 3\nOutput:\n1 9",
               "solution": "function solution(input: string): string {\n  const nums = input.trim().split(/\\s+/);\n  const result = [];\n  for (const n of nums) {\n    const val = Number(n);\n    if (!isNaN(val)) result.push(String(val * val));\n  }\n  return result.join(' ');\n}",
               "starter_code": {
@@ -636,8 +696,12 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["logic", "mapping", "typescript"],
-              "description": "Problem Statement\nMap a numeric status code to its message.\n\nRules\n- 200 → OK\n- 404 → Not Found\n- 500 → Server Error\n- Any other → Unknown\n\nExamples\nInput:\n200\nOutput:\nOK\n\nInput:\n123\nOutput:\nUnknown",
+              "tags": [
+                "logic",
+                "mapping",
+                "typescript"
+              ],
+              "description": "Problem Statement\nMap a numeric status code to its message.\n\nRules\n- 200 \u00e2\u2020\u2019 OK\n- 404 \u00e2\u2020\u2019 Not Found\n- 500 \u00e2\u2020\u2019 Server Error\n- Any other \u00e2\u2020\u2019 Unknown\n\nExamples\nInput:\n200\nOutput:\nOK\n\nInput:\n123\nOutput:\nUnknown",
               "solution": "function solution(input: string): string {\n  const code = input.trim();\n  switch (code) {\n    case '200': return 'OK';\n    case '404': return 'Not Found';\n    case '500': return 'Server Error';\n    default: return 'Unknown';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: map status code to message\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -672,7 +736,11 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["typescript", "generics", "identity"],
+              "tags": [
+                "typescript",
+                "generics",
+                "identity"
+              ],
               "description": "Problem Statement\nImplement a function that returns the input exactly as received.\n\nThis simulates a generic identity function.\n\nRules\n- Do not modify input\n- Preserve formatting exactly\n\nExamples\nInput:\nhello\nOutput:\nhello\n\nInput:\n123\nOutput:\n123",
               "solution": "function solution(input: string): string {\n  return input;\n}",
               "starter_code": {
@@ -706,8 +774,12 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["objects", "json", "events"],
-              "description": "Problem Statement\nYou are given a JSON event.\n\nRules\n- Extract 'type' and 'user'\n- Format: \"User <user> triggered <type>\"\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"type\":\"click\",\"user\":\"John\"}\nOutput:\nUser John triggered click",
+              "tags": [
+                "objects",
+                "json",
+                "events"
+              ],
+              "description": "Problem Statement\nYou are given a JSON event.\n\nRules\n- Extract 'type' and 'user'\n- Format: \"User <user> triggered <type>\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"click\",\"user\":\"John\"}\nOutput:\nUser John triggered click",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (!obj.type || !obj.user) return \"invalid\";\n    return `User ${obj.user} triggered ${obj.type}`;\n  } catch {\n    return \"invalid\";\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse event JSON and return formatted log\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -740,8 +812,12 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["json", "validation", "objects"],
-              "description": "Problem Statement\nValidate a nested object structure.\n\nRules\n- Object must contain user.name (string) and user.age (number)\n- If valid → return \"valid\"\n- Else → \"invalid\"\n\nExamples\nInput:\n{\"user\":{\"name\":\"John\",\"age\":20}}\nOutput:\nvalid\n\nInput:\n{\"user\":{\"name\":123}}\nOutput:\ninvalid",
+              "tags": [
+                "json",
+                "validation",
+                "objects"
+              ],
+              "description": "Problem Statement\nValidate a nested object structure.\n\nRules\n- Object must contain user.name (string) and user.age (number)\n- If valid \u00e2\u2020\u2019 return \"valid\"\n- Else \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"user\":{\"name\":\"John\",\"age\":20}}\nOutput:\nvalid\n\nInput:\n{\"user\":{\"name\":123}}\nOutput:\ninvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (\n      obj.user &&\n      typeof obj.user.name === 'string' &&\n      typeof obj.user.age === 'number'\n    ) {\n      return 'valid';\n    }\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate nested object structure\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -774,8 +850,12 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["logic", "types", "overloading"],
-              "description": "Problem Statement\nPerform operation based on input types.\n\nRules\n- If both inputs are numbers → return sum\n- If both are strings → concatenate\n- Otherwise → \"invalid\"\n\nExamples\nInput:\n2 3\nOutput:\n5\n\nInput:\nhello world\nOutput:\nhelloworld",
+              "tags": [
+                "logic",
+                "types",
+                "overloading"
+              ],
+              "description": "Problem Statement\nPerform operation based on input types.\n\nRules\n- If both inputs are numbers \u00e2\u2020\u2019 return sum\n- If both are strings \u00e2\u2020\u2019 concatenate\n- Otherwise \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n2 3\nOutput:\n5\n\nInput:\nhello world\nOutput:\nhelloworld",
               "solution": "function solution(input: string): string {\n  const [a, b] = input.trim().split(/\\s+/);\n  const numA = Number(a);\n  const numB = Number(b);\n\n  if (!isNaN(numA) && !isNaN(numB)) {\n    return String(numA + numB);\n  }\n\n  if (/^[a-zA-Z]+$/.test(a) && /^[a-zA-Z]+$/.test(b)) {\n    return a + b;\n  }\n\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: handle string concat or number addition\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -808,8 +888,12 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["objects", "immutability", "typescript"],
-              "description": "Problem Statement\nYou are given a JSON object.\n\nYour task is to return it unchanged.\n\nRules\n- Do not modify the object\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"a\":1}\nOutput:\n{\"a\":1}",
+              "tags": [
+                "objects",
+                "immutability",
+                "typescript"
+              ],
+              "description": "Problem Statement\nYou are given a JSON object.\n\nYour task is to return it unchanged.\n\nRules\n- Do not modify the object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1}\nOutput:\n{\"a\":1}",
               "solution": "function solution(input: string): string {\n  try {\n    JSON.parse(input);\n    return input.trim();\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return object without modifying it\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -846,8 +930,12 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["typescript", "objects", "comparison"],
-              "description": "Problem Statement\nYou are given two JSON objects (one per line).\n\nYour task is to compare them for shallow equality.\n\nRules\n- Objects are equal if they have the same keys and values\n- Order of keys does not matter\n- Return \"equal\" or \"not equal\"\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":2,\"a\":1}\nOutput:\nequal",
+              "tags": [
+                "typescript",
+                "objects",
+                "comparison"
+              ],
+              "description": "Problem Statement\nYou are given two JSON objects (one per line).\n\nYour task is to compare them for shallow equality.\n\nRules\n- Objects are equal if they have the same keys and values\n- Order of keys does not matter\n- Return \"equal\" or \"not equal\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":2,\"a\":1}\nOutput:\nequal",
               "solution": "function solution(input: string): string {\n  try {\n    const [aStr, bStr] = input.trim().split('\\n');\n    const a = JSON.parse(aStr);\n    const b = JSON.parse(bStr);\n\n    const keysA = Object.keys(a);\n    const keysB = Object.keys(b);\n\n    if (keysA.length !== keysB.length) return 'not equal';\n\n    for (const key of keysA) {\n      if (a[key] !== b[key]) return 'not equal';\n    }\n\n    return 'equal';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: compare two objects for shallow equality\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -880,8 +968,12 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["objects", "merge", "typescript"],
-              "description": "Problem Statement\nMerge two JSON objects.\n\nRules\n- Input has two lines (two JSON objects)\n- Second object overrides first on conflict\n- Return merged object as JSON string\n- Invalid JSON → \"invalid\"\n\nExample\nInput:\n{\"a\":1}\n{\"b\":2}\nOutput:\n{\"a\":1,\"b\":2}",
+              "tags": [
+                "objects",
+                "merge",
+                "typescript"
+              ],
+              "description": "Problem Statement\nMerge two JSON objects.\n\nRules\n- Input has two lines (two JSON objects)\n- Second object overrides first on conflict\n- Return merged object as JSON string\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"a\":1}\n{\"b\":2}\nOutput:\n{\"a\":1,\"b\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const [aStr, bStr] = input.trim().split('\\n');\n    const a = JSON.parse(aStr);\n    const b = JSON.parse(bStr);\n    return JSON.stringify({ ...a, ...b });\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: merge two JSON objects\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -910,8 +1002,12 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["json", "optional", "typescript"],
-              "description": "Problem Statement\nExtract user.profile.name safely from JSON.\n\nRules\n- If path exists → return name\n- Missing → \"not found\"\n- Invalid JSON → \"invalid\"\n\nExample\nInput:\n{\"user\":{\"profile\":{\"name\":\"John\"}}}\nOutput:\nJohn",
+              "tags": [
+                "json",
+                "optional",
+                "typescript"
+              ],
+              "description": "Problem Statement\nExtract user.profile.name safely from JSON.\n\nRules\n- If path exists \u00e2\u2020\u2019 return name\n- Missing \u00e2\u2020\u2019 \"not found\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"user\":{\"profile\":{\"name\":\"John\"}}}\nOutput:\nJohn",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return obj?.user?.profile?.name ?? 'not found';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: safely access nested property user.profile.name\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -940,8 +1036,11 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["functions", "defaults"],
-              "description": "Problem Statement\nGenerate greeting with default name.\n\nRules\n- If input empty → use \"Guest\"\n- Else use given name\n\nExample\nInput:\n(empty)\nOutput:\nHello Guest",
+              "tags": [
+                "functions",
+                "defaults"
+              ],
+              "description": "Problem Statement\nGenerate greeting with default name.\n\nRules\n- If input empty \u00e2\u2020\u2019 use \"Guest\"\n- Else use given name\n\nExample\nInput:\n(empty)\nOutput:\nHello Guest",
               "solution": "function solution(input: string): string {\n  const name = input.trim() || 'Guest';\n  return `Hello ${name}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply default value if missing\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -966,8 +1065,11 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["arrays", "tuple"],
-              "description": "Problem Statement\nReturn first and last elements from input.\n\nRules\n- If one element → return it twice\n- Maintain order\n\nExample\nInput:\n1 2 3 4\nOutput:\n1 4",
+              "tags": [
+                "arrays",
+                "tuple"
+              ],
+              "description": "Problem Statement\nReturn first and last elements from input.\n\nRules\n- If one element \u00e2\u2020\u2019 return it twice\n- Maintain order\n\nExample\nInput:\n1 2 3 4\nOutput:\n1 4",
               "solution": "function solution(input: string): string {\n  const arr = input.trim().split(/\\s+/);\n  if (arr.length === 1) return `${arr[0]} ${arr[0]}`;\n  return `${arr[0]} ${arr[arr.length - 1]}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return first and last element\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -998,8 +1100,12 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["arrays", "filter", "logic"],
-              "description": "Problem Statement\nFilter an array based on a condition.\n\nRules\n- First line: condition (gt, lt, eq) and value\n- Second line: array\n- gt → greater than, lt → less than, eq → equal\n\nExamples\nInput:\ngt 3\n1 2 3 4 5\nOutput:\n4 5",
+              "tags": [
+                "arrays",
+                "filter",
+                "logic"
+              ],
+              "description": "Problem Statement\nFilter an array based on a condition.\n\nRules\n- First line: condition (gt, lt, eq) and value\n- Second line: array\n- gt \u00e2\u2020\u2019 greater than, lt \u00e2\u2020\u2019 less than, eq \u00e2\u2020\u2019 equal\n\nExamples\nInput:\ngt 3\n1 2 3 4 5\nOutput:\n4 5",
               "solution": "function solution(input: string): string {\n  const [condLine, arrLine] = input.trim().split('\\n');\n  const [cond, valStr] = condLine.split(' ');\n  const val = Number(valStr);\n  const nums = arrLine.split(/\\s+/).map(Number);\n\n  let result: number[] = [];\n  if (cond === 'gt') result = nums.filter(n => n > val);\n  else if (cond === 'lt') result = nums.filter(n => n < val);\n  else if (cond === 'eq') result = nums.filter(n => n === val);\n\n  return result.join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: filter values based on condition\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1028,8 +1134,12 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["geometry", "json", "logic"],
-              "description": "Problem Statement\nCalculate area based on shape type.\n\nRules\n- circle → πr² (use 3.1416)\n- square → side²\n- triangle → (base × height)/2\n- Round to 2 decimal places if needed\n- Invalid input → \"invalid\"\n\nExamples\nInput:\n{\"type\":\"circle\",\"radius\":2}\nOutput:\n12.57",
+              "tags": [
+                "geometry",
+                "json",
+                "logic"
+              ],
+              "description": "Problem Statement\nCalculate area based on shape type.\n\nRules\n- circle \u00e2\u2020\u2019 \u00cf\u20acr\u00c2\u00b2 (use 3.1416)\n- square \u00e2\u2020\u2019 side\u00c2\u00b2\n- triangle \u00e2\u2020\u2019 (base \u00c3\u2014 height)/2\n- Round to 2 decimal places if needed\n- Invalid input \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"circle\",\"radius\":2}\nOutput:\n12.57",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.type === 'circle') return (3.1416 * obj.radius * obj.radius).toFixed(2);\n    if (obj.type === 'square') return String(obj.side * obj.side);\n    if (obj.type === 'triangle') return String((obj.base * obj.height) / 2);\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: calculate area based on shape type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1058,8 +1168,11 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["error-handling", "math"],
-              "description": "Problem Statement\nPerform division safely.\n\nRules\n- Input: two values\n- If valid numbers → return division\n- Division by zero → \"error\"\n- Invalid numbers → \"invalid\"\n\nExamples\nInput:\n10 2\nOutput:\n5",
+              "tags": [
+                "error-handling",
+                "math"
+              ],
+              "description": "Problem Statement\nPerform division safely.\n\nRules\n- Input: two values\n- If valid numbers \u00e2\u2020\u2019 return division\n- Division by zero \u00e2\u2020\u2019 \"error\"\n- Invalid numbers \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n10 2\nOutput:\n5",
               "solution": "function solution(input: string): string {\n  const [aStr, bStr] = input.trim().split(/\\s+/);\n  const a = Number(aStr);\n  const b = Number(bStr);\n\n  if (isNaN(a) || isNaN(b)) return 'invalid';\n  if (b === 0) return 'error';\n  return String(a / b);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: safely divide two numbers\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1088,8 +1201,11 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["logic", "validation"],
-              "description": "Problem Statement\nSimulate a promise result.\n\nRules\n- If input is a valid number → \"resolved <number>\"\n- Otherwise → \"rejected\"\n\nExamples\nInput:\n42\nOutput:\nresolved 42",
+              "tags": [
+                "logic",
+                "validation"
+              ],
+              "description": "Problem Statement\nSimulate a promise result.\n\nRules\n- If input is a valid number \u00e2\u2020\u2019 \"resolved <number>\"\n- Otherwise \u00e2\u2020\u2019 \"rejected\"\n\nExamples\nInput:\n42\nOutput:\nresolved 42",
               "solution": "function solution(input: string): string {\n  const val = Number(input.trim());\n  if (!isNaN(val)) return `resolved ${val}`;\n  return 'rejected';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate and return result or error\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1114,8 +1230,12 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["json", "objects", "merge"],
-              "description": "Problem Statement\nUpdate a base object using a partial object.\n\nRules\n- First line: base object\n- Second line: partial update\n- Override matching keys\n- Return updated object\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":3}\nOutput:\n{\"a\":1,\"b\":3}",
+              "tags": [
+                "json",
+                "objects",
+                "merge"
+              ],
+              "description": "Problem Statement\nUpdate a base object using a partial object.\n\nRules\n- First line: base object\n- Second line: partial update\n- Override matching keys\n- Return updated object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":3}\nOutput:\n{\"a\":1,\"b\":3}",
               "solution": "function solution(input: string): string {\n  try {\n    const [baseStr, updateStr] = input.trim().split('\\n');\n    const base = JSON.parse(baseStr);\n    const update = JSON.parse(updateStr);\n    return JSON.stringify({ ...base, ...update });\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: merge partial object into base object\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1146,7 +1266,11 @@
               "level": "Intermediate_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["json", "immutability", "objects"],
+              "tags": [
+                "json",
+                "immutability",
+                "objects"
+              ],
               "description": "Problem Statement\nYou are given a JSON object.\n\nSimulate a deep readonly check.\n\nRules\n- Assume object should not be modified\n- Return \"readonly\" if structure is valid JSON\n- Return \"invalid\" if parsing fails\n\n(This simulates deep readonly validation in runtime)\n\nExample\nInput:\n{\"a\":1,\"b\":{\"c\":2}}\nOutput:\nreadonly",
               "solution": "function solution(input: string): string {\n  try {\n    JSON.parse(input);\n    return 'readonly';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1172,8 +1296,11 @@
               "level": "Intermediate_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["logic", "overloading"],
-              "description": "Problem Statement\nSimulate function overloading.\n\nRules\n- \"sum\" → sum all numbers\n- \"concat\" → concatenate all strings\n- Invalid → \"invalid\"\n\nExamples\nInput:\nsum 1 2 3\nOutput:\n6",
+              "tags": [
+                "logic",
+                "overloading"
+              ],
+              "description": "Problem Statement\nSimulate function overloading.\n\nRules\n- \"sum\" \u00e2\u2020\u2019 sum all numbers\n- \"concat\" \u00e2\u2020\u2019 concatenate all strings\n- Invalid \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\nsum 1 2 3\nOutput:\n6",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/);\n  const type = parts[0];\n  const rest = parts.slice(1);\n\n  if (type === 'sum') {\n    const nums = rest.map(Number);\n    if (nums.some(isNaN)) return 'invalid';\n    return String(nums.reduce((a, b) => a + b, 0));\n  }\n\n  if (type === 'concat') {\n    return rest.join('');\n  }\n\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply different logic based on input pattern\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1206,8 +1333,11 @@
               "level": "Intermediate_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["logic", "type-check"],
-              "description": "Problem Statement\nDetermine type of input.\n\nRules\n- Number → \"number\"\n- true/false → \"boolean\"\n- valid JSON object → \"object\"\n- otherwise → \"string\"\n\nExamples\nInput:\n123\nOutput:\nnumber",
+              "tags": [
+                "logic",
+                "type-check"
+              ],
+              "description": "Problem Statement\nDetermine type of input.\n\nRules\n- Number \u00e2\u2020\u2019 \"number\"\n- true/false \u00e2\u2020\u2019 \"boolean\"\n- valid JSON object \u00e2\u2020\u2019 \"object\"\n- otherwise \u00e2\u2020\u2019 \"string\"\n\nExamples\nInput:\n123\nOutput:\nnumber",
               "solution": "function solution(input: string): string {\n  const val = input.trim();\n\n  if (!isNaN(Number(val))) return 'number';\n  if (val === 'true' || val === 'false') return 'boolean';\n\n  try {\n    const parsed = JSON.parse(val);\n    if (typeof parsed === 'object') return 'object';\n  } catch {}\n\n  return 'string';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify input type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1240,8 +1370,11 @@
               "level": "Intermediate_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["json", "validation"],
-              "description": "Problem Statement\nDetermine object type using fields.\n\nRules\n- type=user and has name → \"user\"\n- type=admin and has level → \"admin\"\n- otherwise → \"invalid\"\n\nExamples\nInput:\n{\"type\":\"user\",\"name\":\"John\"}\nOutput:\nuser",
+              "tags": [
+                "json",
+                "validation"
+              ],
+              "description": "Problem Statement\nDetermine object type using fields.\n\nRules\n- type=user and has name \u00e2\u2020\u2019 \"user\"\n- type=admin and has level \u00e2\u2020\u2019 \"admin\"\n- otherwise \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"user\",\"name\":\"John\"}\nOutput:\nuser",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.type === 'user' && typeof obj.name === 'string') return 'user';\n    if (obj.type === 'admin' && typeof obj.level === 'number') return 'admin';\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate object type based on fields\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1270,8 +1403,12 @@
               "level": "Intermediate_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["recursion", "arrays", "json"],
-              "description": "Problem Statement\nFlatten a nested array.\n\nRules\n- Input is JSON array (possibly nested)\n- Output flattened values space-separated\n- Maintain order\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n[1,[2,3],[4,[5]]]\nOutput:\n1 2 3 4 5",
+              "tags": [
+                "recursion",
+                "arrays",
+                "json"
+              ],
+              "description": "Problem Statement\nFlatten a nested array.\n\nRules\n- Input is JSON array (possibly nested)\n- Output flattened values space-separated\n- Maintain order\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n[1,[2,3],[4,[5]]]\nOutput:\n1 2 3 4 5",
               "solution": "function solution(input: string): string {\n  try {\n    const arr = JSON.parse(input);\n\n    const result: number[] = [];\n    function flatten(a: any) {\n      for (const el of a) {\n        if (Array.isArray(el)) flatten(el);\n        else result.push(el);\n      }\n    }\n\n    flatten(arr);\n    return result.join(' ');\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: flatten nested arrays\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1304,8 +1441,11 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["objects", "keys"],
-              "description": "Problem Statement\nReturn all keys of a JSON object in sorted order.\n\nRules\n- Output keys space-separated\n- Sort alphabetically\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"b\":2,\"a\":1}\nOutput:\na b",
+              "tags": [
+                "objects",
+                "keys"
+              ],
+              "description": "Problem Statement\nReturn all keys of a JSON object in sorted order.\n\nRules\n- Output keys space-separated\n- Sort alphabetically\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"b\":2,\"a\":1}\nOutput:\na b",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return Object.keys(obj).sort().join(' ');\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return all keys of object sorted\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1334,8 +1474,11 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["arrays", "index"],
-              "description": "Problem Statement\nReturn element at given index.\n\nRules\n- First line: array\n- Second line: index\n- If index out of range → \"invalid\"\n\nExamples\nInput:\n1 2 3 4\n2\nOutput:\n3",
+              "tags": [
+                "arrays",
+                "index"
+              ],
+              "description": "Problem Statement\nReturn element at given index.\n\nRules\n- First line: array\n- Second line: index\n- If index out of range \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n1 2 3 4\n2\nOutput:\n3",
               "solution": "function solution(input: string): string {\n  const [arrLine, idxLine] = input.trim().split('\\n');\n  const arr = arrLine.split(/\\s+/);\n  const idx = Number(idxLine);\n\n  if (isNaN(idx) || idx < 0 || idx >= arr.length) return 'invalid';\n  return arr[idx];\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return element at given index\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1364,7 +1507,10 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["mapping", "objects"],
+              "tags": [
+                "mapping",
+                "objects"
+              ],
               "description": "Problem Statement\nCount frequency of words.\n\nRules\n- Output format: word:count\n- Maintain alphabetical order of words\n\nExamples\nInput:\na b a\nOutput:\na:2 b:1",
               "solution": "function solution(input: string): string {\n  const words = input.trim().split(/\\s+/).filter(Boolean);\n  const map: Record<string, number> = {};\n\n  for (const w of words) {\n    map[w] = (map[w] || 0) + 1;\n  }\n\n  return Object.keys(map)\n    .sort()\n    .map(k => `${k}:${map[k]}`)\n    .join(' ');\n}",
               "starter_code": {
@@ -1394,7 +1540,10 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["parsing", "numbers"],
+              "tags": [
+                "parsing",
+                "numbers"
+              ],
               "description": "Problem Statement\nParse and sum valid numbers.\n\nRules\n- Ignore invalid values\n- Return sum\n\nExamples\nInput:\n1 a 2\nOutput:\n3",
               "solution": "function solution(input: string): string {\n  const nums = input.trim().split(/\\s+/);\n  let sum = 0;\n\n  for (const n of nums) {\n    const val = Number(n);\n    if (!isNaN(val)) sum += val;\n  }\n\n  return String(sum);\n}",
               "starter_code": {
@@ -1424,8 +1573,11 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["type-check", "logic"],
-              "description": "Problem Statement\nClassify each value by type.\n\nRules\n- number → \"number\"\n- true/false → \"boolean\"\n- others → \"string\"\n\nExamples\nInput:\n1 true hello\nOutput:\nnumber boolean string",
+              "tags": [
+                "type-check",
+                "logic"
+              ],
+              "description": "Problem Statement\nClassify each value by type.\n\nRules\n- number \u00e2\u2020\u2019 \"number\"\n- true/false \u00e2\u2020\u2019 \"boolean\"\n- others \u00e2\u2020\u2019 \"string\"\n\nExamples\nInput:\n1 true hello\nOutput:\nnumber boolean string",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n\n  const result = parts.map(p => {\n    if (!isNaN(Number(p))) return 'number';\n    if (p === 'true' || p === 'false') return 'boolean';\n    return 'string';\n  });\n\n  return result.join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify values by type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1456,8 +1608,11 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["objects", "transformation"],
-              "description": "Problem Statement\nTransform all values of a JSON object into strings.\n\nRules\n- Keep keys same\n- Convert values using String()\n- Return JSON string\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":true}\nOutput:\n{\"a\":\"1\",\"b\":\"true\"}",
+              "tags": [
+                "objects",
+                "transformation"
+              ],
+              "description": "Problem Statement\nTransform all values of a JSON object into strings.\n\nRules\n- Keep keys same\n- Convert values using String()\n- Return JSON string\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":true}\nOutput:\n{\"a\":\"1\",\"b\":\"true\"}",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    const result: any = {};\n    for (const key in obj) {\n      result[key] = String(obj[key]);\n    }\n    return JSON.stringify(result);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: transform all values to strings\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1486,7 +1641,10 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["objects", "filter"],
+              "tags": [
+                "objects",
+                "filter"
+              ],
               "description": "Problem Statement\nPick selected keys from an object.\n\nRules\n- First line: JSON object\n- Second line: space-separated keys\n- Return object with only those keys\n- Ignore missing keys\n\nExamples\nInput:\n{\"a\":1,\"b\":2,\"c\":3}\na c\nOutput:\n{\"a\":1,\"c\":3}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, keysLine] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const keys = keysLine.split(/\\s+/);\n\n    const result: any = {};\n    for (const k of keys) {\n      if (k in obj) result[k] = obj[k];\n    }\n\n    return JSON.stringify(result);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1516,7 +1674,10 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["events", "grouping"],
+              "tags": [
+                "events",
+                "grouping"
+              ],
               "description": "Problem Statement\nGroup events by type.\n\nRules\n- Each line is a JSON event\n- Count occurrences of each type\n- Output sorted by key\n\nExamples\nInput:\n{\"type\":\"click\"}\n{\"type\":\"click\"}\n{\"type\":\"login\"}\nOutput:\nclick:2 login:1",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    const map: Record<string, number> = {};\n\n    for (const line of lines) {\n      const obj = JSON.parse(line);\n      const t = obj.type;\n      map[t] = (map[t] || 0) + 1;\n    }\n\n    return Object.keys(map)\n      .sort()\n      .map(k => `${k}:${map[k]}`)\n      .join(' ');\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1546,8 +1707,11 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["validation", "objects"],
-              "description": "Problem Statement\nValidate object against required keys.\n\nRules\n- First line: JSON object\n- Second line: required keys\n- If all exist → \"valid\"\n- Else → \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\na b\nOutput:\nvalid",
+              "tags": [
+                "validation",
+                "objects"
+              ],
+              "description": "Problem Statement\nValidate object against required keys.\n\nRules\n- First line: JSON object\n- Second line: required keys\n- If all exist \u00e2\u2020\u2019 \"valid\"\n- Else \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\na b\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, keysLine] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const keys = keysLine.split(/\\s+/);\n\n    for (const k of keys) {\n      if (!(k in obj)) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: ensure object has required keys\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1576,7 +1740,10 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["merge", "objects"],
+              "tags": [
+                "merge",
+                "objects"
+              ],
               "description": "Problem Statement\nMerge multiple objects into one.\n\nRules\n- Each line is a JSON object\n- Later objects override earlier ones\n- Return merged result\n\nExamples\nInput:\n{\"a\":1}\n{\"b\":2}\nOutput:\n{\"a\":1,\"b\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    let result: any = {};\n\n    for (const line of lines) {\n      const obj = JSON.parse(line);\n      result = { ...result, ...obj };\n    }\n\n    return JSON.stringify(result);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1608,8 +1775,11 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["classification", "logic"],
-              "description": "Problem Statement\nClassify each value into its type category.\n\nRules\n- number → number\n- true/false → boolean\n- valid JSON object/array → object\n- otherwise → string\n\nExamples\nInput:\n1 true hello {}\nOutput:\nnumber boolean string object",
+              "tags": [
+                "classification",
+                "logic"
+              ],
+              "description": "Problem Statement\nClassify each value into its type category.\n\nRules\n- number \u00e2\u2020\u2019 number\n- true/false \u00e2\u2020\u2019 boolean\n- valid JSON object/array \u00e2\u2020\u2019 object\n- otherwise \u00e2\u2020\u2019 string\n\nExamples\nInput:\n1 true hello {}\nOutput:\nnumber boolean string object",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n\n  return parts.map(p => {\n    if (!isNaN(Number(p))) return 'number';\n    if (p === 'true' || p === 'false') return 'boolean';\n\n    try {\n      const parsed = JSON.parse(p);\n      if (typeof parsed === 'object') return 'object';\n    } catch {}\n\n    return 'string';\n  }).join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify each value into categories\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1638,7 +1808,11 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["json", "merge", "recursion"],
+              "tags": [
+                "json",
+                "merge",
+                "recursion"
+              ],
               "description": "Problem Statement\nDeeply merge a partial object into a base object.\n\nRules\n- Nested objects must be merged recursively\n- Primitive values overwrite\n- Return final merged object\n\nExamples\nInput:\n{\"a\":1,\"b\":{\"c\":2,\"d\":3}}\n{\"b\":{\"c\":10}}\nOutput:\n{\"a\":1,\"b\":{\"c\":10,\"d\":3}}",
               "solution": "function solution(input: string): string {\n  try {\n    const [baseStr, updateStr] = input.trim().split('\\n');\n    const base = JSON.parse(baseStr);\n    const update = JSON.parse(updateStr);\n\n    function deepMerge(a: any, b: any): any {\n      for (const key in b) {\n        if (b[key] && typeof b[key] === 'object' && !Array.isArray(b[key])) {\n          a[key] = deepMerge(a[key] || {}, b[key]);\n        } else {\n          a[key] = b[key];\n        }\n      }\n      return a;\n    }\n\n    return JSON.stringify(deepMerge(base, update));\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1668,8 +1842,11 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["analysis", "arrays"],
-              "description": "Problem Statement\nDetermine the element type of an array.\n\nRules\n- All numbers → number\n- All strings → string\n- Mixed → mixed\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n[1,2,3]\nOutput:\nnumber",
+              "tags": [
+                "analysis",
+                "arrays"
+              ],
+              "description": "Problem Statement\nDetermine the element type of an array.\n\nRules\n- All numbers \u00e2\u2020\u2019 number\n- All strings \u00e2\u2020\u2019 string\n- Mixed \u00e2\u2020\u2019 mixed\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n[1,2,3]\nOutput:\nnumber",
               "solution": "function solution(input: string): string {\n  try {\n    const arr = JSON.parse(input);\n    if (!Array.isArray(arr)) return 'invalid';\n\n    let hasNum = false;\n    let hasStr = false;\n\n    for (const el of arr) {\n      if (typeof el === 'number') hasNum = true;\n      else if (typeof el === 'string') hasStr = true;\n    }\n\n    if (hasNum && hasStr) return 'mixed';\n    if (hasNum) return 'number';\n    if (hasStr) return 'string';\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: infer array element type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1698,7 +1875,10 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["arrays", "manipulation"],
+              "tags": [
+                "arrays",
+                "manipulation"
+              ],
               "description": "Problem Statement\nReverse all elements except the first one.\n\nRules\n- First element stays fixed\n- Remaining elements reversed\n\nExamples\nInput:\n1 2 3 4\nOutput:\n1 4 3 2",
               "solution": "function solution(input: string): string {\n  const arr = input.trim().split(/\\s+/);\n  if (arr.length <= 1) return arr.join(' ');\n\n  const first = arr[0];\n  const rest = arr.slice(1).reverse();\n\n  return [first, ...rest].join(' ');\n}",
               "starter_code": {
@@ -1728,8 +1908,11 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["state", "simulation"],
-              "description": "Problem Statement\nSimulate a reducer with actions.\n\nRules\n- First line: initial number\n- Following lines: actions\n- inc → +1\n- dec → -1\n\nExamples\nInput:\n0\ninc\ninc\ndec\nOutput:\n1",
+              "tags": [
+                "state",
+                "simulation"
+              ],
+              "description": "Problem Statement\nSimulate a reducer with actions.\n\nRules\n- First line: initial number\n- Following lines: actions\n- inc \u00e2\u2020\u2019 +1\n- dec \u00e2\u2020\u2019 -1\n\nExamples\nInput:\n0\ninc\ninc\ndec\nOutput:\n1",
               "solution": "function solution(input: string): string {\n  const lines = input.trim().split('\\n');\n  let state = Number(lines[0]);\n\n  for (let i = 1; i < lines.length; i++) {\n    if (lines[i] === 'inc') state++;\n    else if (lines[i] === 'dec') state--;\n  }\n\n  return String(state);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply actions to state\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1762,8 +1945,11 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["objects", "transform"],
-              "description": "Problem Statement\nRemove all null or undefined values from an object.\n\nRules\n- Keep only keys with valid values\n- Return cleaned object\n- Invalid JSON → \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":null,\"c\":2}\nOutput:\n{\"a\":1,\"c\":2}",
+              "tags": [
+                "objects",
+                "transform"
+              ],
+              "description": "Problem Statement\nRemove all null or undefined values from an object.\n\nRules\n- Keep only keys with valid values\n- Return cleaned object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":null,\"c\":2}\nOutput:\n{\"a\":1,\"c\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    const res: any = {};\n    for (const k in obj) {\n      if (obj[k] !== null && obj[k] !== undefined) {\n        res[k] = obj[k];\n      }\n    }\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: remove null/undefined values from object\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1792,7 +1978,10 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["objects", "filter"],
+              "tags": [
+                "objects",
+                "filter"
+              ],
               "description": "Problem Statement\nRemove specified keys from an object.\n\nRules\n- First line: JSON object\n- Second line: keys to remove\n- Ignore non-existing keys\n\nExamples\nInput:\n{\"a\":1,\"b\":2,\"c\":3}\nb c\nOutput:\n{\"a\":1}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, keysLine] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const keys = keysLine.split(/\\s+/);\n\n    for (const k of keys) {\n      delete obj[k];\n    }\n\n    return JSON.stringify(obj);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -1822,8 +2011,11 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["validation", "strings"],
-              "description": "Problem Statement\nReturn length of a valid string.\n\nRules\n- If input is \"null\" or empty → return 0\n- Otherwise return string length\n\nExamples\nInput:\nhello\nOutput:\n5",
+              "tags": [
+                "validation",
+                "strings"
+              ],
+              "description": "Problem Statement\nReturn length of a valid string.\n\nRules\n- If input is \"null\" or empty \u00e2\u2020\u2019 return 0\n- Otherwise return string length\n\nExamples\nInput:\nhello\nOutput:\n5",
               "solution": "function solution(input: string): string {\n  const val = input.trim();\n  if (!val || val === 'null') return '0';\n  return String(val.length);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return length of valid string or 0\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1852,8 +2044,11 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["json", "validation"],
-              "description": "Problem Statement\nIdentify object type based on keys.\n\nRules\n- radius → circle\n- side → square\n- otherwise → unknown\n\nExamples\nInput:\n{\"radius\":2}\nOutput:\ncircle",
+              "tags": [
+                "json",
+                "validation"
+              ],
+              "description": "Problem Statement\nIdentify object type based on keys.\n\nRules\n- radius \u00e2\u2020\u2019 circle\n- side \u00e2\u2020\u2019 square\n- otherwise \u00e2\u2020\u2019 unknown\n\nExamples\nInput:\n{\"radius\":2}\nOutput:\ncircle",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if ('radius' in obj) return 'circle';\n    if ('side' in obj) return 'square';\n    return 'unknown';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: detect object type based on keys\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1882,8 +2077,11 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["arrays", "manipulation"],
-              "description": "Problem Statement\nRemove last element from array without mutating original.\n\nRules\n- Return remaining elements\n- Single element → empty output\n\nExamples\nInput:\n1 2 3\nOutput:\n1 2",
+              "tags": [
+                "arrays",
+                "manipulation"
+              ],
+              "description": "Problem Statement\nRemove last element from array without mutating original.\n\nRules\n- Return remaining elements\n- Single element \u00e2\u2020\u2019 empty output\n\nExamples\nInput:\n1 2 3\nOutput:\n1 2",
               "solution": "function solution(input: string): string {\n  const arr = input.trim().split(/\\s+/).filter(Boolean);\n  return arr.slice(0, -1).join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return new array with last element removed\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1914,8 +2112,12 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["graph", "resolution", "cycles"],
-              "description": "Problem Statement\nResolve dependencies from a container with cycle detection.\n\nRules\n- First line: JSON map of dependencies\n- Second line: key to resolve\n- Follow chain until terminal value\n- If cycle detected → \"cycle\"\n- If key not present → \"not_found\"\n\nExample\nInput:\n{\"a\":\"b\",\"b\":\"c\",\"c\":\"value\"}\na\nOutput:\nvalue",
+              "tags": [
+                "graph",
+                "resolution",
+                "cycles"
+              ],
+              "description": "Problem Statement\nResolve dependencies from a container with cycle detection.\n\nRules\n- First line: JSON map of dependencies\n- Second line: key to resolve\n- Follow chain until terminal value\n- If cycle detected \u00e2\u2020\u2019 \"cycle\"\n- If key not present \u00e2\u2020\u2019 \"not_found\"\n\nExample\nInput:\n{\"a\":\"b\",\"b\":\"c\",\"c\":\"value\"}\na\nOutput:\nvalue",
               "solution": "function solution(input: string): string {\n  try {\n    const [mapStr, key] = input.trim().split('\\n');\n    const map = JSON.parse(mapStr);\n\n    if (!(key in map)) return 'not_found';\n\n    let current = key;\n    const visited = new Set();\n\n    while (current in map) {\n      if (visited.has(current)) return 'cycle';\n      visited.add(current);\n      current = map[current];\n    }\n\n    return current;\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: resolve dependency with cycle detection\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1944,8 +2146,12 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["state", "overwrite", "order"],
-              "description": "Problem Statement\nBuild an object step-by-step.\n\nRules\n- Each line: key=value\n- Later assignments overwrite earlier ones\n- Invalid format → \"invalid\"\n\nExample\nInput:\nname=John\nage=20\nname=Jane\nOutput:\n{\"name\":\"Jane\",\"age\":20}",
+              "tags": [
+                "state",
+                "overwrite",
+                "order"
+              ],
+              "description": "Problem Statement\nBuild an object step-by-step.\n\nRules\n- Each line: key=value\n- Later assignments overwrite earlier ones\n- Invalid format \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nname=John\nage=20\nname=Jane\nOutput:\n{\"name\":\"Jane\",\"age\":20}",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n').filter(Boolean);\n    const obj: any = {};\n\n    for (const line of lines) {\n      if (!line.includes('=')) return 'invalid';\n      const [k, v] = line.split('=');\n      const num = Number(v);\n      obj[k] = isNaN(num) ? v : num;\n    }\n\n    return JSON.stringify(obj);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply build steps with overwrite rules\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1974,8 +2180,11 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["validation", "rules"],
-              "description": "Problem Statement\nValidate a form with multiple constraints.\n\nRules\n- name: non-empty string\n- age: ≥ 18\n- email (optional): must contain '@'\n- Missing required fields → \"invalid\"\n\nExample\nInput:\n{\"name\":\"John\",\"age\":20,\"email\":\"a@b.com\"}\nOutput:\nvalid",
+              "tags": [
+                "validation",
+                "rules"
+              ],
+              "description": "Problem Statement\nValidate a form with multiple constraints.\n\nRules\n- name: non-empty string\n- age: \u00e2\u2030\u00a5 18\n- email (optional): must contain '@'\n- Missing required fields \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"name\":\"John\",\"age\":20,\"email\":\"a@b.com\"}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n\n    if (typeof obj.name !== 'string' || obj.name.length === 0) return 'invalid';\n    if (typeof obj.age !== 'number' || obj.age < 18) return 'invalid';\n\n    if ('email' in obj) {\n      if (typeof obj.email !== 'string' || !obj.email.includes('@')) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate with multiple constraints\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2004,8 +2213,11 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["mapping", "conflicts"],
-              "description": "Problem Statement\nRename keys using mapping with conflicts.\n\nRules\n- If multiple keys map to same key → last wins\n- Keys not in mapping remain unchanged\n\nExample\nInput:\n{\"a\":1,\"b\":2}\n{\"a\":\"x\",\"b\":\"x\"}\nOutput:\n{\"x\":2}",
+              "tags": [
+                "mapping",
+                "conflicts"
+              ],
+              "description": "Problem Statement\nRename keys using mapping with conflicts.\n\nRules\n- If multiple keys map to same key \u00e2\u2020\u2019 last wins\n- Keys not in mapping remain unchanged\n\nExample\nInput:\n{\"a\":1,\"b\":2}\n{\"a\":\"x\",\"b\":\"x\"}\nOutput:\n{\"x\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, mapStr] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const map = JSON.parse(mapStr);\n\n    const res: any = {};\n\n    for (const k in obj) {\n      const newKey = map[k] || k;\n      res[newKey] = obj[k];\n    }\n\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: remap keys with conflict resolution\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2030,7 +2242,10 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["grouping", "sorting"],
+              "tags": [
+                "grouping",
+                "sorting"
+              ],
               "description": "Problem Statement\nGroup items by type and sort values.\n\nRules\n- Group by type\n- Sort values ascending inside each group\n- Output keys sorted alphabetically\n\nExample\nInput:\n{\"type\":\"a\",\"value\":3}\n{\"type\":\"a\",\"value\":1}\nOutput:\n{\"a\":[1,3]}",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    const res: any = {};\n\n    for (const line of lines) {\n      const obj = JSON.parse(line);\n      if (!res[obj.type]) res[obj.type] = [];\n      res[obj.type].push(obj.value);\n    }\n\n    const sorted: any = {};\n    Object.keys(res).sort().forEach(k => {\n      sorted[k] = res[k].sort((a: number, b: number) => a - b);\n    });\n\n    return JSON.stringify(sorted);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2058,7 +2273,11 @@
               "level": "Specialist_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["strings", "transform", "rules"],
+              "tags": [
+                "strings",
+                "transform",
+                "rules"
+              ],
               "description": "Problem Statement\nConvert a string into camelCase.\n\nRules\n- Split by '_' and '-'\n- First word lowercase\n- Next words capitalized\n- Preserve existing camelCase\n\nExample\nInput:\nhello_world-test\nOutput:\nhelloWorldTest",
               "solution": "function solution(input: string): string {\n  const parts = input.split(/[_-]/);\n  if (parts.length === 1) return input;\n\n  return parts\n    .map((p, i) => i === 0 ? p.toLowerCase() : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())\n    .join('');\n}",
               "starter_code": {
@@ -2088,8 +2307,12 @@
               "level": "Specialist_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["objects", "flags", "transform"],
-              "description": "Problem Statement\nApply modifiers to an object.\n\nRules\n- readonly → return same object\n- optional → remove all keys\n- unknown modifier → \"invalid\"\n\nExample\nInput:\n{\"x\":1}\noptional\nOutput:\n{}",
+              "tags": [
+                "objects",
+                "flags",
+                "transform"
+              ],
+              "description": "Problem Statement\nApply modifiers to an object.\n\nRules\n- readonly \u00e2\u2020\u2019 return same object\n- optional \u00e2\u2020\u2019 remove all keys\n- unknown modifier \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"x\":1}\noptional\nOutput:\n{}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, modifier] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n\n    if (modifier === 'readonly') return JSON.stringify(obj);\n    if (modifier === 'optional') return JSON.stringify({});\n\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply modifiers to object values\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2118,8 +2341,11 @@
               "level": "Specialist_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["validation", "schema"],
-              "description": "Problem Statement\nValidate object against a schema definition.\n\nRules\n- Schema maps keys to types: number/string/boolean\n- All keys must match type\n- Missing or mismatch → \"invalid\"\n\nExample\nInput:\n{\"a\":1,\"b\":\"x\"}\n{\"a\":\"number\",\"b\":\"string\"}\nOutput:\nvalid",
+              "tags": [
+                "validation",
+                "schema"
+              ],
+              "description": "Problem Statement\nValidate object against a schema definition.\n\nRules\n- Schema maps keys to types: number/string/boolean\n- All keys must match type\n- Missing or mismatch \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"a\":1,\"b\":\"x\"}\n{\"a\":\"number\",\"b\":\"string\"}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, schemaStr] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const schema = JSON.parse(schemaStr);\n\n    for (const key in schema) {\n      if (!(key in obj)) return 'invalid';\n      if (typeof obj[key] !== schema[key]) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate object against schema\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2148,8 +2374,12 @@
               "level": "Specialist_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["state", "transitions", "validation"],
-              "description": "Problem Statement\nSimulate a state machine.\n\nStates: idle, running\n\nTransitions:\n- idle → start → running\n- running → stop → idle\n- invalid transition → \"invalid\"\n\nExample\nInput:\nidle\nstart\nstop\nOutput:\nidle",
+              "tags": [
+                "state",
+                "transitions",
+                "validation"
+              ],
+              "description": "Problem Statement\nSimulate a state machine.\n\nStates: idle, running\n\nTransitions:\n- idle \u00e2\u2020\u2019 start \u00e2\u2020\u2019 running\n- running \u00e2\u2020\u2019 stop \u00e2\u2020\u2019 idle\n- invalid transition \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nidle\nstart\nstop\nOutput:\nidle",
               "solution": "function solution(input: string): string {\n  const lines = input.trim().split('\\n');\n  let state = lines[0];\n\n  for (let i = 1; i < lines.length; i++) {\n    const action = lines[i];\n\n    if (state === 'idle' && action === 'start') state = 'running';\n    else if (state === 'running' && action === 'stop') state = 'idle';\n    else return 'invalid';\n  }\n\n  return state;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: simulate state machine\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2178,7 +2408,11 @@
               "level": "Specialist_1",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["recursion", "merge", "objects"],
+              "tags": [
+                "recursion",
+                "merge",
+                "objects"
+              ],
               "description": "Problem Statement\nDeeply merge two objects.\n\nRules\n- Objects merge recursively\n- Primitive values overwrite\n- Arrays overwrite (not merge)\n\nExample\nInput:\n{\"a\":1,\"b\":{\"x\":2}}\n{\"b\":{\"y\":3}}\nOutput:\n{\"a\":1,\"b\":{\"x\":2,\"y\":3}}",
               "solution": "function solution(input: string): string {\n  try {\n    const [aStr, bStr] = input.trim().split('\\n');\n    const a = JSON.parse(aStr);\n    const b = JSON.parse(bStr);\n\n    function merge(x: any, y: any): any {\n      if (typeof x !== 'object' || typeof y !== 'object' || Array.isArray(x) || Array.isArray(y)) {\n        return y;\n      }\n\n      const res: any = { ...x };\n\n      for (const key in y) {\n        if (key in res) {\n          res[key] = merge(res[key], y[key]);\n        } else {\n          res[key] = y[key];\n        }\n      }\n\n      return res;\n    }\n\n    return JSON.stringify(merge(a, b));\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2212,7 +2446,10 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["strings", "formatting"],
+              "tags": [
+                "strings",
+                "formatting"
+              ],
               "description": "Problem Statement\nPrefix the input string with \"user_\".\n\nRules\n- Always prepend \"user_\"\n- Do not modify original content\n\nExample\nInput:\njohn\nOutput:\nuser_john",
               "solution": "function solution(input: string): string {\n  return `user_${input}`;\n}",
               "starter_code": {
@@ -2242,7 +2479,10 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["filter", "numbers"],
+              "tags": [
+                "filter",
+                "numbers"
+              ],
               "description": "Problem Statement\nExtract only numeric values from input.\n\nRules\n- Input is space-separated\n- Keep only valid numbers\n\nExample\nInput:\n1 a 2 b 3\nOutput:\n1 2 3",
               "solution": "function solution(input: string): string {\n  return input.split(/\\s+/).filter(x => !isNaN(Number(x))).join(' ');\n}",
               "starter_code": {
@@ -2272,7 +2512,10 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["filter", "strings"],
+              "tags": [
+                "filter",
+                "strings"
+              ],
               "description": "Problem Statement\nRemove banned words from list.\n\nRules\n- First line: words\n- Second line: banned words\n- Remove all banned words\n\nExample\nInput:\napple banana orange\nbanana\nOutput:\napple orange",
               "solution": "function solution(input: string): string {\n  const [line1, line2 = ''] = input.trim().split('\\n');\n  const words = line1.split(/\\s+/);\n  const banned = new Set(line2.split(/\\s+/).filter(Boolean));\n\n  return words.filter(w => !banned.has(w)).join(' ');\n}",
               "starter_code": {
@@ -2302,7 +2545,10 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["filter", "null"],
+              "tags": [
+                "filter",
+                "null"
+              ],
               "description": "Problem Statement\nRemove null and undefined values.\n\nRules\n- Input is space-separated\n- Remove 'null' and 'undefined'\n\nExample\nInput:\n1 null 2 undefined 3\nOutput:\n1 2 3",
               "solution": "function solution(input: string): string {\n  return input\n    .split(/\\s+/)\n    .filter(x => x !== 'null' && x !== 'undefined')\n    .join(' ');\n}",
               "starter_code": {
@@ -2332,7 +2578,10 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["functions", "evaluation"],
+              "tags": [
+                "functions",
+                "evaluation"
+              ],
               "description": "Problem Statement\nEvaluate a simple addition expression.\n\nRules\n- Format: number+number\n- Return result\n\nExample\nInput:\n2+3\nOutput:\n5",
               "solution": "function solution(input: string): string {\n  const [a, b] = input.split('+').map(Number);\n  return String(a + b);\n}",
               "starter_code": {
@@ -2364,8 +2613,11 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["routing", "matching"],
-              "description": "Problem Statement\nMatch a route pattern and extract parameters.\n\nRules\n- Pattern may contain :param\n- Match exact segments\n- Return params as JSON\n- If mismatch → \"not_found\"\n\nExample\nInput:\n/user/:id\n/user/42\nOutput:\n{\"id\":\"42\"}",
+              "tags": [
+                "routing",
+                "matching"
+              ],
+              "description": "Problem Statement\nMatch a route pattern and extract parameters.\n\nRules\n- Pattern may contain :param\n- Match exact segments\n- Return params as JSON\n- If mismatch \u00e2\u2020\u2019 \"not_found\"\n\nExample\nInput:\n/user/:id\n/user/42\nOutput:\n{\"id\":\"42\"}",
               "solution": "function solution(input: string): string {\n  try {\n    const [pattern, path] = input.trim().split('\\n');\n    const pParts = pattern.split('/').filter(Boolean);\n    const pathParts = path.split('/').filter(Boolean);\n\n    if (pParts.length !== pathParts.length) return 'not_found';\n\n    const res: any = {};\n\n    for (let i = 0; i < pParts.length; i++) {\n      if (pParts[i].startsWith(':')) {\n        res[pParts[i].slice(1)] = pathParts[i];\n      } else if (pParts[i] !== pathParts[i]) {\n        return 'not_found';\n      }\n    }\n\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: match route and extract params\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2394,8 +2646,11 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["query", "strings"],
-              "description": "Problem Statement\nConstruct a GraphQL query.\n\nRules\n- First word = root\n- Remaining = fields\n- Format: { root { fields } }\n- Empty input → \"invalid\"\n\nExample\nInput:\nuser id name\nOutput:\n{ user { id name } }",
+              "tags": [
+                "query",
+                "strings"
+              ],
+              "description": "Problem Statement\nConstruct a GraphQL query.\n\nRules\n- First word = root\n- Remaining = fields\n- Format: { root { fields } }\n- Empty input \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nuser id name\nOutput:\n{ user { id name } }",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n  if (parts.length === 0) return 'invalid';\n\n  const [root, ...fields] = parts;\n  return `{ ${root} { ${fields.join(' ')} } }`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: build GraphQL query string\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2424,7 +2679,10 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["strings", "patterns"],
+              "tags": [
+                "strings",
+                "patterns"
+              ],
               "description": "Problem Statement\nExpand pattern into options.\n\nRules\n- Split by '|'\n- Output space-separated values\n\nExample\nInput:\na|b\nOutput:\na b",
               "solution": "function solution(input: string): string {\n  return input.split('|').join(' ');\n}",
               "starter_code": {
@@ -2454,7 +2712,10 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["pipeline", "transforms"],
+              "tags": [
+                "pipeline",
+                "transforms"
+              ],
               "description": "Problem Statement\nApply middleware operations sequentially.\n\nRules\n- First line: initial number\n- Each step: add X or mul X\n- Apply in order\n\nExample\nInput:\n5\nadd 3\nmul 2\nOutput:\n16",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    let val = Number(lines[0]);\n\n    for (let i = 1; i < lines.length; i++) {\n      const [op, numStr] = lines[i].split(' ');\n      const num = Number(numStr);\n\n      if (op === 'add') val += num;\n      else if (op === 'mul') val *= num;\n      else return 'invalid';\n    }\n\n    return String(val);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2484,8 +2745,11 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["state", "cache"],
-              "description": "Problem Statement\nSimulate a key-value cache.\n\nRules\n- set key value\n- get key → value or \"null\"\n- Only output last get result\n\nExample\nInput:\nset a 1\nget a\nOutput:\n1",
+              "tags": [
+                "state",
+                "cache"
+              ],
+              "description": "Problem Statement\nSimulate a key-value cache.\n\nRules\n- set key value\n- get key \u00e2\u2020\u2019 value or \"null\"\n- Only output last get result\n\nExample\nInput:\nset a 1\nget a\nOutput:\n1",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    const cache: any = {};\n    let result = '';\n\n    for (const line of lines) {\n      const [cmd, key, value] = line.split(' ');\n\n      if (cmd === 'set') {\n        cache[key] = value;\n      } else if (cmd === 'get') {\n        result = cache[key] ?? 'null';\n      }\n    }\n\n    return result;\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: simulate cache operations\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2516,7 +2780,11 @@
               "level": "Specialist_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["query", "filter", "ordering"],
+              "tags": [
+                "query",
+                "filter",
+                "ordering"
+              ],
               "description": "Problem Statement\nSimulate a query builder.\n\nRules\n- First line: JSON array of objects\n- Operations:\n  - filter field > value\n  - sort field asc|desc\n  - select field\n- Apply in order\n\nExample\nInput:\n[{\"id\":1,\"age\":20},{\"id\":2,\"age\":30}]\nfilter age > 20\nselect id\nOutput:\n[2]",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    let data = JSON.parse(lines[0]);\n\n    for (let i = 1; i < lines.length; i++) {\n      const parts = lines[i].split(' ');\n\n      if (parts[0] === 'filter') {\n        const [_, field, op, val] = parts;\n        data = data.filter((x: any) => x[field] > Number(val));\n      }\n\n      if (parts[0] === 'sort') {\n        const [_, field, dir] = parts;\n        data.sort((a: any, b: any) => dir === 'asc' ? a[field] - b[field] : b[field] - a[field]);\n      }\n\n      if (parts[0] === 'select') {\n        const field = parts[1];\n        data = data.map((x: any) => x[field]);\n      }\n    }\n\n    return JSON.stringify(data);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2546,7 +2814,10 @@
               "level": "Specialist_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["parser", "structure"],
+              "tags": [
+                "parser",
+                "structure"
+              ],
               "description": "Problem Statement\nValidate if input is valid JSON.\n\nRules\n- Accept objects and arrays\n- Reject malformed JSON\n\nExample\nInput:\n{\"a\":1}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    JSON.parse(input);\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2576,7 +2847,10 @@
               "level": "Specialist_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["inference", "analysis"],
+              "tags": [
+                "inference",
+                "analysis"
+              ],
               "description": "Problem Statement\nInfer types of values.\n\nRules\n- Detect: number, boolean, string, null\n- Output space-separated types\n\nExample\nInput:\n1 true hello\nOutput:\nnumber boolean string",
               "solution": "function solution(input: string): string {\n  return input.split(/\\s+/).map(x => {\n    if (x === 'null') return 'null';\n    if (x === 'true' || x === 'false') return 'boolean';\n    if (!isNaN(Number(x))) return 'number';\n    return 'string';\n  }).join(' ');\n}",
               "starter_code": {
@@ -2602,7 +2876,11 @@
               "level": "Specialist_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["schema", "validation", "nested"],
+              "tags": [
+                "schema",
+                "validation",
+                "nested"
+              ],
               "description": "Problem Statement\nValidate object against nested schema.\n\nRules\n- Schema can be nested\n- Types: number, string, boolean\n- Structure must match\n\nExample\nInput:\n{\"a\":1,\"b\":{\"c\":\"x\"}}\n{\"a\":\"number\",\"b\":{\"c\":\"string\"}}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, schemaStr] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const schema = JSON.parse(schemaStr);\n\n    function validate(o: any, s: any): boolean {\n      for (const key in s) {\n        if (!(key in o)) return false;\n        if (typeof s[key] === 'object') {\n          if (!validate(o[key], s[key])) return false;\n        } else {\n          if (typeof o[key] !== s[key]) return false;\n        }\n      }\n      return true;\n    }\n\n    return validate(obj, schema) ? 'valid' : 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
@@ -2632,8 +2910,12 @@
               "level": "Specialist_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["plugins", "pipeline", "state"],
-              "description": "Problem Statement\nExecute plugins sequentially.\n\nPlugins:\n- inc → +1\n- double → *2\n\nRules\n- Apply in order\n- Unknown plugin → \"invalid\"\n\nExample\nInput:\n5\ninc\ndouble\nOutput:\n12",
+              "tags": [
+                "plugins",
+                "pipeline",
+                "state"
+              ],
+              "description": "Problem Statement\nExecute plugins sequentially.\n\nPlugins:\n- inc \u00e2\u2020\u2019 +1\n- double \u00e2\u2020\u2019 *2\n\nRules\n- Apply in order\n- Unknown plugin \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n5\ninc\ndouble\nOutput:\n12",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    let val = Number(lines[0]);\n\n    for (let i = 1; i < lines.length; i++) {\n      const cmd = lines[i];\n\n      if (cmd === 'inc') val += 1;\n      else if (cmd === 'double') val *= 2;\n      else return 'invalid';\n    }\n\n    return String(val);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: execute plugins in order\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2698,7 +2980,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["next-js", "beginner", "easy"],
+              "tags": [
+                "next-js",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Next JS. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -2775,7 +3061,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["angular", "beginner", "easy"],
+              "tags": [
+                "angular",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Angular. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -2852,7 +3142,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "csv", "data-cleaning", "beginner", "easy"],
+              "tags": [
+                "python",
+                "csv",
+                "data-cleaning",
+                "beginner",
+                "easy"
+              ],
               "description": "Problem Statement\nGiven sales rows in the format item,amount, compute the total non-negative sales amount for the day.\n\nInput Format\nEach line contains one row in the form item,amount.\n\nOutput Format\nReturn a single integer: sum of valid non-negative amounts.\n\nRules\n- Ignore malformed rows.\n- Ignore rows where amount is not an integer.\n- Ignore negative amounts.\n\nExample\nInput:\ncoffee,120\ntea,80\nbagel,200\n\nOutput:\n400",
               "solution": "def solution(lines):\n    total = 0\n    for line in lines:\n        if not line or ',' not in line:\n            continue\n        _, amount_raw = line.split(',', 1)\n        try:\n            amount = int(amount_raw.strip())\n        except ValueError:\n            continue\n        if amount >= 0:\n            total += amount\n    return total",
               "starter_code": {
@@ -2886,7 +3182,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "strings", "email", "beginner", "easy"],
+              "tags": [
+                "python",
+                "strings",
+                "email",
+                "beginner",
+                "easy"
+              ],
               "description": "Problem Statement\nGiven a list of user emails, return per-domain counts sorted alphabetically.\n\nInput Format\nEach line contains one email.\n\nOutput Format\nReturn comma-separated domain:count pairs sorted by domain.\n\nRules\n- Ignore malformed email rows without '@'.\n- Domain matching is case-insensitive.\n\nExample\nInput:\na@x.com\nb@y.com\nc@x.com\n\nOutput:\nx.com:2,y.com:1",
               "solution": "def solution(emails):\n    counts = {}\n    for email in emails:\n        if '@' not in email:\n            continue\n        domain = email.rsplit('@', 1)[1].strip().lower()\n        if not domain:\n            continue\n        counts[domain] = counts.get(domain, 0) + 1\n    return ','.join(f\"{d}:{counts[d]}\" for d in sorted(counts))",
               "starter_code": {
@@ -2960,7 +3262,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "validation", "security", "beginner", "easy"],
+              "tags": [
+                "python",
+                "validation",
+                "security",
+                "beginner",
+                "easy"
+              ],
               "description": "Problem Statement\nValidate password against policy.\n\nPolicy\n- Minimum length: 8\n- At least one uppercase letter\n- At least one lowercase letter\n- At least one digit\n\nOutput Format\nReturn \"true\" if valid, otherwise \"false\".",
               "solution": "def solution(password):\n    if len(password) < 8:\n        return \"false\"\n    has_upper = any(c.isupper() for c in password)\n    has_lower = any(c.islower() for c in password)\n    has_digit = any(c.isdigit() for c in password)\n    return \"true\" if has_upper and has_lower and has_digit else \"false\"",
               "starter_code": {
@@ -3036,7 +3344,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "dict", "aggregation", "beginner", "medium"],
+              "tags": [
+                "python",
+                "dict",
+                "aggregation",
+                "beginner",
+                "medium"
+              ],
               "description": "Problem Statement\nAggregate category,amount records and return sorted category totals.\n\nOutput Format\nReturn comma-separated category:total pairs sorted alphabetically.\n\nRules\n- Ignore malformed rows.\n- Ignore rows with non-integer amount.\n- Ignore negative amounts.",
               "solution": "def solution(records):\n    totals = {}\n    for row in records:\n        if not row or ',' not in row:\n            continue\n        category, amount_raw = row.split(',', 1)\n        category = category.strip()\n        if not category:\n            continue\n        try:\n            amount = int(amount_raw.strip())\n        except ValueError:\n            continue\n        if amount < 0:\n            continue\n        totals[category] = totals.get(category, 0) + amount\n    return ','.join(f\"{c}:{totals[c]}\" for c in sorted(totals))",
               "starter_code": {
@@ -3110,7 +3424,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "helpdesk", "grouping", "beginner", "medium"],
+              "tags": [
+                "python",
+                "helpdesk",
+                "grouping",
+                "beginner",
+                "medium"
+              ],
               "description": "Problem Statement\nCount ticket severities for dashboard output.\n\nSeverity values\n- low\n- med\n- high\n\nOutput Format\nReturn exactly: high:X,low:Y,med:Z",
               "solution": "def solution(records):\n    counts = {'low': 0, 'med': 0, 'high': 0}\n    for row in records:\n        if ',' not in row:\n            continue\n        _, sev = row.split(',', 1)\n        sev = sev.strip().lower()\n        if sev in counts:\n            counts[sev] += 1\n    return f\"high:{counts['high']},low:{counts['low']},med:{counts['med']}\"",
               "starter_code": {
@@ -3144,7 +3464,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "time", "scheduling", "beginner", "medium"],
+              "tags": [
+                "python",
+                "time",
+                "scheduling",
+                "beginner",
+                "medium"
+              ],
               "description": "Problem Statement\nDetermine whether two meetings overlap from HH:MM start/end times.\n\nRule\nMeetings overlap if they share any positive duration.\nTouching at boundary (end == start) is not overlap.\n\nOutput Format\nReturn \"true\" or \"false\".",
               "solution": "def _to_minutes(t):\n    h, m = t.split(':')\n    return int(h) * 60 + int(m)\n\ndef solution(start1, end1, start2, end2):\n    a, b = _to_minutes(start1), _to_minutes(end1)\n    c, d = _to_minutes(start2), _to_minutes(end2)\n    return 'true' if max(a, c) < min(b, d) else 'false'",
               "starter_code": {
@@ -3260,7 +3586,13 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["python", "fraud", "transactions", "beginner", "hard"],
+              "tags": [
+                "python",
+                "fraud",
+                "transactions",
+                "beginner",
+                "hard"
+              ],
               "description": "Problem Statement\nFlag accounts with too many transactions within a short interval.\n\nInput Format\n- records: timestamp,account,amount\n- max_count: allowed transaction count per rolling window\n- window_seconds: window length\n\nOutput Format\nReturn comma-separated sorted accounts that violate velocity rule.",
               "solution": "from collections import defaultdict, deque\n\ndef solution(records, max_count, window_seconds):\n    by_account = defaultdict(list)\n    for row in records:\n        parts = row.split(',')\n        if len(parts) != 3:\n            continue\n        t_raw, account, _ = parts\n        try:\n            t = int(t_raw.strip())\n        except ValueError:\n            continue\n        account = account.strip()\n        if account:\n            by_account[account].append(t)\n\n    flagged = []\n    for account, arr in by_account.items():\n        arr.sort()\n        q = deque()\n        for t in arr:\n            q.append(t)\n            while q and t - q[0] >= window_seconds:\n                q.popleft()\n            if len(q) > max_count:\n                flagged.append(account)\n                break\n\n    return ','.join(sorted(flagged))",
               "starter_code": {
@@ -3294,7 +3626,13 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["python", "sla", "rolling-window", "beginner", "hard"],
+              "tags": [
+                "python",
+                "sla",
+                "rolling-window",
+                "beginner",
+                "hard"
+              ],
               "description": "Problem Statement\nCount rolling windows where average latency exceeds SLA threshold.\n\nInput Format\n- Line 1: space-separated latencies in ms\n- Line 2: threshold\n- Line 3: window_size\n\nOutput Format\nReturn number of violating windows.",
               "solution": "def solution(latencies_ms, threshold, window_size):\n    n = len(latencies_ms)\n    if window_size <= 0 or window_size > n:\n        return 0\n\n    s = sum(latencies_ms[:window_size])\n    breaches = 1 if (s / window_size) > threshold else 0\n\n    for i in range(window_size, n):\n        s += latencies_ms[i] - latencies_ms[i - window_size]\n        if (s / window_size) > threshold:\n            breaches += 1\n\n    return breaches",
               "starter_code": {
@@ -3328,7 +3666,13 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["python", "webhooks", "retries", "beginner", "hard"],
+              "tags": [
+                "python",
+                "webhooks",
+                "retries",
+                "beginner",
+                "hard"
+              ],
               "description": "Problem Statement\nFrom status logs, count required retries for repeated 5xx failures.\n\nRule\nEvery 5xx response contributes one retry.\n\nOutput Format\nReturn integer retry count.",
               "solution": "def solution(status_codes):\n    retries = 0\n    for code in status_codes:\n        if 500 <= code <= 599:\n            retries += 1\n    return retries",
               "starter_code": {
@@ -3406,7 +3750,13 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "json", "etl", "intermediate_1", "easy"],
+              "tags": [
+                "python",
+                "json",
+                "etl",
+                "intermediate_1",
+                "easy"
+              ],
               "description": "Problem Statement\nClean event objects before ingestion.\n\nRules\n- Keep only keys: id, timestamp, type, payload.\n- id, timestamp, type must be non-empty strings.\n- payload must be a dictionary; otherwise skip event.\n- Ignore malformed events.\n\nOutput\nReturn cleaned events in original order.",
               "solution": "def solution(events):\n    out = []\n    for e in events:\n        if not isinstance(e, dict):\n            continue\n        event_id = e.get(\"id\")\n        ts = e.get(\"timestamp\")\n        etype = e.get(\"type\")\n        payload = e.get(\"payload\")\n        if not all(isinstance(v, str) and v.strip() for v in [event_id, ts, etype]):\n            continue\n        if not isinstance(payload, dict):\n            continue\n        out.append({\"id\": event_id, \"timestamp\": ts, \"type\": etype, \"payload\": payload})\n    return out",
               "starter_code": {
@@ -3472,7 +3822,13 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "api", "pagination", "intermediate_1", "easy"],
+              "tags": [
+                "python",
+                "api",
+                "pagination",
+                "intermediate_1",
+                "easy"
+              ],
               "description": "Problem Statement\nCombine paginated API results into one deduplicated list.\n\nRules\n- Each item is a dict with key id.\n- Keep the first occurrence for each id.\n- Preserve order of first appearance.",
               "solution": "def solution(pages):\n    seen = set()\n    out = []\n    for page in pages:\n        for item in page:\n            item_id = item.get(\"id\") if isinstance(item, dict) else None\n            if item_id in seen:\n                continue\n            if item_id is None:\n                continue\n            seen.add(item_id)\n            out.append(item)\n    return out",
               "starter_code": {
@@ -3502,7 +3858,13 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "csv", "validation", "intermediate_1", "easy"],
+              "tags": [
+                "python",
+                "csv",
+                "validation",
+                "intermediate_1",
+                "easy"
+              ],
               "description": "Problem Statement\nValidate CSV header and row values against expected schema.\n\nRules\n- Header columns must match schema keys exactly and in order.\n- Every row must have same number of columns.\n- Types must match int/float/str.",
               "solution": "def _ok(value, typ):\n    if typ == \"str\":\n        return True\n    if typ == \"int\":\n        try:\n            int(value)\n            return True\n        except ValueError:\n            return False\n    if typ == \"float\":\n        try:\n            float(value)\n            return True\n        except ValueError:\n            return False\n    return False\n\n\ndef solution(header, rows, schema):\n    cols = header\n    expected = list(schema.keys())\n    if cols != expected:\n        return \"false\"\n    for row in rows:\n        if len(row) != len(cols):\n            return \"false\"\n        for i, col in enumerate(cols):\n            if not _ok(row[i], schema[col]):\n                return \"false\"\n    return \"true\"",
               "starter_code": {
@@ -3968,7 +4330,13 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "etl", "data-cleaning", "imputation", "easy"],
+              "tags": [
+                "python",
+                "etl",
+                "data-cleaning",
+                "imputation",
+                "easy"
+              ],
               "description": "Fill missing values (None or empty string) per column using configurable strategies: constant, mean, or mode.",
               "solution": "from collections import Counter\n\ndef solution(rows, strategies):\n    def missing(v):\n        return v is None or v == ''\n\n    fillers = {}\n    for col, st in strategies.items():\n        kind = st.get('type')\n        values = [r.get(col) for r in rows if not missing(r.get(col))]\n        if kind == 'constant':\n            fillers[col] = st.get('value')\n        elif kind == 'mean':\n            nums = [float(v) for v in values]\n            fillers[col] = sum(nums) / len(nums) if nums else 0.0\n        elif kind == 'mode':\n            if values:\n                counts = Counter(values)\n                fillers[col] = sorted(counts.items(), key=lambda x: (-x[1], str(x[0])))[0][0]\n            else:\n                fillers[col] = None\n        else:\n            fillers[col] = None\n\n    out = []\n    for row in rows:\n        nr = dict(row)\n        for col in strategies:\n            if missing(nr.get(col)):\n                nr[col] = fillers[col]\n        out.append(nr)\n    return out",
               "starter_code": {
@@ -3994,7 +4362,13 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "inventory", "diff", "warehouse", "easy"],
+              "tags": [
+                "python",
+                "inventory",
+                "diff",
+                "warehouse",
+                "easy"
+              ],
               "description": "Compare two inventory snapshots and emit sorted added, removed, and changed SKU lists.",
               "solution": "def solution(old_snapshot, new_snapshot):\n    old_keys = set(old_snapshot)\n    new_keys = set(new_snapshot)\n    added = sorted(new_keys - old_keys)\n    removed = sorted(old_keys - new_keys)\n    changed = sorted(k for k in (old_keys & new_keys) if old_snapshot[k] != new_snapshot[k])\n    return {'added': added, 'removed': removed, 'changed': changed}",
               "starter_code": {
@@ -4020,7 +4394,13 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "sessions", "security", "timeouts", "easy"],
+              "tags": [
+                "python",
+                "sessions",
+                "security",
+                "timeouts",
+                "easy"
+              ],
               "description": "Invalidate sessions whose last activity exceeds inactivity threshold as of now_ts.",
               "solution": "def solution(events, threshold_seconds, now_ts):\n    last_seen = {}\n    for sid, ts in events:\n        if sid not in last_seen or ts > last_seen[sid]:\n            last_seen[sid] = ts\n    active, expired = [], []\n    for sid, ts in last_seen.items():\n        if now_ts - ts > threshold_seconds:\n            expired.append(sid)\n        else:\n            active.append(sid)\n    return {'active': sorted(active), 'expired': sorted(expired)}",
               "starter_code": {
@@ -4046,7 +4426,13 @@
               "level": "Intermediate_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["python", "kpi", "analytics", "business", "easy"],
+              "tags": [
+                "python",
+                "kpi",
+                "analytics",
+                "business",
+                "easy"
+              ],
               "description": "Compare KPI actuals against targets. Label on_track if actual >= target, at_risk if within 95% of target, else off_track.",
               "solution": "def solution(actuals, targets):\n    out = {}\n    for k, t in targets.items():\n        a = actuals.get(k, 0)\n        if a >= t:\n            out[k] = 'on_track'\n        elif t != 0 and a >= 0.95 * t:\n            out[k] = 'at_risk'\n        else:\n            out[k] = 'off_track'\n    return out",
               "starter_code": {
@@ -4106,7 +4492,13 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "fraud", "risk", "normalization", "medium"],
+              "tags": [
+                "python",
+                "fraud",
+                "risk",
+                "normalization",
+                "medium"
+              ],
               "description": "Normalize raw model scores to [0,1] using min-max from observed data, then map each score to a risk band.",
               "solution": "def solution(scores, bands):\n    if not scores:\n        return []\n    mn, mx = min(scores), max(scores)\n    denom = (mx - mn) if mx != mn else 1.0\n    out = []\n    for s in scores:\n        n = (s - mn) / denom\n        n = 0.0 if n < 0 else 1.0 if n > 1 else n\n        label = 'unknown'\n        for b in bands:\n            name, lo, hi = b\n            if lo <= n < hi:\n                label = name\n                break\n        out.append(label)\n    return out",
               "starter_code": {
@@ -4132,7 +4524,13 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "search", "ctr", "aggregation", "medium"],
+              "tags": [
+                "python",
+                "search",
+                "ctr",
+                "aggregation",
+                "medium"
+              ],
               "description": "Aggregate clicks and impressions per query, filter by minimum impressions, and return CTR report sorted by query.",
               "solution": "def solution(records, min_impressions):\n    agg = {}\n    for r in records:\n        q = r['query']\n        if q not in agg:\n            agg[q] = {'impressions': 0, 'clicks': 0}\n        agg[q]['impressions'] += r.get('impressions', 0)\n        agg[q]['clicks'] += r.get('clicks', 0)\n\n    out = []\n    for q, v in agg.items():\n        imp = v['impressions']\n        if imp < min_impressions:\n            continue\n        ctr = (v['clicks'] / imp) if imp else 0.0\n        out.append({'query': q, 'ctr': round(ctr, 6), 'impressions': imp})\n    return sorted(out, key=lambda x: x['query'])",
               "starter_code": {
@@ -4158,7 +4556,13 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "sla", "uptime", "latency", "medium"],
+              "tags": [
+                "python",
+                "sla",
+                "uptime",
+                "latency",
+                "medium"
+              ],
               "description": "Aggregate uptime and latency breach statistics by region for SLA reporting.",
               "solution": "def solution(records, latency_sla_ms):\n    agg = {}\n    for r in records:\n        reg = r['region']\n        if reg not in agg:\n            agg[reg] = {'up': 0, 'down': 0, 'breach': 0}\n        agg[reg]['up'] += r.get('uptime_minutes', 0)\n        agg[reg]['down'] += r.get('downtime_minutes', 0)\n        if r.get('p95_latency_ms', 0) > latency_sla_ms:\n            agg[reg]['breach'] += 1\n\n    out = []\n    for reg, v in agg.items():\n        total = v['up'] + v['down']\n        pct = (v['up'] / total * 100.0) if total else 0.0\n        out.append({'region': reg, 'uptime_pct': round(pct, 6), 'latency_breaches': v['breach']})\n    return sorted(out, key=lambda x: x['region'])",
               "starter_code": {
@@ -4184,7 +4588,13 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["python", "churn", "risk-modeling", "saas", "medium"],
+              "tags": [
+                "python",
+                "churn",
+                "risk-modeling",
+                "saas",
+                "medium"
+              ],
               "description": "Combine product, billing, and support churn signals into risk tiers using weighted score: 0.5*product + 0.3*billing + 0.2*support.",
               "solution": "def solution(customers):\n    out = {}\n    for c in customers:\n        score = 0.5 * c.get('product', 0) + 0.3 * c.get('billing', 0) + 0.2 * c.get('support', 0)\n        if score >= 0.7:\n            tier = 'high'\n        elif score >= 0.4:\n            tier = 'medium'\n        else:\n            tier = 'low'\n        out[c['id']] = tier\n    return out",
               "starter_code": {
@@ -4212,7 +4622,13 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["python", "queues", "sla", "backlog", "hard"],
+              "tags": [
+                "python",
+                "queues",
+                "sla",
+                "backlog",
+                "hard"
+              ],
               "description": "Identify queue classes with at least one task whose wait time (started_ts - enqueued_ts) exceeds the class SLA.",
               "solution": "def solution(tasks, sla_by_class):\n    breached = set()\n    for t in tasks:\n        cls = t['queue_class']\n        if cls not in sla_by_class:\n            continue\n        wait = t['started_ts'] - t['enqueued_ts']\n        if wait > sla_by_class[cls]:\n            breached.add(cls)\n    return sorted(breached)",
               "starter_code": {
@@ -5404,7 +5820,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["python-with-flask", "beginner", "easy"],
+              "tags": [
+                "python-with-flask",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Python with Flask. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -5481,7 +5901,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["fastapi", "get", "query"],
+              "tags": [
+                "fastapi",
+                "get",
+                "query"
+              ],
               "description": "Create a FastAPI GET endpoint at `/greet` that accepts a query parameter `name` and returns `{\"message\": \"Welcome, {name}!\"}`. If `name` is not provided, it should default to `{\"message\": \"Welcome, Guest!\"}`.",
               "starter_files": [
                 {
@@ -5500,7 +5924,12 @@
               "difficulty": "Medium",
               "level": "Intermediate_1",
               "question_type": "framework",
-              "tags": ["fastapi", "post", "pydantic", "validation"],
+              "tags": [
+                "fastapi",
+                "post",
+                "pydantic",
+                "validation"
+              ],
               "description": "Create a FastAPI POST endpoint at `/register` that accepts a JSON body containing `username` (string) and `age` (integer) using a Pydantic BaseModel. The endpoint should return `{\"status\": \"success\", \"user_id\": 1, \"username\": <username>}`. The Pydantic model will automatically return a 422 error if the data types are invalid.",
               "starter_files": [
                 {
@@ -5577,7 +6006,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["python-with-django", "beginner", "easy"],
+              "tags": [
+                "python-with-django",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Python with Django. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -5654,7 +6087,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["python-for-data-science", "beginner", "easy"],
+              "tags": [
+                "python-for-data-science",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Python for Data Science. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -5721,7 +6158,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["strings", "parsing", "aggregation", "Beginner", "Easy"],
+              "tags": [
+                "strings",
+                "parsing",
+                "aggregation",
+                "Beginner",
+                "Easy"
+              ],
               "description": "Problem Statement\nYou are given daily sales lines where each line is expected in the format item,amount. Compute the total sales amount for the day using only valid non-negative amounts.\n\nA line is valid only if:\n1. It contains exactly one comma.\n2. The item part is non-empty after trimming.\n3. The amount part is a valid integer.\n4. The amount is greater than or equal to 0.\n\nInvalid lines must be ignored.\n\nInput Format\n- Multiple lines, each representing one sales record in the format item,amount.\n- Input ends at EOF or first empty line.\n\nOutput Format\n- Print a single integer: total of all valid non-negative amounts.\n\nConstraints\n- 0 <= number of lines <= 10^5\n- 0 <= valid amount <= 10^9\n- Total fits in signed 64-bit integer\n\nExample\nInput:\napple,120\nbanana,80\nbad_line\norange,-10\n\nOutput:\n200\n\nExplanation\nOnly apple,120 and banana,80 are valid non-negative entries.",
               "solution": "long total = 0L;\nfor (String line : lines) {\n  if (line == null) continue;\n  String[] p = line.split(\",\", -1);\n  if (p.length != 2) continue;\n  String item = p[0].trim();\n  String amountText = p[1].trim();\n  if (item.isEmpty()) continue;\n  try {\n    long amount = Long.parseLong(amountText);\n    if (amount >= 0) total += amount;\n  } catch (NumberFormatException ignored) {}\n}\nreturn total;",
               "starter_code": {
@@ -5763,7 +6206,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["hashmap", "strings", "sorting", "Beginner", "Easy"],
+              "tags": [
+                "hashmap",
+                "strings",
+                "sorting",
+                "Beginner",
+                "Easy"
+              ],
               "description": "Problem Statement\nGiven a list of user email addresses, return the count of users per domain, sorted alphabetically by domain name.\n\nEmail validity rules for this problem:\n- Must contain exactly one '@'.\n- Local part and domain part must both be non-empty after trimming.\n- Invalid emails are ignored.\n\nInput Format\n- Multiple lines, each containing one email.\n- Input ends at EOF or first empty line.\n\nOutput Format\n- Print one line per domain in ascending lexicographic order.\n- Line format: domain:count\n\nConstraints\n- 0 <= number of emails <= 10^5\n- Email length <= 320\n\nExample\nInput:\nalice@gmail.com\nbob@yahoo.com\ncarol@gmail.com\n\nOutput:\ngmail.com:2\nyahoo.com:1\n\nExplanation\ngmail.com appears twice; yahoo.com appears once.",
               "solution": "Map<String, Integer> freq = new HashMap<>();\nfor (String email : emails) {\n  if (email == null) continue;\n  String e = email.trim();\n  int at = e.indexOf('@');\n  if (at <= 0 || at != e.lastIndexOf('@') || at == e.length() - 1) continue;\n  String domain = e.substring(at + 1).toLowerCase();\n  freq.put(domain, freq.getOrDefault(domain, 0) + 1);\n}\nList<String> domains = new ArrayList<>(freq.keySet());\nCollections.sort(domains);\nList<String> out = new ArrayList<>();\nfor (String d : domains) out.add(d + \":\" + freq.get(d));\nreturn out;",
               "starter_code": {
@@ -5901,7 +6350,13 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["strings", "data-cleaning", "regex", "Beginner", "Easy"],
+              "tags": [
+                "strings",
+                "data-cleaning",
+                "regex",
+                "Beginner",
+                "Easy"
+              ],
               "description": "Problem Statement\nNormalize a phone string for storage:\n- Remove all non-digit characters.\n- If resulting digit string has more than 10 digits, keep only the last 10 digits.\n- If it has 10 or fewer digits, keep it as-is.\n\nInput Format\nLine 1: Raw phone string (can contain spaces, symbols, country code).\n\nOutput Format\nPrint the normalized digit string.\n\nConstraints\n- 0 <= input length <= 10^5\n\nExample\nInput:\n+1 (415) 555-2671\n\nOutput:\n4155552671\n\nExplanation\nAfter removing non-digits, we get 14155552671; keeping last 10 gives 4155552671.",
               "solution": "StringBuilder digits = new StringBuilder();\nfor (int i = 0; i < raw.length(); i++) {\n  char c = raw.charAt(i);\n  if (Character.isDigit(c)) digits.append(c);\n}\nString s = digits.toString();\nif (s.length() <= 10) return s;\nreturn s.substring(s.length() - 10);",
               "starter_code": {
@@ -5993,7 +6448,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["arrays", "filtering", "sorting", "Beginner", "Medium"],
+              "tags": [
+                "arrays",
+                "filtering",
+                "sorting",
+                "Beginner",
+                "Medium"
+              ],
               "description": "Problem Statement\nGiven stock records in sku,qty format and a reorder threshold, return all SKUs whose quantity is strictly below threshold.\n\nRules\n- Ignore malformed lines.\n- SKU must be non-empty.\n- qty must be a valid integer.\n- If same SKU appears multiple times, use the last seen quantity.\n- Output SKUs in ascending lexicographic order.\n\nInput Format\nLine 1: Integer threshold\nRemaining lines: sku,qty\nInput ends at EOF or empty line\n\nOutput Format\nPrint one SKU per line that requires reorder.\n\nConstraints\n- Up to 2 * 10^5 records\n\nExample\nInput:\n10\nSKU1,5\nSKU2,12\nSKU3,10\n\nOutput:\nSKU1",
               "solution": "Map<String, Integer> qtyMap = new HashMap<>();\nfor (String r : records) {\n  String[] p = r.split(\",\", -1);\n  if (p.length != 2) continue;\n  String sku = p[0].trim();\n  if (sku.isEmpty()) continue;\n  try {\n    int q = Integer.parseInt(p[1].trim());\n    qtyMap.put(sku, q);\n  } catch (NumberFormatException ignored) {}\n}\nList<String> out = new ArrayList<>();\nfor (Map.Entry<String, Integer> e : qtyMap.entrySet()) {\n  if (e.getValue() < threshold) out.add(e.getKey());\n}\nCollections.sort(out);\nreturn out;",
               "starter_code": {
@@ -6035,7 +6496,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["hashmap", "counting", "strings", "Beginner", "Medium"],
+              "tags": [
+                "hashmap",
+                "counting",
+                "strings",
+                "Beginner",
+                "Medium"
+              ],
               "description": "Problem Statement\nFor dashboard metrics, count support tickets by severity buckets: low, med, high.\n\nRules\n- Severity matching is case-insensitive.\n- Ignore unknown values.\n- Output must always include all three buckets in exact order: low,med,high.\n- Output format: low:<count>,med:<count>,high:<count>\n\nInput Format\nMultiple lines, each one severity label.\nInput ends at EOF or empty line.\n\nOutput Format\nSingle line string in the required bucket order.\n\nConstraints\n- Up to 10^6 ticket lines\n\nExample\nInput:\nlow\nmed\nhigh\nmed\n\nOutput:\nlow:1,med:2,high:1",
               "solution": "int low = 0, med = 0, high = 0;\nfor (String s : severities) {\n  String t = s == null ? \"\" : s.trim().toLowerCase();\n  if (t.equals(\"low\")) low++;\n  else if (t.equals(\"med\")) med++;\n  else if (t.equals(\"high\")) high++;\n}\nreturn \"low:\" + low + \",med:\" + med + \",high:\" + high;",
               "starter_code": {
@@ -6077,7 +6544,13 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["time", "intervals", "parsing", "Beginner", "Medium"],
+              "tags": [
+                "time",
+                "intervals",
+                "parsing",
+                "Beginner",
+                "Medium"
+              ],
               "description": "Problem Statement\nGiven two meetings with start and end times in HH:MM (24-hour format), determine whether they overlap.\n\nInterval semantics\n- Meetings are half-open intervals [start, end).\n- Two meetings overlap if they share at least one minute.\n- If one ends exactly when the other starts, they do NOT overlap.\n\nInput Format\nLine 1: start1\nLine 2: end1\nLine 3: start2\nLine 4: end2\n\nOutput Format\nPrint true if overlap exists, else false.\n\nConstraints\n- Times are valid HH:MM\n- 00:00 <= time <= 23:59\n- start < end for each meeting\n\nExample\nInput:\n09:00\n10:00\n09:30\n11:00\n\nOutput:\ntrue",
               "solution": "int toMin(String t) {\n  int h = Integer.parseInt(t.substring(0, 2));\n  int m = Integer.parseInt(t.substring(3, 5));\n  return h * 60 + m;\n}\nint s1 = toMin(start1), e1 = toMin(end1), s2 = toMin(start2), e2 = toMin(end2);\nreturn Math.max(s1, s2) < Math.min(e1, e2);",
               "starter_code": {
@@ -6313,7 +6786,13 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["state-machine", "logs", "counting", "Beginner", "Hard"],
+              "tags": [
+                "state-machine",
+                "logs",
+                "counting",
+                "Beginner",
+                "Hard"
+              ],
               "description": "Problem Statement\nA webhook sender retries delivery after each server-side failure (HTTP 5xx).\nGiven a sequence of status codes, count the total number of retries required.\n\nSimplified retry model for this problem\n- Each 5xx status indicates one failed attempt that triggers one retry.\n- Any non-5xx status ends the current failure streak.\n- Total retries equals total number of 5xx entries in the stream.\n\nInput Format\nMultiple lines, each containing one integer HTTP status code.\nInput ends at EOF or empty line.\n\nOutput Format\nPrint a single integer: total retries required.\n\nConstraints\n- 0 <= number of status entries <= 10^6\n- 100 <= status code <= 599\n\nExample\nInput:\n500\n502\n200\n503\n\nOutput:\n3",
               "solution": "int retries = 0;\nfor (String s : statuses) {\n  int code;\n  try { code = Integer.parseInt(s.trim()); } catch (Exception ex) { continue; }\n  if (code >= 500 && code <= 599) retries++;\n}\nreturn retries;",
               "starter_code": {
@@ -6355,7 +6834,13 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["greedy", "simulation", "arrays", "Beginner", "Hard"],
+              "tags": [
+                "greedy",
+                "simulation",
+                "arrays",
+                "Beginner",
+                "Hard"
+              ],
               "description": "Problem Statement\nA venue has totalSeats seats and groups arrive in fixed order.\nAllocate seats greedily by arrival order with these rules:\n- A group can be seated only if all of its members can be seated together from remaining seats.\n- Groups cannot be split.\n- Once a group cannot be seated due to insufficient remaining seats, skip that group and continue checking later groups (still without reordering).\n\nReturn the number of groups that were successfully seated.\n\nInput Format\nLine 1: Integer totalSeats\nLine 2: Space-separated group sizes in arrival order\n\nOutput Format\nPrint one integer: count of seated groups.\n\nConstraints\n- 0 <= totalSeats <= 10^9\n- 0 <= number of groups <= 2 * 10^5\n- 1 <= group size <= 10^9\n\nExample\nInput:\n10\n2 4 3 5\n\nOutput:\n3\n\nExplanation\nSeat 2 (remaining 8), seat 4 (remaining 4), seat 3 (remaining 1), cannot seat 5. Total seated groups = 3.",
               "solution": "long remaining = totalSeats;\nint seated = 0;\nfor (int g : groupSizes) {\n  if (g <= remaining) {\n    remaining -= g;\n    seated++;\n  }\n}\nreturn seated;",
               "starter_code": {
@@ -6545,7 +7030,13 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["csv", "validation", "schema", "Intermediate_1", "Easy"],
+              "tags": [
+                "csv",
+                "validation",
+                "schema",
+                "Intermediate_1",
+                "Easy"
+              ],
               "description": "Problem Statement\nValidate a CSV file against fixed schema:\nHeader must be exactly: id,name,age\nRow types:\n- id: integer\n- name: non-empty string\n- age: integer in [0, 150]\n\nReturn first validation error only.\n\nInput Format\nLine 1: CSV header\nNext lines: CSV rows\nInput ends at EOF or empty line\n\nOutput Format\n- If fully valid: valid\n- If header invalid: invalid:header\n- If row i invalid (1-based including header): invalid:row=<i>\n\nConstraints\n- Up to 2 * 10^5 rows\n\nExample\nInput:\nid,name,age\n1,Alice,30\n\nOutput:\nvalid",
               "solution": "if (lines.isEmpty() || !lines.get(0).trim().equals(\"id,name,age\")) return \"invalid:header\";\nfor (int i = 1; i < lines.size(); i++) {\n  String line = lines.get(i);\n  if (line.trim().isEmpty()) continue;\n  String[] p = line.split(\",\", -1);\n  if (p.length != 3) return \"invalid:row=\" + (i + 1);\n  try {\n    Integer.parseInt(p[0].trim());\n    int age = Integer.parseInt(p[2].trim());\n    if (p[1].trim().isEmpty() || age < 0 || age > 150) return \"invalid:row=\" + (i + 1);\n  } catch (Exception ex) {\n    return \"invalid:row=\" + (i + 1);\n  }\n}\nreturn \"valid\";",
               "starter_code": {
@@ -7607,7 +8098,13 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["queues", "sla", "detection", "Intermediate_2", "Hard"],
+              "tags": [
+                "queues",
+                "sla",
+                "detection",
+                "Intermediate_2",
+                "Hard"
+              ],
               "description": "Problem Statement\nIdentify queue classes whose wait time exceeds class SLA.\nEach row: class,waitSeconds,slaSeconds\n\nA class is in breach if any row for that class has waitSeconds > slaSeconds.\nOutput unique breached classes sorted lexicographically.\nIgnore malformed rows.\n\nInput Format\nMultiple lines class,waitSeconds,slaSeconds\n\nOutput Format\nOne breached class per line.\n\nConstraints\n- Up to 10^6 rows",
               "solution": "Set<String> bad = new HashSet<>();\nfor (String line : rows) {\n  String[] p = line.split(\",\", -1);\n  if (p.length != 3) continue;\n  String cls = p[0].trim();\n  long w, s;\n  try { w = Long.parseLong(p[1].trim()); s = Long.parseLong(p[2].trim()); } catch (Exception ex) { continue; }\n  if (w > s) bad.add(cls);\n}\nList<String> out = new ArrayList<>(bad);\nCollections.sort(out);\nreturn out;",
               "starter_code": {
@@ -7845,7 +8342,13 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["security", "redaction", "logs", "Specialist_1", "Easy"],
+              "tags": [
+                "security",
+                "redaction",
+                "logs",
+                "Specialist_1",
+                "Easy"
+              ],
               "description": "Problem Statement\nRedact sensitive data in audit logs while preserving queryable key structure.\n\nEach row has comma-separated key=value fields. Sensitive keys are:\nemail, ip, ssn, token\n\nRules\n- Keep all keys and ordering of first appearance.\n- If key repeats, keep only last value for that key.\n- Replace sensitive values with ***.\n- Ignore malformed tokens without '='.\n- If no valid key=value token remains, skip the row.\n\nInput Format\nMultiple log lines, one row per line.\n\nOutput Format\nNormalized redacted rows with comma-separated key=value.\n\nConstraints\n- Up to 2 * 10^5 rows\n\nExample\nInput:\nuser=alice,email=alice@example.com,action=login\n\nOutput:\nuser=alice,email=***,action=login",
               "solution": "Set<String> sensitive = new HashSet<>(Arrays.asList(\"email\", \"ip\", \"ssn\", \"token\"));\nList<String> out = new ArrayList<>();\nfor (String row : rows) {\n  LinkedHashMap<String, String> map = new LinkedHashMap<>();\n  for (String t : row.split(\",\")) {\n    int eq = t.indexOf('=');\n    if (eq <= 0) continue;\n    String k = t.substring(0, eq).trim();\n    String v = t.substring(eq + 1).trim();\n    if (map.containsKey(k)) map.remove(k);\n    map.put(k, sensitive.contains(k) ? \"***\" : v);\n  }\n  if (map.isEmpty()) continue;\n  StringBuilder sb = new StringBuilder();\n  int i = 0;\n  for (Map.Entry<String, String> e : map.entrySet()) {\n    if (i++ > 0) sb.append(',');\n    sb.append(e.getKey()).append('=').append(e.getValue());\n  }\n  out.add(sb.toString());\n}\nreturn out;",
               "starter_code": {
@@ -8857,7 +9360,13 @@
               "level": "Specialist_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["billing", "audit", "revenue", "Specialist_2", "Medium"],
+              "tags": [
+                "billing",
+                "audit",
+                "revenue",
+                "Specialist_2",
+                "Medium"
+              ],
               "description": "Problem Statement\nDetect revenue leakage from usage and billing data.\nUsage row: customer,units,unitPrice\nBilled row: customer,billedAmount\n\nExpected amount = units * unitPrice\nRules\n- If customer has usage but no billed row => unbilled:customer\n- Else if billedAmount != expectedAmount => pricing_mismatch:customer\n- Output sorted lexicographically by message\n- Ignore malformed rows",
               "solution": "Map<String, Long> exp = new HashMap<>();\nfor (String line : usage) {\n  String[] p = line.split(\",\", -1);\n  if (p.length != 3) continue;\n  long u, pr;\n  try { u = Long.parseLong(p[1].trim()); pr = Long.parseLong(p[2].trim()); } catch (Exception ex) { continue; }\n  exp.put(p[0].trim(), u * pr);\n}\nMap<String, Long> bill = new HashMap<>();\nfor (String line : billed) {\n  String[] p = line.split(\",\", -1);\n  if (p.length != 2) continue;\n  try { bill.put(p[0].trim(), Long.parseLong(p[1].trim())); } catch (Exception ignored) {}\n}\nList<String> out = new ArrayList<>();\nfor (String c : exp.keySet()) {\n  if (!bill.containsKey(c)) out.add(\"unbilled:\" + c);\n  else if (!bill.get(c).equals(exp.get(c))) out.add(\"pricing_mismatch:\" + c);\n}\nCollections.sort(out);\nreturn out;",
               "starter_code": {
@@ -9311,7 +9820,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["java-spring-boot", "beginner", "easy"],
+              "tags": [
+                "java-spring-boot",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Java Spring Boot. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -9370,12 +9883,15 @@
               "id": "CS-BEG-E-1",
               "title": "Hello World in C#",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Easy",
+              "level": "Beginner",
               "question_type": "coding",
-              "tags": ["hello-world", "console", "csharp-basics"],
-              "description": "Write a C# console application that prints 'Hello, World!'.",
-              "solution": "using System;\nclass Program {\n  static void Main() {\n    Console.WriteLine(\"Hello, World!\");\n  }\n}",
+              "tags": [
+                "hello-world",
+                "console",
+                "csharp-basics"
+              ],
+              "description": "Problem Statement\nWrite a C# program that prints 'Hello, World!' to the console.\n\nInput Format\nNo input required.\n\nOutput Format\nPrint exactly: Hello, World!\n\nExample\nInput:\n(none)\n\nOutput:\nHello, World!",
               "starter_code": {
                 "csharp": "using System;\nclass Program {\n    static void Main() {\n        // Your code here\n    }\n}"
               },
@@ -9390,82 +9906,107 @@
                   "input": "",
                   "output": "Hello, World!"
                 }
-              ]
+              ],
+              "solution": "using System;\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"Hello, World!\");\n    }\n}"
             },
             {
               "id": "CS-BEG-E-2",
               "title": "Reverse a String in C#",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Easy",
+              "level": "Beginner",
               "question_type": "coding",
-              "tags": ["string", "array", "csharp-basics"],
-              "description": "Write a C# method that reverses a given string.",
-              "solution": "string Reverse(string s) {\n  char[] arr = s.ToCharArray();\n  Array.Reverse(arr);\n  return new string(arr);\n}",
+              "tags": [
+                "string",
+                "array",
+                "csharp-basics"
+              ],
+              "description": "Problem Statement\nGiven a string, return its reverse.\n\nInput Format\nA single line containing a string s.\n\nOutput Format\nPrint the reversed string.\n\nRules\n- The string may contain spaces and special characters.\n- Empty string should return empty string.\n\nExample\nInput:\nhello\n\nOutput:\nolleh",
               "starter_code": {
-                "csharp": "using System;\nclass Solution {\n    static string Reverse(string s) {\n        // Your code here\n    }\n}"
+                "csharp": "using System;\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // Your code here\n        Console.WriteLine();\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "s = \"hello\"",
-                  "output": "\"olleh\""
+                  "input": "hello",
+                  "output": "olleh"
                 },
                 {
-                  "input": "s = \"racecar\"",
-                  "output": "\"racecar\""
+                  "input": "racecar",
+                  "output": "racecar"
+                },
+                {
+                  "input": "Hello World",
+                  "output": "dlroW olleH"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "s = \"\"",
-                  "output": "\"\""
+                  "input": "",
+                  "output": ""
                 },
                 {
-                  "input": "s = \"a\"",
-                  "output": "\"a\""
+                  "input": "a",
+                  "output": "a"
                 },
                 {
-                  "input": "s = \"ab\"",
-                  "output": "\"ba\""
+                  "input": "abcdef",
+                  "output": "fedcba"
                 }
-              ]
+              ],
+              "solution": "using System;\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        char[] arr = s.ToCharArray();\n        Array.Reverse(arr);\n        Console.WriteLine(new string(arr));\n    }\n}"
             },
             {
               "id": "CS-BEG-E-3",
               "title": "Fibonacci Sequence",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Easy",
+              "level": "Beginner",
               "question_type": "coding",
-              "tags": ["math", "loop", "csharp-basics"],
-              "description": "Print the first 10 numbers of the Fibonacci sequence in C#.",
-              "solution": "int a=0,b=1;\nfor(int i=0;i<10;i++){\n  Console.WriteLine(a);\n  int temp=a+b; a=b; b=temp;\n}",
+              "tags": [
+                "math",
+                "loop",
+                "csharp-basics"
+              ],
+              "description": "Problem Statement\nGiven a number n, print the first n numbers of the Fibonacci sequence.\n\nInput Format\nA single integer n.\n\nOutput Format\nPrint the first n Fibonacci numbers separated by spaces on a single line.\n\nRules\n- n will always be a positive integer.\n- Fibonacci sequence starts at 0.\n\nExample\nInput:\n10\n\nOutput:\n0 1 1 2 3 5 8 13 21 34",
               "starter_code": {
-                "csharp": "using System;\nclass Program {\n    static void Main() {\n        // Print first 10 Fibonacci numbers\n    }\n}"
+                "csharp": "using System;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // Your code here\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "n = 10",
+                  "input": "10",
                   "output": "0 1 1 2 3 5 8 13 21 34"
+                },
+                {
+                  "input": "5",
+                  "output": "0 1 1 2 3"
+                },
+                {
+                  "input": "1",
+                  "output": "0"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "n = 1",
-                  "output": "0"
+                  "input": "2",
+                  "output": "0 1"
                 },
                 {
-                  "input": "n = 5",
-                  "output": "0 1 1 2 3"
+                  "input": "7",
+                  "output": "0 1 1 2 3 5 8"
+                },
+                {
+                  "input": "15",
+                  "output": "0 1 1 2 3 5 8 13 21 34 55 89 144 233 377"
                 }
-              ]
+              ],
+              "solution": "using System;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int a = 0, b = 1;\n        string[] result = new string[n];\n        for(int i = 0; i < n; i++) {\n            result[i] = a.ToString();\n            int temp = a + b;\n            a = b;\n            b = temp;\n        }\n        Console.WriteLine(string.Join(\" \", result));\n    }\n}"
             },
             {
               "id": "CS-BEG-E-4",
               "title": "Filter Even Numbers with LINQ",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Easy",
+              "level": "Beginner",
               "question_type": "coding",
               "tags": [
                 "linq",
@@ -9474,31 +10015,39 @@
                 "sorting",
                 "csharp-basics"
               ],
-              "description": "Given a List<int>, use LINQ to filter only even numbers and return them sorted ascending.",
-              "solution": "var evens = numbers.Where(n => n % 2 == 0).OrderBy(n => n).ToList();",
+              "description": "Problem Statement\nGiven a list of integers, use LINQ to filter only even numbers and print them sorted in ascending order.\n\nInput Format\nFirst line contains n (number of integers).\nNext n lines each contain one integer.\n\nOutput Format\nPrint even numbers separated by spaces in ascending order.\nIf no even numbers exist, print nothing.\n\nExample\nInput:\n5\n5\n2\n8\n1\n4\n\nOutput:\n2 4 8",
               "starter_code": {
-                "csharp": "using System.Linq;\nusing System.Collections.Generic;\npublic class Solution {\n    public List<int> FilterEvens(List<int> numbers) {\n        // Return even numbers sorted ascending\n    }\n}"
+                "csharp": "using System;\nusing System.Linq;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        List<int> numbers = new List<int>();\n        for(int i = 0; i < n; i++) {\n            numbers.Add(int.Parse(Console.ReadLine()));\n        }\n        // Use LINQ to filter even numbers and sort ascending\n        // Print result separated by spaces\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "numbers = [5,2,8,1,4]",
-                  "output": "[2,4,8]"
+                  "input": "5\n5\n2\n8\n1\n4",
+                  "output": "2 4 8"
                 },
                 {
-                  "input": "numbers = [1,3,5]",
-                  "output": "[]"
+                  "input": "3\n1\n3\n5",
+                  "output": ""
+                },
+                {
+                  "input": "4\n10\n3\n6\n2",
+                  "output": "2 6 10"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "numbers = []",
-                  "output": "[]"
+                  "input": "0",
+                  "output": ""
                 },
                 {
-                  "input": "numbers = [2,2,2]",
-                  "output": "[2,2,2]"
+                  "input": "3\n2\n2\n2",
+                  "output": "2 2 2"
+                },
+                {
+                  "input": "5\n100\n1\n50\n3\n20",
+                  "output": "20 50 100"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Linq;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        List<int> numbers = new List<int>();\n        for(int i = 0; i < n; i++) {\n            numbers.Add(int.Parse(Console.ReadLine()));\n        }\n        var evens = numbers.Where(x => x % 2 == 0).OrderBy(x => x).ToList();\n        Console.WriteLine(string.Join(\" \", evens));\n    }\n}"
             }
           ],
           "Medium": [
@@ -9506,8 +10055,8 @@
               "id": "CS-BEG-M-1",
               "title": "Class Inheritance and Polymorphism",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Medium",
+              "level": "Beginner",
               "question_type": "coding",
               "tags": [
                 "oop",
@@ -9516,65 +10065,85 @@
                 "abstract-class",
                 "csharp-basics"
               ],
-              "description": "Create an Animal base class with a Speak() method. Derive Dog and Cat classes that override Speak(). Demonstrate polymorphism via a list of Animal.",
-              "solution": "abstract class Animal { public abstract string Speak(); }\nclass Dog : Animal { public override string Speak() => \"Woof\"; }\nclass Cat : Animal { public override string Speak() => \"Meow\"; }\n\nvar animals = new List<Animal> { new Dog(), new Cat() };\nforeach(var a in animals) Console.WriteLine(a.Speak());",
+              "description": "Problem Statement\nYou are given a list of animals. Each animal is either a Dog or a Cat. Print what each animal says.\n\nInput Format\nFirst line contains n (number of animals).\nNext n lines each contain either 'Dog' or 'Cat'.\n\nOutput Format\nFor each animal print what it says \u2014 Dog prints 'Woof' and Cat prints 'Meow'.\n\nRules\n- Use inheritance and polymorphism.\n- Create an abstract Animal class with a Speak() method.\n- Dog and Cat must override Speak().\n\nExample\nInput:\n3\nDog\nCat\nDog\n\nOutput:\nWoof\nMeow\nWoof",
               "starter_code": {
-                "csharp": "abstract class Animal {\n    public abstract string Speak();\n}\nclass Dog : Animal {\n    // override Speak\n}\nclass Cat : Animal {\n    // override Speak\n}"
+                "csharp": "using System;\nusing System.Collections.Generic;\n\nabstract class Animal {\n    public abstract string Speak();\n}\n\nclass Dog : Animal {\n    // override Speak()\n}\n\nclass Cat : Animal {\n    // override Speak()\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        List<Animal> animals = new List<Animal>();\n        for(int i = 0; i < n; i++) {\n            string type = Console.ReadLine();\n            // Add Dog or Cat to animals list\n        }\n        foreach(var animal in animals) {\n            Console.WriteLine(animal.Speak());\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "new Dog().Speak()",
-                  "output": "\"Woof\""
+                  "input": "3\nDog\nCat\nDog",
+                  "output": "Woof\nMeow\nWoof"
                 },
                 {
-                  "input": "new Cat().Speak()",
-                  "output": "\"Meow\""
+                  "input": "2\nCat\nCat",
+                  "output": "Meow\nMeow"
+                },
+                {
+                  "input": "1\nDog",
+                  "output": "Woof"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "List<Animal> with Dog and Cat; call Speak on each",
-                  "output": "\"Woof\", \"Meow\""
+                  "input": "4\nDog\nDog\nCat\nDog",
+                  "output": "Woof\nWoof\nMeow\nWoof"
+                },
+                {
+                  "input": "2\nCat\nDog",
+                  "output": "Meow\nWoof"
+                },
+                {
+                  "input": "1\nCat",
+                  "output": "Meow"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Collections.Generic;\n\nabstract class Animal {\n    public abstract string Speak();\n}\n\nclass Dog : Animal {\n    public override string Speak() => \"Woof\";\n}\n\nclass Cat : Animal {\n    public override string Speak() => \"Meow\";\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        List<Animal> animals = new List<Animal>();\n        for(int i = 0; i < n; i++) {\n            string type = Console.ReadLine();\n            if(type == \"Dog\") animals.Add(new Dog());\n            else animals.Add(new Cat());\n        }\n        foreach(var animal in animals) {\n            Console.WriteLine(animal.Speak());\n        }\n    }\n}"
             },
             {
               "id": "CS-BEG-M-2",
               "title": "Exception Handling in C#",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Medium",
+              "level": "Beginner",
               "question_type": "coding",
               "tags": [
                 "exception-handling",
                 "try-catch-finally",
                 "csharp-basics"
               ],
-              "description": "Write a method that divides two numbers. Catch DivideByZeroException and return -1. Use finally to log completion.",
-              "solution": "int Divide(int a, int b) {\n  try {\n    return a / b;\n  } catch(DivideByZeroException) {\n    return -1;\n  } finally {\n    Console.WriteLine(\"Division attempt complete.\");\n  }\n}",
+              "description": "Problem Statement\nWrite a C# program that reads two integers a and b and prints the result of a divided by b.\nIf b is zero, print -1 instead.\nAlways print 'Division attempt complete.' after the operation.\n\nInput Format\nTwo integers a and b on separate lines.\n\nOutput Format\nFirst line: result of division or -1 if b is zero.\nSecond line: 'Division attempt complete.'\n\nRules\n- Use try/catch/finally.\n- Catch DivideByZeroException specifically.\n- Integer division only.\n\nExample\nInput:\n10\n2\n\nOutput:\n5\nDivision attempt complete.",
               "starter_code": {
-                "csharp": "public class Solution {\n    public int Divide(int a, int b) {\n        // Handle DivideByZeroException, log in finally\n    }\n}"
+                "csharp": "using System;\nclass Program {\n    static void Main() {\n        int a = int.Parse(Console.ReadLine());\n        int b = int.Parse(Console.ReadLine());\n        // Use try/catch/finally to handle division\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "a=10, b=2",
-                  "output": "5"
+                  "input": "10\n2",
+                  "output": "5\nDivision attempt complete."
                 },
                 {
-                  "input": "a=10, b=0",
-                  "output": "-1"
+                  "input": "10\n0",
+                  "output": "-1\nDivision attempt complete."
+                },
+                {
+                  "input": "9\n3",
+                  "output": "3\nDivision attempt complete."
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "a=0, b=5",
-                  "output": "0"
+                  "input": "0\n5",
+                  "output": "0\nDivision attempt complete."
                 },
                 {
-                  "input": "a=-10, b=2",
-                  "output": "-5"
+                  "input": "-10\n2",
+                  "output": "-5\nDivision attempt complete."
+                },
+                {
+                  "input": "7\n0",
+                  "output": "-1\nDivision attempt complete."
                 }
-              ]
+              ],
+              "solution": "using System;\nclass Program {\n    static void Main() {\n        int a = int.Parse(Console.ReadLine());\n        int b = int.Parse(Console.ReadLine());\n        try {\n            Console.WriteLine(a / b);\n        } catch(DivideByZeroException) {\n            Console.WriteLine(-1);\n        } finally {\n            Console.WriteLine(\"Division attempt complete.\");\n        }\n    }\n}"
             }
           ],
           "Hard": [
@@ -9582,8 +10151,8 @@
               "id": "CS-BEG-H-1",
               "title": "Generic Repository Pattern",
               "skill": ".NET, C#",
-              "level": "Beginner",
               "difficulty": "Hard",
+              "level": "Beginner",
               "question_type": "coding",
               "tags": [
                 "generics",
@@ -9591,27 +10160,39 @@
                 "design-patterns",
                 "csharp-intermediate"
               ],
-              "description": "Implement a generic IRepository<T> interface with GetById, GetAll, Add, Update, Delete. Implement it with an in-memory Dictionary.",
-              "solution": "public interface IRepository<T> where T : class {\n  T GetById(int id);\n  IEnumerable<T> GetAll();\n  void Add(int id, T entity);\n  void Delete(int id);\n}\npublic class InMemoryRepository<T> : IRepository<T> where T : class {\n  private Dictionary<int,T> _store = new();\n  public T GetById(int id) => _store.TryGetValue(id,out var v)?v:null;\n  public IEnumerable<T> GetAll() => _store.Values;\n  public void Add(int id,T e) => _store[id]=e;\n  public void Delete(int id) => _store.Remove(id);\n}",
+              "description": "Problem Statement\nImplement a simple in-memory repository using generics.\nYou will receive a series of commands and must execute them.\n\nCommands:\n- ADD id value: add item with given id\n- GET id: print item with given id, or 'null' if not found\n- DELETE id: remove item with given id\n- GETALL: print all values separated by spaces, or 'empty' if none\n\nInput Format\nFirst line contains n (number of commands).\nNext n lines each contain a command.\n\nOutput Format\nPrint output for GET and GETALL commands only.\n\nExample\nInput:\n4\nADD 1 Alice\nGET 1\nDELETE 1\nGET 1\n\nOutput:\nAlice\nnull",
               "starter_code": {
-                "csharp": "public interface IRepository<T> where T : class {\n    T GetById(int id);\n    IEnumerable<T> GetAll();\n    void Add(int id, T entity);\n    void Delete(int id);\n}\npublic class InMemoryRepository<T> : IRepository<T> where T : class {\n    // Implement using Dictionary\n}"
+                "csharp": "using System;\nusing System.Collections.Generic;\n\npublic interface IRepository<T> where T : class {\n    T GetById(int id);\n    IEnumerable<T> GetAll();\n    void Add(int id, T entity);\n    void Delete(int id);\n}\n\npublic class InMemoryRepository<T> : IRepository<T> where T : class {\n    // Implement using Dictionary\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var repo = new InMemoryRepository<string>();\n        for(int i = 0; i < n; i++) {\n            string[] parts = Console.ReadLine().Split(' ', 3);\n            // Handle ADD, GET, DELETE, GETALL commands\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Add(1, 'Alice'); GetById(1);",
-                  "output": "\"Alice\""
+                  "input": "4\nADD 1 Alice\nGET 1\nDELETE 1\nGET 1",
+                  "output": "Alice\nnull"
                 },
                 {
-                  "input": "Add(1,'A'); Delete(1); GetById(1);",
-                  "output": "null"
+                  "input": "3\nADD 1 Alice\nADD 2 Bob\nGETALL",
+                  "output": "Alice Bob"
+                },
+                {
+                  "input": "1\nGETALL",
+                  "output": "empty"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "GetAll() on empty repo",
-                  "output": "[]"
+                  "input": "5\nADD 1 Alice\nADD 2 Bob\nDELETE 1\nGETALL\nGET 1",
+                  "output": "Bob\nnull"
+                },
+                {
+                  "input": "3\nADD 1 X\nADD 1 Y\nGET 1",
+                  "output": "Y"
+                },
+                {
+                  "input": "2\nADD 1 Alice\nGET 2",
+                  "output": "null"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Collections.Generic;\nusing System.Linq;\n\npublic interface IRepository<T> where T : class {\n    T GetById(int id);\n    IEnumerable<T> GetAll();\n    void Add(int id, T entity);\n    void Delete(int id);\n}\n\npublic class InMemoryRepository<T> : IRepository<T> where T : class {\n    private Dictionary<int, T> _store = new Dictionary<int, T>();\n    public T GetById(int id) => _store.TryGetValue(id, out var v) ? v : null;\n    public IEnumerable<T> GetAll() => _store.Values;\n    public void Add(int id, T entity) => _store[id] = entity;\n    public void Delete(int id) => _store.Remove(id);\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var repo = new InMemoryRepository<string>();\n        for(int i = 0; i < n; i++) {\n            string[] parts = Console.ReadLine().Split(' ', 3);\n            if(parts[0] == \"ADD\") repo.Add(int.Parse(parts[1]), parts[2]);\n            else if(parts[0] == \"GET\") Console.WriteLine(repo.GetById(int.Parse(parts[1])) ?? \"null\");\n            else if(parts[0] == \"DELETE\") repo.Delete(int.Parse(parts[1]));\n            else if(parts[0] == \"GETALL\") {\n                var all = repo.GetAll().ToList();\n                Console.WriteLine(all.Count == 0 ? \"empty\" : string.Join(\" \", all));\n            }\n        }\n    }\n}"
             }
           ]
         },
@@ -9850,7 +10431,7 @@
             },
             {
               "id": "CS-INT2-M-2",
-              "title": "Entity Framework Core — CRUD + Eager Loading",
+              "title": "Entity Framework Core \u00e2\u20ac\u201d CRUD + Eager Loading",
               "skill": ".NET, C#",
               "level": "Intermediate_2",
               "difficulty": "Medium",
@@ -10184,7 +10765,11 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["hello-world", "console", "vbnet-basics"],
+              "tags": [
+                "hello-world",
+                "console",
+                "vbnet-basics"
+              ],
               "description": "Write a VB.NET console application that prints 'Hello, World!'.",
               "solution": "Module Program\n  Sub Main()\n    Console.WriteLine(\"Hello, World!\")\n  End Sub\nEnd Module",
               "starter_code": {
@@ -10210,7 +10795,11 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["string", "array", "vbnet-basics"],
+              "tags": [
+                "string",
+                "array",
+                "vbnet-basics"
+              ],
               "description": "Write a function in VB.NET that returns the reverse of a given string.",
               "solution": "Function ReverseString(s As String) As String\n  Dim arr As Char() = s.ToCharArray()\n  Array.Reverse(arr)\n  Return New String(arr)\nEnd Function",
               "starter_code": {
@@ -10244,7 +10833,11 @@
               "level": "Beginner",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["math", "loop", "vbnet-basics"],
+              "tags": [
+                "math",
+                "loop",
+                "vbnet-basics"
+              ],
               "description": "Print the first 10 Fibonacci numbers using a loop in VB.NET.",
               "solution": "Dim a As Integer = 0, b As Integer = 1\nFor i As Integer = 0 To 9\n  Console.WriteLine(a)\n  Dim temp As Integer = a + b\n  a = b\n  b = temp\nNext",
               "starter_code": {
@@ -10272,7 +10865,12 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["oop", "classes", "properties", "vbnet-basics"],
+              "tags": [
+                "oop",
+                "classes",
+                "properties",
+                "vbnet-basics"
+              ],
               "description": "Create a VB.NET class Car with properties Make, Model, Year. Add a method Describe() that returns a formatted string.",
               "solution": "Public Class Car\n  Public Property Make As String\n  Public Property Model As String\n  Public Property Year As Integer\n  Public Function Describe() As String\n    Return $\"{Year} {Make} {Model}\"\n  End Function\nEnd Class",
               "starter_code": {
@@ -10298,7 +10896,12 @@
               "level": "Beginner",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["linq", "filtering", "sorting", "vbnet-basics"],
+              "tags": [
+                "linq",
+                "filtering",
+                "sorting",
+                "vbnet-basics"
+              ],
               "description": "Given a List(Of Integer), use LINQ to return all numbers greater than 10, sorted descending.",
               "solution": "Dim result = From n In numbers\n             Where n > 10\n             Order By n Descending\n             Select n\nFor Each n In result\n  Console.WriteLine(n)\nNext",
               "starter_code": {
@@ -10326,7 +10929,11 @@
               "level": "Beginner",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["interfaces", "oop", "vbnet-basics"],
+              "tags": [
+                "interfaces",
+                "oop",
+                "vbnet-basics"
+              ],
               "description": "Define an IShape interface with Area() and Perimeter(). Implement it in a Rectangle class.",
               "solution": "Interface IShape\n  Function Area() As Double\n  Function Perimeter() As Double\nEnd Interface\n\nClass Rectangle\n  Implements IShape\n  Public Property Width As Double\n  Public Property Height As Double\n  Public Function Area() As Double Implements IShape.Area\n    Return Width * Height\n  End Function\n  Public Function Perimeter() As Double Implements IShape.Perimeter\n    Return 2 * (Width + Height)\n  End Function\nEnd Class",
               "starter_code": {
@@ -10356,7 +10963,11 @@
               "level": "Intermediate_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["async-await", "http-client", "vbnet-intermediate"],
+              "tags": [
+                "async-await",
+                "http-client",
+                "vbnet-intermediate"
+              ],
               "description": "Write an Async Function in VB.NET that fetches a web page using HttpClient and returns its content.",
               "solution": "Async Function FetchPageAsync(url As String) As Task(Of String)\n  Using client As New HttpClient()\n    Return Await client.GetStringAsync(url)\n  End Using\nEnd Function",
               "starter_code": {
@@ -10419,7 +11030,11 @@
               "level": "Intermediate_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["events", "delegates", "vbnet-intermediate"],
+              "tags": [
+                "events",
+                "delegates",
+                "vbnet-intermediate"
+              ],
               "description": "Create a Timer class in VB.NET that fires a Tick event every second. Subscribe a handler that prints a counter.",
               "solution": "Public Class SimpleTimer\n  Public Event Tick()\n  Public Sub Start(seconds As Integer)\n    For i As Integer = 1 To seconds\n      System.Threading.Thread.Sleep(1000)\n      RaiseEvent Tick()\n    Next\n  End Sub\nEnd Class\n\nDim t As New SimpleTimer()\nAddHandler t.Tick, Sub() Console.WriteLine(\"Tick!\")\nt.Start(3)",
               "starter_code": {
@@ -10531,7 +11146,12 @@
               "level": "Intermediate_2",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["ef-core", "orm", "linq", "vbnet-intermediate"],
+              "tags": [
+                "ef-core",
+                "orm",
+                "linq",
+                "vbnet-intermediate"
+              ],
               "description": "Define a Product entity and AppDbContext in VB.NET using EF Core. Query products with price > 50.",
               "solution": "Public Class Product\n  Public Property Id As Integer\n  Public Property Name As String\n  Public Property Price As Decimal\nEnd Class\n\nPublic Class AppDbContext\n  Inherits DbContext\n  Public Property Products As DbSet(Of Product)\nEnd Class\n\nDim products = Await _context.Products\n  .Where(Function(p) p.Price > 50)\n  .ToListAsync()",
               "starter_code": {
@@ -10559,7 +11179,11 @@
               "level": "Intermediate_2",
               "difficulty": "Hard",
               "question_type": "coding",
-              "tags": ["com-interop", "office-automation", "vbnet-advanced"],
+              "tags": [
+                "com-interop",
+                "office-automation",
+                "vbnet-advanced"
+              ],
               "description": "Use COM Interop in VB.NET to open a Word document, add text, and save it using Microsoft.Office.Interop.Word.",
               "solution": "Dim wordApp As New Word.Application()\nwordApp.Visible = True\nDim doc As Word.Document = wordApp.Documents.Add()\ndoc.Content.Text = \"Hello from VB.NET!\"\ndoc.SaveAs2(\"C:\\output.docx\")\ndoc.Close()\nwordApp.Quit()\nRuntime.InteropServices.Marshal.ReleaseComObject(wordApp)",
               "starter_code": {
@@ -10589,7 +11213,11 @@
               "level": "Specialist_1",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["xml-literals", "linq-to-xml", "vbnet-advanced"],
+              "tags": [
+                "xml-literals",
+                "linq-to-xml",
+                "vbnet-advanced"
+              ],
               "description": "Use VB.NET XML literals to create an XML structure and query it with LINQ to XML.",
               "solution": "Dim catalog =\n  <Catalog>\n    <Book id=\"1\"><Title>VB.NET Mastery</Title><Price>29.99</Price></Book>\n    <Book id=\"2\"><Title>ASP.NET Core</Title><Price>39.99</Price></Book>\n  </Catalog>\n\nDim cheapBooks = From b In catalog.<Book>\n                 Where CDec(b.<Price>.Value) < 35\n                 Select b.<Title>.Value\nFor Each title In cheapBooks\n  Console.WriteLine(title)\nNext",
               "starter_code": {
@@ -10617,7 +11245,12 @@
               "level": "Specialist_1",
               "difficulty": "Medium",
               "question_type": "coding",
-              "tags": ["winforms", "mvp", "design-patterns", "vbnet-advanced"],
+              "tags": [
+                "winforms",
+                "mvp",
+                "design-patterns",
+                "vbnet-advanced"
+              ],
               "description": "Implement a WinForms login form using MVP pattern. Separate view, presenter, and model concerns.",
               "solution": "' ILoginView interface\nPublic Interface ILoginView\n  Property Username As String\n  Property Password As String\n  Event LoginButtonClicked As EventHandler\n  Sub ShowError(msg As String)\nEnd Interface\n\n' LoginPresenter\nPublic Class LoginPresenter\n  Private _view As ILoginView\n  Private _model As LoginModel\n  Public Sub New(view As ILoginView, model As LoginModel)\n    _view = view\n    _model = model\n    AddHandler _view.LoginButtonClicked, AddressOf OnLogin\n  End Sub\n  Private Sub OnLogin(s As Object, e As EventArgs)\n    If Not _model.Validate(_view.Username, _view.Password) Then\n      _view.ShowError(\"Invalid credentials\")\n    End If\n  End Sub\nEnd Class",
               "starter_code": {
@@ -10688,7 +11321,12 @@
               "level": "Specialist_2",
               "difficulty": "Easy",
               "question_type": "coding",
-              "tags": ["pinvoke", "interop", "native", "vbnet-advanced"],
+              "tags": [
+                "pinvoke",
+                "interop",
+                "native",
+                "vbnet-advanced"
+              ],
               "description": "Use P/Invoke in VB.NET to call the Windows MessageBox function from user32.dll.",
               "solution": "Imports System.Runtime.InteropServices\n\nModule NativeMethods\n  <DllImport(\"user32.dll\", CharSet:=CharSet.Unicode)>\n  Public Function MessageBox(hWnd As IntPtr, text As String, caption As String, type As UInteger) As Integer\n  End Function\nEnd Module\n\nNativeMethods.MessageBox(IntPtr.Zero, \"Hello!\", \"P/Invoke Demo\", 0)",
               "starter_code": {
@@ -11063,7 +11701,13 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "sql",
-              "tags": ["sql", "select", "basics", "Beginner", "Easy"],
+              "tags": [
+                "sql",
+                "select",
+                "basics",
+                "Beginner",
+                "Easy"
+              ],
               "description": "Query all columns for every row in the CITY table.",
               "solution": "SELECT * FROM CITY;",
               "schema": [
@@ -13169,7 +13813,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "sql",
-              "tags": ["mongodb", "beginner", "easy"],
+              "tags": [
+                "mongodb",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for MongoDB. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "schema": [
@@ -13229,7 +13877,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "sql",
-              "tags": ["postgresql", "beginner", "easy"],
+              "tags": [
+                "postgresql",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for PostgreSQL. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "schema": [
@@ -13299,7 +13951,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["java-selenium", "beginner", "easy"],
+              "tags": [
+                "java-selenium",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Java Selenium. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
@@ -13376,7 +14032,11 @@
               "difficulty": "Easy",
               "level": "Beginner",
               "question_type": "framework",
-              "tags": ["python-selenium", "beginner", "easy"],
+              "tags": [
+                "python-selenium",
+                "beginner",
+                "easy"
+              ],
               "description": "Complete the basic task for Python Selenium. Ensure your implementation satisfies the requirements.",
               "solution": "Here is the solution for the task...",
               "starter_files": [
