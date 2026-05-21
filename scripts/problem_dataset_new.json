@@ -10200,34 +10200,49 @@
           "Easy": [
             {
               "id": "CS-INT1-E-1",
-              "title": "Async/Await Basic HTTP Call",
+              "title": "Async/Await Task Processing",
               "skill": ".NET, C#",
-              "level": "Intermediate_1",
               "difficulty": "Easy",
+              "level": "Intermediate_1",
               "question_type": "coding",
               "tags": [
                 "async-await",
-                "http-client",
-                "networking",
+                "tasks",
                 "csharp-intermediate"
               ],
-              "description": "Write an async method that fetches a URL using HttpClient and returns the response body as string.",
-              "solution": "async Task<string> FetchAsync(string url) {\n  using var client = new HttpClient();\n  return await client.GetStringAsync(url);\n}",
+              "description": "Problem Statement\nWrite a C# program that simulates async task processing. Given n tasks each with a name and a result value, process them asynchronously and print each result in the format 'Task {name} completed with result: {value}'.\n\nInput Format\nFirst line: number of tasks n\nNext n lines: task name and result value separated by space\n\nOutput Format\nFor each task print:\nTask {name} completed with result: {value}\n\nRules\n- Use async/await and Task.Run to process each task\n- Print results in the order they are received\n\nExample\nInput:\n3\nFetch 42\nCompute 100\nLoad 7\n\nOutput:\nTask Fetch completed with result: 42\nTask Compute completed with result: 100\nTask Load completed with result: 7",
               "starter_code": {
-                "csharp": "using System.Net.Http;\nusing System.Threading.Tasks;\npublic class Solution {\n    public async Task<string> FetchAsync(string url) {\n        // Your code here\n    }\n}"
+                "csharp": "using System;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task<string> ProcessTask(string name, int value) {\n        return await Task.Run(() => \"\");\n    }\n\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            string name = parts[0];\n            int value = int.Parse(parts[1]);\n            // Call ProcessTask and print result\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "url = \"https://example.com\"",
-                  "output": "HTML content as string (non-empty)"
+                  "input": "3\nFetch 42\nCompute 100\nLoad 7",
+                  "output": "Task Fetch completed with result: 42\nTask Compute completed with result: 100\nTask Load completed with result: 7"
+                },
+                {
+                  "input": "1\nDownload 99",
+                  "output": "Task Download completed with result: 99"
+                },
+                {
+                  "input": "2\nRead 10\nWrite 20",
+                  "output": "Task Read completed with result: 10\nTask Write completed with result: 20"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "url = \"https://httpbin.org/get\"",
-                  "output": "JSON response (non-empty)"
+                  "input": "1\nPing 0",
+                  "output": "Task Ping completed with result: 0"
+                },
+                {
+                  "input": "3\nA 1\nB 2\nC 3",
+                  "output": "Task A completed with result: 1\nTask B completed with result: 2\nTask C completed with result: 3"
+                },
+                {
+                  "input": "2\nSync 500\nAsync 250",
+                  "output": "Task Sync completed with result: 500\nTask Async completed with result: 250"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task<string> ProcessTask(string name, int value) {\n        return await Task.Run(() => $\"Task {name} completed with result: {value}\");\n    }\n\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            string name = parts[0];\n            int value = int.Parse(parts[1]);\n            string result = await ProcessTask(name, value);\n            Console.WriteLine(result);\n        }\n    }\n}"
             }
           ],
           "Medium": [
@@ -10235,8 +10250,8 @@
               "id": "CS-INT1-M-1",
               "title": "Delegates and Events",
               "skill": ".NET, C#",
-              "level": "Intermediate_1",
               "difficulty": "Medium",
+              "level": "Intermediate_1",
               "question_type": "coding",
               "tags": [
                 "events",
@@ -10244,30 +10259,42 @@
                 "event-handler",
                 "csharp-intermediate"
               ],
-              "description": "Create a Button class with a Click event. Subscribe two handlers that print messages when Click fires.",
-              "solution": "public class Button {\n  public event EventHandler Click;\n  public void OnClick() => Click?.Invoke(this, EventArgs.Empty);\n}\nvar btn = new Button();\nbtn.Click += (s,e) => Console.WriteLine(\"Handler 1 called\");\nbtn.Click += (s,e) => Console.WriteLine(\"Handler 2 called\");\nbtn.OnClick();",
+              "description": "Problem Statement\nYou are building a simple event system. Given a number of button clicks, print a message for each handler that responds to the click.\n\nEach button has two handlers:\n- Handler 1 always prints: 'Handler 1 called'\n- Handler 2 always prints: 'Handler 2 called'\n\nInput Format\nFirst line contains n (number of clicks).\n\nOutput Format\nFor each click, print:\nHandler 1 called\nHandler 2 called\n\nExample\nInput:\n2\n\nOutput:\nHandler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called",
               "starter_code": {
-                "csharp": "public class Button {\n    public event EventHandler Click;\n    public void OnClick() {\n        // Raise Click event\n    }\n}"
+                "csharp": "using System;\n\npublic class Button {\n    public event EventHandler Click;\n    public void OnClick() {\n        // Raise Click event here\n    }\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var btn = new Button();\n        // Subscribe two handlers to btn.Click\n        // Handler 1 prints: Handler 1 called\n        // Handler 2 prints: Handler 2 called\n        for(int i = 0; i < n; i++) {\n            btn.OnClick();\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Subscribe 2 handlers, call OnClick()",
-                  "output": "\"Handler 1 called\"\n\"Handler 2 called\""
+                  "input": "1",
+                  "output": "Handler 1 called\nHandler 2 called"
+                },
+                {
+                  "input": "2",
+                  "output": "Handler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called"
+                },
+                {
+                  "input": "3",
+                  "output": "Handler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "No handlers subscribed, call OnClick()",
-                  "output": "No exception, no output"
+                  "input": "0",
+                  "output": ""
+                },
+                {
+                  "input": "4",
+                  "output": "Handler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called\nHandler 1 called\nHandler 2 called"
                 }
-              ]
+              ],
+              "solution": "using System;\n\npublic class Button {\n    public event EventHandler Click;\n    public void OnClick() {\n        Click?.Invoke(this, EventArgs.Empty);\n    }\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var btn = new Button();\n        btn.Click += (s, e) => Console.WriteLine(\"Handler 1 called\");\n        btn.Click += (s, e) => Console.WriteLine(\"Handler 2 called\");\n        for(int i = 0; i < n; i++) {\n            btn.OnClick();\n        }\n    }\n}"
             },
             {
               "id": "CS-INT1-M-2",
               "title": "LINQ Join and GroupBy",
               "skill": ".NET, C#",
-              "level": "Intermediate_1",
               "difficulty": "Medium",
+              "level": "Intermediate_1",
               "question_type": "coding",
               "tags": [
                 "linq",
@@ -10276,88 +10303,135 @@
                 "aggregation",
                 "csharp-intermediate"
               ],
-              "description": "Given Orders and Customers lists, use LINQ to join them and group orders by customer name.",
-              "solution": "var result = orders\n  .Join(customers,\n    o => o.CustomerId,\n    c => c.Id,\n    (o,c) => new { CustomerName=c.Name, o.Total })\n  .GroupBy(x => x.CustomerName)\n  .Select(g => new { Customer=g.Key, TotalSpent=g.Sum(x=>x.Total) });",
+              "description": "Problem Statement\nYou are given a list of customers and orders. Join them and print the total amount spent by each customer in ascending order of customer name.\n\nInput Format\nFirst line: number of customers c\nNext c lines: customer id and name separated by space\nNext line: number of orders o\nNext o lines: customer id and order amount separated by space\n\nOutput Format\nFor each customer who has orders, print:\ncustomer_name total_spent\nSorted alphabetically by customer name.\n\nExample\nInput:\n2\n1 Alice\n2 Bob\n3\n1 50\n1 30\n2 100\n\nOutput:\nAlice 80\nBob 100",
               "starter_code": {
-                "csharp": "var result = orders\n    .Join(customers, o => o.CustomerId, c => c.Id,\n        (o, c) => new { CustomerName = c.Name, o.Total })\n    // GroupBy and Sum\n    ;"
+                "csharp": "using System;\nusing System.Linq;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int c = int.Parse(Console.ReadLine());\n        var customers = new Dictionary<int, string>();\n        for(int i = 0; i < c; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            customers[int.Parse(parts[0])] = parts[1];\n        }\n        int o = int.Parse(Console.ReadLine());\n        var orders = new List<(int customerId, int amount)>();\n        for(int i = 0; i < o; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            orders.Add((int.Parse(parts[0]), int.Parse(parts[1])));\n        }\n        // Use LINQ to join and group by customer name\n        // Print customer name and total spent sorted alphabetically\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "orders=[{cid:1,total:50},{cid:1,total:30},{cid:2,total:100}], customers=[{id:1,name:'Alice'},{id:2,name:'Bob'}]",
-                  "output": "[{Customer:'Alice',TotalSpent:80},{Customer:'Bob',TotalSpent:100}]"
+                  "input": "2\n1 Alice\n2 Bob\n3\n1 50\n1 30\n2 100",
+                  "output": "Alice 80\nBob 100"
+                },
+                {
+                  "input": "2\n1 Alice\n2 Bob\n2\n2 200\n2 50",
+                  "output": "Bob 250"
+                },
+                {
+                  "input": "3\n1 Alice\n2 Bob\n3 Charlie\n4\n1 100\n3 50\n1 25\n3 75",
+                  "output": "Alice 125\nCharlie 125"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "No orders for a customer",
-                  "output": "Customer not in result"
+                  "input": "2\n1 Alice\n2 Bob\n0",
+                  "output": ""
+                },
+                {
+                  "input": "3\n1 Alice\n2 Bob\n3 Charlie\n3\n1 500\n2 300\n3 100",
+                  "output": "Alice 500\nBob 300\nCharlie 100"
+                },
+                {
+                  "input": "2\n1 Alice\n2 Bob\n3\n1 10\n1 20\n1 30",
+                  "output": "Alice 60"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Linq;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int c = int.Parse(Console.ReadLine());\n        var customers = new Dictionary<int, string>();\n        for(int i = 0; i < c; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            customers[int.Parse(parts[0])] = parts[1];\n        }\n        int o = int.Parse(Console.ReadLine());\n        var orders = new List<(int customerId, int amount)>();\n        for(int i = 0; i < o; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            orders.Add((int.Parse(parts[0]), int.Parse(parts[1])));\n        }\n        var result = orders\n            .Where(ord => customers.ContainsKey(ord.customerId))\n            .GroupBy(ord => customers[ord.customerId])\n            .Select(g => new { Name = g.Key, Total = g.Sum(x => x.amount) })\n            .OrderBy(x => x.Name);\n        foreach(var r in result) {\n            Console.WriteLine($\"{r.Name} {r.Total}\");\n        }\n    }\n}"
             },
             {
               "id": "CS-INT1-M-3",
               "title": "Dependency Injection with IServiceCollection",
               "skill": ".NET, C#",
-              "level": "Intermediate_1",
               "difficulty": "Medium",
+              "level": "Intermediate_1",
               "question_type": "coding",
               "tags": [
                 "dependency-injection",
                 "ioc",
-                "asp-net-core",
+                "interfaces",
                 "csharp-intermediate"
               ],
-              "description": "Register IEmailService and its EmailService implementation as Scoped in .NET DI. Resolve and use it.",
-              "solution": "var services = new ServiceCollection();\nservices.AddScoped<IEmailService, EmailService>();\nvar provider = services.BuildServiceProvider();\nusing var scope = provider.CreateScope();\nvar email = scope.ServiceProvider.GetRequiredService<IEmailService>();\nemail.Send(\"user@example.com\", \"Hello\");",
+              "description": "Problem Statement\nImplement a simple dependency injection pattern manually without any framework. Given a list of email send commands, use an interface and its implementation to send emails and print confirmation messages.\n\nInput Format\nFirst line: number of emails n\nNext n lines: recipient and message separated by comma\n\nOutput Format\nFor each email print:\nEmail sent to {recipient}: {message}\n\nRules\n- Define an IEmailService interface with a Send method\n- Implement it with EmailService class\n- Use the interface reference to call Send (demonstrating DI principle)\n\nExample\nInput:\n2\nuser@example.com,Hello\nadmin@example.com,Welcome\n\nOutput:\nEmail sent to user@example.com: Hello\nEmail sent to admin@example.com: Welcome",
               "starter_code": {
-                "csharp": "var services = new ServiceCollection();\n// Register IEmailService as Scoped\n// Resolve and call Send\n"
+                "csharp": "using System;\n\npublic interface IEmailService {\n    void Send(string recipient, string message);\n}\n\npublic class EmailService : IEmailService {\n    // Implement Send method\n    // Print: Email sent to {recipient}: {message}\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        IEmailService emailService = new EmailService();\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(',');\n            // Call emailService.Send\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Resolve IEmailService, call Send('user@example.com','Hello')",
-                  "output": "Email sent successfully"
+                  "input": "2\nuser@example.com,Hello\nadmin@example.com,Welcome",
+                  "output": "Email sent to user@example.com: Hello\nEmail sent to admin@example.com: Welcome"
+                },
+                {
+                  "input": "1\ntest@test.com,Test message",
+                  "output": "Email sent to test@test.com: Test message"
+                },
+                {
+                  "input": "3\na@a.com,Hi\nb@b.com,Bye\nc@c.com,Hello",
+                  "output": "Email sent to a@a.com: Hi\nEmail sent to b@b.com: Bye\nEmail sent to c@c.com: Hello"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "Resolve unregistered service",
-                  "output": "InvalidOperationException"
+                  "input": "1\nneha@company.com,Welcome aboard",
+                  "output": "Email sent to neha@company.com: Welcome aboard"
+                },
+                {
+                  "input": "2\nx@x.com,Message 1\ny@y.com,Message 2",
+                  "output": "Email sent to x@x.com: Message 1\nEmail sent to y@y.com: Message 2"
+                },
+                {
+                  "input": "3\none@one.com,First\ntwo@two.com,Second\nthree@three.com,Third",
+                  "output": "Email sent to one@one.com: First\nEmail sent to two@two.com: Second\nEmail sent to three@three.com: Third"
                 }
-              ]
+              ],
+              "solution": "using System;\n\npublic interface IEmailService {\n    void Send(string recipient, string message);\n}\n\npublic class EmailService : IEmailService {\n    public void Send(string recipient, string message) {\n        Console.WriteLine($\"Email sent to {recipient}: {message}\");\n    }\n}\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        IEmailService emailService = new EmailService();\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(',');\n            emailService.Send(parts[0], parts[1]);\n        }\n    }\n}"
             }
           ],
           "Hard": [
             {
               "id": "CS-INT1-H-1",
-              "title": "Custom ASP.NET Core Middleware",
+              "title": "Middleware Pipeline Pattern",
               "skill": ".NET, C#",
-              "level": "Intermediate_1",
               "difficulty": "Hard",
+              "level": "Intermediate_1",
               "question_type": "coding",
               "tags": [
                 "middleware",
-                "asp-net-core",
                 "pipeline",
                 "logging",
                 "csharp-intermediate"
               ],
-              "description": "Write a custom ASP.NET Core middleware that logs request method, path, and response status code. Register it in Program.cs.",
-              "solution": "public class LoggingMiddleware {\n  private readonly RequestDelegate _next;\n  public LoggingMiddleware(RequestDelegate next) => _next = next;\n  public async Task InvokeAsync(HttpContext ctx) {\n    Console.WriteLine($\"{ctx.Request.Method} {ctx.Request.Path}\");\n    await _next(ctx);\n    Console.WriteLine($\"Response: {ctx.Response.StatusCode}\");\n  }\n}\n// In Program.cs:\napp.UseMiddleware<LoggingMiddleware>();",
+              "description": "Problem Statement\nSimulate a middleware pipeline in C#. Given a list of HTTP requests in the format 'METHOD /path STATUS', pass each through a logging middleware that prints the request and response details.\n\nInput Format\nFirst line: number of requests n\nNext n lines: METHOD /path STATUS (e.g. GET /api/users 200)\n\nOutput Format\nFor each request print:\n{METHOD} {path}\nResponse: {STATUS}\n\nRules\n- Implement a middleware class with an Invoke method\n- Middleware must log the request before passing to next, and log response after\n- Use a delegate to represent the next middleware\n\nExample\nInput:\n2\nGET /api/users 200\nPOST /api/items 201\n\nOutput:\nGET /api/users\nResponse: 200\nPOST /api/items\nResponse: 201",
               "starter_code": {
-                "csharp": "public class LoggingMiddleware {\n    private readonly RequestDelegate _next;\n    public LoggingMiddleware(RequestDelegate next) => _next = next;\n    public async Task InvokeAsync(HttpContext ctx) {\n        // Log request, call next, log response\n    }\n}"
+                "csharp": "using System;\nusing System.Threading.Tasks;\n\npublic class RequestContext {\n    public string Method { get; set; }\n    public string Path { get; set; }\n    public int StatusCode { get; set; }\n}\n\npublic class LoggingMiddleware {\n    private readonly Func<RequestContext, Task> _next;\n    public LoggingMiddleware(Func<RequestContext, Task> next) {\n        _next = next;\n    }\n    public async Task Invoke(RequestContext ctx) {\n        // Log request: print \"{Method} {Path}\"\n        // Call _next\n        // Log response: print \"Response: {StatusCode}\"\n    }\n}\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var middleware = new LoggingMiddleware(async ctx => await Task.CompletedTask);\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            var ctx = new RequestContext {\n                Method = parts[0],\n                Path = parts[1],\n                StatusCode = int.Parse(parts[2])\n            };\n            await middleware.Invoke(ctx);\n        }\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "GET /api/users",
-                  "output": "Logs: \"GET /api/users\" then \"Response: 200\""
+                  "input": "2\nGET /api/users 200\nPOST /api/items 201",
+                  "output": "GET /api/users\nResponse: 200\nPOST /api/items\nResponse: 201"
+                },
+                {
+                  "input": "1\nDELETE /api/user/1 204",
+                  "output": "DELETE /api/user/1\nResponse: 204"
+                },
+                {
+                  "input": "3\nGET / 200\nPOST /login 200\nGET /dashboard 403",
+                  "output": "GET /\nResponse: 200\nPOST /login\nResponse: 200\nGET /dashboard\nResponse: 403"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "POST /api/items returning 201",
-                  "output": "Logs: \"POST /api/items\" then \"Response: 201\""
+                  "input": "1\nGET /health 200",
+                  "output": "GET /health\nResponse: 200"
+                },
+                {
+                  "input": "2\nPUT /api/user/1 200\nDELETE /api/user/2 404",
+                  "output": "PUT /api/user/1\nResponse: 200\nDELETE /api/user/2\nResponse: 404"
+                },
+                {
+                  "input": "3\nGET /a 200\nGET /b 404\nPOST /c 500",
+                  "output": "GET /a\nResponse: 200\nGET /b\nResponse: 404\nPOST /c\nResponse: 500"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Threading.Tasks;\n\npublic class RequestContext {\n    public string Method { get; set; }\n    public string Path { get; set; }\n    public int StatusCode { get; set; }\n}\n\npublic class LoggingMiddleware {\n    private readonly Func<RequestContext, Task> _next;\n    public LoggingMiddleware(Func<RequestContext, Task> next) {\n        _next = next;\n    }\n    public async Task Invoke(RequestContext ctx) {\n        Console.WriteLine($\"{ctx.Method} {ctx.Path}\");\n        await _next(ctx);\n        Console.WriteLine($\"Response: {ctx.StatusCode}\");\n    }\n}\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var middleware = new LoggingMiddleware(async ctx => await Task.CompletedTask);\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(' ');\n            var ctx = new RequestContext {\n                Method = parts[0],\n                Path = parts[1],\n                StatusCode = int.Parse(parts[2])\n            };\n            await middleware.Invoke(ctx);\n        }\n    }\n}"
             }
           ]
         },
@@ -10367,8 +10441,8 @@
               "id": "CS-INT2-E-1",
               "title": "C# Record Types",
               "skill": ".NET, C#",
-              "level": "Intermediate_2",
               "difficulty": "Easy",
+              "level": "Intermediate_2",
               "question_type": "coding",
               "tags": [
                 "records",
@@ -10377,32 +10451,48 @@
                 "csharp-9",
                 "csharp-intermediate"
               ],
-              "description": "Define a Person record with Name and Age. Demonstrate immutability and with-expression for copying with changes.",
-              "solution": "record Person(string Name, int Age);\nvar alice = new Person(\"Alice\", 30);\nvar olderAlice = alice with { Age = 31 };\nConsole.WriteLine(alice);       // Person { Name = Alice, Age = 30 }\nConsole.WriteLine(olderAlice);  // Person { Name = Alice, Age = 31 }",
+              "description": "Problem Statement\nGiven a person's name and age, create a Person record, then create a copy with an updated age using a with-expression. Print both.\n\nInput Format\nFirst line: name\nSecond line: original age\nThird line: new age\n\nOutput Format\nPrint original then updated in format:\nPerson { Name = {name}, Age = {age} }\n\nExample\nInput:\nAlice\n30\n31\n\nOutput:\nPerson { Name = Alice, Age = 30 }\nPerson { Name = Alice, Age = 31 }",
               "starter_code": {
-                "csharp": "record Person(string Name, int Age);\n// Demonstrate with-expression"
+                "csharp": "using System;\n\nrecord Person(string Name, int Age);\n\nclass Program {\n    static void Main() {\n        string name = Console.ReadLine();\n        int age = int.Parse(Console.ReadLine());\n        int newAge = int.Parse(Console.ReadLine());\n        // Create a Person record\n        // Use with-expression to create updated copy\n        // Print both\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Person('Alice', 30) with { Age = 31 }",
-                  "output": "Person { Name = Alice, Age = 31 }"
+                  "input": "Alice\n30\n31",
+                  "output": "Person { Name = Alice, Age = 30 }\nPerson { Name = Alice, Age = 31 }"
+                },
+                {
+                  "input": "Bob\n25\n26",
+                  "output": "Person { Name = Bob, Age = 25 }\nPerson { Name = Bob, Age = 26 }"
+                },
+                {
+                  "input": "Charlie\n40\n41",
+                  "output": "Person { Name = Charlie, Age = 40 }\nPerson { Name = Charlie, Age = 41 }"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "alice == new Person('Alice',30)",
-                  "output": "true (value equality)"
+                  "input": "Diana\n22\n23",
+                  "output": "Person { Name = Diana, Age = 22 }\nPerson { Name = Diana, Age = 23 }"
+                },
+                {
+                  "input": "Eve\n35\n36",
+                  "output": "Person { Name = Eve, Age = 35 }\nPerson { Name = Eve, Age = 36 }"
+                },
+                {
+                  "input": "Frank\n50\n51",
+                  "output": "Person { Name = Frank, Age = 50 }\nPerson { Name = Frank, Age = 51 }"
                 }
-              ]
+              ],
+              "solution": "using System;\n\nrecord Person(string Name, int Age);\n\nclass Program {\n    static void Main() {\n        string name = Console.ReadLine();\n        int age = int.Parse(Console.ReadLine());\n        int newAge = int.Parse(Console.ReadLine());\n        var person = new Person(name, age);\n        var updated = person with { Age = newAge };\n        Console.WriteLine(person);\n        Console.WriteLine(updated);\n    }\n}"
             }
           ],
           "Medium": [
             {
               "id": "CS-INT2-M-1",
-              "title": "Producer-Consumer with System.Threading.Channels",
+              "title": "Producer-Consumer with Channels",
               "skill": ".NET, C#",
-              "level": "Intermediate_2",
               "difficulty": "Medium",
+              "level": "Intermediate_2",
               "question_type": "coding",
               "tags": [
                 "channels",
@@ -10411,23 +10501,39 @@
                 "concurrency",
                 "csharp-advanced"
               ],
-              "description": "Implement a producer that writes integers to a bounded Channel<int> of capacity 10, and a consumer that reads and prints them.",
-              "solution": "var ch = Channel.CreateBounded<int>(10);\nvar producer = Task.Run(async () => {\n  for(int i=0;i<20;i++) {\n    await ch.Writer.WriteAsync(i);\n    Console.WriteLine($\"Wrote {i}\");\n  }\n  ch.Writer.Complete();\n});\nvar consumer = Task.Run(async () => {\n  await foreach(var item in ch.Reader.ReadAllAsync())\n    Console.WriteLine($\"Read {item}\");\n});\nawait Task.WhenAll(producer, consumer);",
+              "description": "Problem Statement\nSimulate a producer-consumer pattern. Given n integers, produce and consume them one by one printing each step.\n\nInput Format\nFirst line: number of items n\nNext n lines: each integer value\n\nOutput Format\nFor each item print:\nProduced: {value}\nConsumed: {value}\n\nExample\nInput:\n3\n10\n20\n30\n\nOutput:\nProduced: 10\nConsumed: 10\nProduced: 20\nConsumed: 20\nProduced: 30\nConsumed: 30",
               "starter_code": {
-                "csharp": "var ch = Channel.CreateBounded<int>(10);\n// Producer writes 0-19, Consumer reads all"
+                "csharp": "using System;\nusing System.Collections.Generic;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var queue = new Queue<int>();\n        // For each item produce then consume using async/await\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Producer writes 0..4, Consumer reads",
-                  "output": "Wrote 0..4, Read 0..4"
+                  "input": "3\n10\n20\n30",
+                  "output": "Produced: 10\nConsumed: 10\nProduced: 20\nConsumed: 20\nProduced: 30\nConsumed: 30"
+                },
+                {
+                  "input": "1\n42",
+                  "output": "Produced: 42\nConsumed: 42"
+                },
+                {
+                  "input": "2\n5\n15",
+                  "output": "Produced: 5\nConsumed: 5\nProduced: 15\nConsumed: 15"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "Bounded channel at capacity, producer blocks until consumer reads",
-                  "output": "No deadlock"
+                  "input": "4\n1\n2\n3\n4",
+                  "output": "Produced: 1\nConsumed: 1\nProduced: 2\nConsumed: 2\nProduced: 3\nConsumed: 3\nProduced: 4\nConsumed: 4"
+                },
+                {
+                  "input": "1\n0",
+                  "output": "Produced: 0\nConsumed: 0"
+                },
+                {
+                  "input": "3\n100\n200\n300",
+                  "output": "Produced: 100\nConsumed: 100\nProduced: 200\nConsumed: 200\nProduced: 300\nConsumed: 300"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Collections.Generic;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var queue = new Queue<int>();\n        for(int i = 0; i < n; i++) {\n            int value = int.Parse(Console.ReadLine());\n            await Task.Run(() => { queue.Enqueue(value); Console.WriteLine($\"Produced: {value}\"); });\n            await Task.Run(() => { int item = queue.Dequeue(); Console.WriteLine($\"Consumed: {item}\"); });\n        }\n    }\n}"
             },
             {
               "id": "CS-INT2-M-2",
@@ -10502,8 +10608,8 @@
               "id": "CS-SP1-E-1",
               "title": "Span<T> for Zero-Allocation Slicing",
               "skill": ".NET, C#",
-              "level": "Specialist_1",
               "difficulty": "Easy",
+              "level": "Specialist_1",
               "question_type": "coding",
               "tags": [
                 "span",
@@ -10512,23 +10618,39 @@
                 "performance",
                 "csharp-advanced"
               ],
-              "description": "Use Span<char> to slice a string without heap allocation and compare a substring.",
-              "solution": "string s = \"Hello, World!\";\nReadOnlySpan<char> span = s.AsSpan(7, 5);\nConsole.WriteLine(span.SequenceEqual(\"World\")); // true",
+              "description": "Problem Statement\nGiven a string, start index, length and target substring, use Span<char> to slice the string and check if it equals the target.\n\nInput Format\nFirst line: the string\nSecond line: start index\nThird line: length\nFourth line: target substring\n\nOutput Format\nPrint 'true' or 'false'\n\nRules\n- Use AsSpan() to slice\n- Use SequenceEqual() to compare\n\nExample\nInput:\nHello, World!\n7\n5\nWorld\n\nOutput:\ntrue",
               "starter_code": {
-                "csharp": "string s = \"Hello, World!\";\n// Use AsSpan to slice and compare without heap allocation"
+                "csharp": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        int start = int.Parse(Console.ReadLine());\n        int length = int.Parse(Console.ReadLine());\n        string target = Console.ReadLine();\n        // Use AsSpan to slice and SequenceEqual to compare\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "s = \"Hello, World!\", slice [7..12]",
-                  "output": "true (equals 'World')"
+                  "input": "Hello, World!\n7\n5\nWorld",
+                  "output": "true"
+                },
+                {
+                  "input": "Hello, World!\n0\n5\nHello",
+                  "output": "true"
+                },
+                {
+                  "input": "Hello, World!\n0\n5\nWorld",
+                  "output": "false"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "s = \"abcdef\", slice [0..3]",
-                  "output": "true (equals 'abc')"
+                  "input": "abcdefgh\n2\n3\ncde",
+                  "output": "true"
+                },
+                {
+                  "input": "abcdefgh\n0\n3\nabc",
+                  "output": "true"
+                },
+                {
+                  "input": "abcdefgh\n5\n3\nabc",
+                  "output": "false"
                 }
-              ]
+              ],
+              "solution": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        int start = int.Parse(Console.ReadLine());\n        int length = int.Parse(Console.ReadLine());\n        string target = Console.ReadLine();\n        ReadOnlySpan<char> span = s.AsSpan(start, length);\n        Console.WriteLine(span.SequenceEqual(target));\n    }\n}"
             }
           ],
           "Medium": [
@@ -10536,8 +10658,8 @@
               "id": "CS-SP1-M-1",
               "title": "Middleware Pipeline Pattern",
               "skill": ".NET, C#",
-              "level": "Specialist_1",
               "difficulty": "Medium",
+              "level": "Specialist_1",
               "question_type": "coding",
               "tags": [
                 "pipeline",
@@ -10546,23 +10668,39 @@
                 "delegates",
                 "csharp-advanced"
               ],
-              "description": "Build a composable async pipeline for processing a request object through multiple handlers using delegates.",
-              "solution": "public delegate Task RequestDelegate(RequestContext ctx);\n\npublic class Pipeline {\n  private readonly List<Func<RequestDelegate,RequestDelegate>> _middlewares=new();\n  public Pipeline Use(Func<RequestDelegate,RequestDelegate> mw){_middlewares.Add(mw);return this;}\n  public RequestDelegate Build(){\n    RequestDelegate app=ctx=>Task.CompletedTask;\n    for(int i=_middlewares.Count-1;i>=0;i--) app=_middlewares[i](app);\n    return app;\n  }\n}",
+              "description": "Problem Statement\nBuild a composable middleware pipeline. Given n middleware names and a request string, pass the request through all middleware in order. Each middleware prints '{name}: processing {request}'.\n\nInput Format\nFirst line: number of middleware n\nNext n lines: middleware name\nLast line: request string\n\nOutput Format\nFor each middleware print:\n{name}: processing {request}\n\nExample\nInput:\n3\nLogger\nAuth\nHandler\nGET /api/users\n\nOutput:\nLogger: processing GET /api/users\nAuth: processing GET /api/users\nHandler: processing GET /api/users",
               "starter_code": {
-                "csharp": "public delegate Task RequestDelegate(RequestContext ctx);\npublic class Pipeline {\n    // Use + Build()\n}"
+                "csharp": "using System;\nusing System.Collections.Generic;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var middlewares = new List<string>();\n        for(int i = 0; i < n; i++) middlewares.Add(Console.ReadLine());\n        string request = Console.ReadLine();\n        // Build and execute the pipeline using delegates/Func\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "2 middleware added, Build() called, invoke pipeline",
-                  "output": "Both middleware execute in order"
+                  "input": "3\nLogger\nAuth\nHandler\nGET /api/users",
+                  "output": "Logger: processing GET /api/users\nAuth: processing GET /api/users\nHandler: processing GET /api/users"
+                },
+                {
+                  "input": "1\nLogger\nPOST /api/items",
+                  "output": "Logger: processing POST /api/items"
+                },
+                {
+                  "input": "2\nAuth\nHandler\nDELETE /api/user/1",
+                  "output": "Auth: processing DELETE /api/user/1\nHandler: processing DELETE /api/user/1"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "0 middleware",
-                  "output": "Pipeline passes through (no-op)"
+                  "input": "2\nLogger\nAuth\nGET /health",
+                  "output": "Logger: processing GET /health\nAuth: processing GET /health"
+                },
+                {
+                  "input": "3\nA\nB\nC\nrequest",
+                  "output": "A: processing request\nB: processing request\nC: processing request"
+                },
+                {
+                  "input": "1\nHandler\nGET /",
+                  "output": "Handler: processing GET /"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Collections.Generic;\nusing System.Threading.Tasks;\n\nclass Program {\n    static async Task Main() {\n        int n = int.Parse(Console.ReadLine());\n        var middlewares = new List<string>();\n        for(int i = 0; i < n; i++) middlewares.Add(Console.ReadLine());\n        string request = Console.ReadLine();\n        Func<Task> pipeline = () => Task.CompletedTask;\n        for(int i = middlewares.Count - 1; i >= 0; i--) {\n            string name = middlewares[i];\n            var next = pipeline;\n            pipeline = async () => { Console.WriteLine($\"{name}: processing {request}\"); await next(); };\n        }\n        await pipeline();\n    }\n}"
             },
             {
               "id": "CS-SP1-M-2",
@@ -10606,8 +10744,8 @@
               "id": "CS-SP1-H-1",
               "title": "Build Dynamic Query with Expression Trees",
               "skill": ".NET, C#",
-              "level": "Specialist_1",
               "difficulty": "Hard",
+              "level": "Specialist_1",
               "question_type": "coding",
               "tags": [
                 "expression-trees",
@@ -10615,23 +10753,39 @@
                 "reflection",
                 "csharp-advanced"
               ],
-              "description": "Build a dynamic LINQ Where predicate at runtime using Expression Trees for filtering a property by name and value.",
-              "solution": "Expression<Func<T,bool>> BuildPredicate<T>(string propName, object value) {\n  var param = Expression.Parameter(typeof(T), \"x\");\n  var prop = Expression.Property(param, propName);\n  var constant = Expression.Constant(value);\n  var body = Expression.Equal(prop, constant);\n  return Expression.Lambda<Func<T,bool>>(body, param);\n}\n// Usage:\nvar pred = BuildPredicate<Product>(\"Category\", \"Electronics\");\nvar results = products.AsQueryable().Where(pred).ToList();",
+              "description": "Problem Statement\nGiven a list of products with name and price, use expression trees to dynamically filter them by a property name and value.\n\nInput Format\nFirst line: number of products n\nNext n lines: product name and price separated by comma\nNext line: filter property (Name or Price)\nNext line: filter value\n\nOutput Format\nPrint matching product names one per line.\nIf no matches print 'No results'\n\nExample\nInput:\n3\nLaptop,1000\nPhone,500\nTablet,1000\nPrice\n1000\n\nOutput:\nLaptop\nTablet",
               "starter_code": {
-                "csharp": "Expression<Func<T,bool>> BuildPredicate<T>(string propName, object value) {\n    // Build using Expression.Parameter, Property, Constant, Equal, Lambda\n}"
+                "csharp": "using System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Linq.Expressions;\n\nclass Product {\n    public string Name { get; set; }\n    public int Price { get; set; }\n}\n\nclass Program {\n    static Expression<Func<Product, bool>> BuildPredicate(string propName, string value) {\n        // Use Expression.Parameter, Property, Constant, Equal, Lambda\n        return null;\n    }\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var products = new List<Product>();\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(',');\n            products.Add(new Product { Name = parts[0], Price = int.Parse(parts[1]) });\n        }\n        string prop = Console.ReadLine();\n        string value = Console.ReadLine();\n        // Use BuildPredicate to filter and print results\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "BuildPredicate<Product>(\"Category\", \"Electronics\")",
-                  "output": "Returns lambda: x => x.Category == \"Electronics\""
+                  "input": "3\nLaptop,1000\nPhone,500\nTablet,1000\nPrice\n1000",
+                  "output": "Laptop\nTablet"
+                },
+                {
+                  "input": "3\nLaptop,1000\nPhone,500\nTablet,800\nName\nPhone",
+                  "output": "Phone"
+                },
+                {
+                  "input": "3\nLaptop,1000\nPhone,500\nTablet,800\nPrice\n200",
+                  "output": "No results"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "BuildPredicate<User>(\"Age\", 30)",
-                  "output": "Returns lambda: x => x.Age == 30"
+                  "input": "2\nWatch,300\nRing,300\nPrice\n300",
+                  "output": "Watch\nRing"
+                },
+                {
+                  "input": "2\nWatch,300\nRing,400\nName\nWatch",
+                  "output": "Watch"
+                },
+                {
+                  "input": "2\nWatch,300\nRing,400\nPrice\n999",
+                  "output": "No results"
                 }
-              ]
+              ],
+              "solution": "using System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Linq.Expressions;\n\nclass Product {\n    public string Name { get; set; }\n    public int Price { get; set; }\n}\n\nclass Program {\n    static Expression<Func<Product, bool>> BuildPredicate(string propName, string value) {\n        var param = Expression.Parameter(typeof(Product), \"x\");\n        var prop = Expression.Property(param, propName);\n        Expression constant = propName == \"Price\" ? Expression.Constant(int.Parse(value)) : (Expression)Expression.Constant(value);\n        var body = Expression.Equal(prop, constant);\n        return Expression.Lambda<Func<Product, bool>>(body, param);\n    }\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var products = new List<Product>();\n        for(int i = 0; i < n; i++) {\n            var parts = Console.ReadLine().Split(',');\n            products.Add(new Product { Name = parts[0], Price = int.Parse(parts[1]) });\n        }\n        string prop = Console.ReadLine();\n        string value = Console.ReadLine();\n        var predicate = BuildPredicate(prop, value);\n        var results = products.AsQueryable().Where(predicate).ToList();\n        if(results.Count == 0) Console.WriteLine(\"No results\");\n        else results.ForEach(p => Console.WriteLine(p.Name));\n    }\n}"
             }
           ]
         },
@@ -10641,8 +10795,8 @@
               "id": "CS-SP2-E-1",
               "title": "stackalloc and unsafe Buffers",
               "skill": ".NET, C#",
-              "level": "Specialist_2",
               "difficulty": "Easy",
+              "level": "Specialist_2",
               "question_type": "coding",
               "tags": [
                 "unsafe",
@@ -10651,23 +10805,39 @@
                 "low-level",
                 "csharp-advanced"
               ],
-              "description": "Use stackalloc to allocate a 256-byte buffer on the stack and fill it with a checksum without heap pressure.",
-              "solution": "unsafe {\n  byte* buf = stackalloc byte[256];\n  for(int i=0;i<256;i++) buf[i]=(byte)i;\n  int sum=0;\n  for(int i=0;i<256;i++) sum+=buf[i];\n  Console.WriteLine(sum); // 32640\n}",
+              "description": "Problem Statement\nGiven n, allocate n bytes on the stack using stackalloc, fill with values 0 to n-1 and compute their sum.\n\nInput Format\nA single integer n\n\nOutput Format\nPrint the sum of bytes 0 to n-1\n\nRules\n- Use stackalloc to allocate the buffer\n- Use unsafe context\n\nExample\nInput:\n10\n\nOutput:\n45",
               "starter_code": {
-                "csharp": "unsafe {\n    byte* buf = stackalloc byte[256];\n    // Fill with 0..255 and compute sum\n}"
+                "csharp": "using System;\n\nclass Program {\n    static unsafe void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // Use stackalloc to allocate n bytes\n        // Fill with 0..n-1 and print the sum\n    }\n}"
               },
               "test_cases": [
                 {
-                  "input": "Buffer 0..255",
+                  "input": "10",
+                  "output": "45"
+                },
+                {
+                  "input": "5",
+                  "output": "10"
+                },
+                {
+                  "input": "256",
                   "output": "32640"
                 }
               ],
               "hidden_test_cases": [
                 {
-                  "input": "Buffer first 10 bytes 0..9",
-                  "output": "45"
+                  "input": "1",
+                  "output": "0"
+                },
+                {
+                  "input": "4",
+                  "output": "6"
+                },
+                {
+                  "input": "100",
+                  "output": "4950"
                 }
-              ]
+              ],
+              "solution": "using System;\n\nclass Program {\n    static unsafe void Main() {\n        int n = int.Parse(Console.ReadLine());\n        byte* buf = stackalloc byte[n];\n        for(int i = 0; i < n; i++) buf[i] = (byte)i;\n        int sum = 0;\n        for(int i = 0; i < n; i++) sum += buf[i];\n        Console.WriteLine(sum);\n    }\n}"
             }
           ],
           "Medium": [
