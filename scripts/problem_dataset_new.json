@@ -394,7 +394,7 @@
                 "typescript",
                 "easy"
               ],
-              "description": "Problem Statement\nGiven space-separated values, compute the sum of valid numbers.\n\nRules\n- Ignore invalid numbers\n- Empty input \u00e2\u2020\u2019 0\n\nExample\nInput:\n1 a 2\nOutput:\n3",
+              "description": "Problem Statement\nGiven space-separated values, compute the sum of valid numbers.\n\nRules\n- Ignore invalid numbers\n- Empty input \u2192 0\n\nExample\nInput:\n1 a 2\nOutput:\n3",
               "solution": "function solution(input: string): string {\n  const nums = input.trim().split(/\\s+/).map(Number);\n  let sum = 0;\n  for (const n of nums) {\n    if (!isNaN(n)) sum += n;\n  }\n  return String(sum);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse input and compute sum\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -432,7 +432,7 @@
                 "logic",
                 "typescript"
               ],
-              "description": "Problem Statement\nToggle a boolean string.\n\nRules\n- true \u00e2\u2020\u2019 false\n- false \u00e2\u2020\u2019 true\n- otherwise \u00e2\u2020\u2019 invalid\n\nExample\nInput:\ntrue\nOutput:\nfalse",
+              "description": "Problem Statement\nToggle a boolean string.\n\nRules\n- true \u2192 false\n- false \u2192 true\n- otherwise \u2192 invalid\n\nExample\nInput:\ntrue\nOutput:\nfalse",
               "solution": "function solution(input: string): string {\n  const val = input.trim().toLowerCase();\n  if (val === 'true') return 'false';\n  if (val === 'false') return 'true';\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: toggle boolean string\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -470,7 +470,7 @@
                 "json",
                 "typescript"
               ],
-              "description": "Problem Statement\nExtract \"name\" from JSON input.\n\nRules\n- Missing \u00e2\u2020\u2019 unknown\n- Invalid JSON \u00e2\u2020\u2019 invalid\n\nExample\nInput:\n{\"name\":\"John\"}\nOutput:\nJohn",
+              "description": "Problem Statement\nExtract \"name\" from JSON input.\n\nRules\n- Missing \u2192 unknown\n- Invalid JSON \u2192 invalid\n\nExample\nInput:\n{\"name\":\"John\"}\nOutput:\nJohn",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return obj.name ? String(obj.name) : 'unknown';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse JSON and extract name\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -508,7 +508,7 @@
                 "optional",
                 "strings"
               ],
-              "description": "Problem Statement\nGenerate greeting with optional title.\n\nRules\n- Both \u00e2\u2020\u2019 Hello <title> <name>\n- Only name \u00e2\u2020\u2019 Hello <name>\n- Empty \u00e2\u2020\u2019 Hello Guest\n\nExample\nInput:\nAlice\nOutput:\nHello Alice",
+              "description": "Problem Statement\nGenerate greeting with optional title.\n\nRules\n- Both \u2192 Hello <title> <name>\n- Only name \u2192 Hello <name>\n- Empty \u2192 Hello Guest\n\nExample\nInput:\nAlice\nOutput:\nHello Alice",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(' ');\n  const name = parts[0] || 'Guest';\n  const title = parts[1] || '';\n  return title ? `Hello ${title} ${name}` : `Hello ${name}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: generate greeting with optional title\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -549,7 +549,7 @@
                 "math",
                 "medium"
               ],
-              "description": "Problem Statement\nYou are given a string representing a mathematical operation.\n\nRules\n- Supported operations: add, sub, mul, div\n- Format: <operation> <num1> <num2>\n- Return result as string\n- Division is integer division\n- Invalid input \u00e2\u2020\u2019 return \"invalid\"\n\nExamples\nInput:\nadd 2 3\nOutput:\n5\n\nInput:\ndiv 5 0\nOutput:\ninvalid",
+              "description": "Problem Statement\nYou are given a string representing a mathematical operation.\n\nRules\n- Supported operations: add, sub, mul, div\n- Format: <operation> <num1> <num2>\n- Return result as string\n- Division is integer division\n- Invalid input \u2192 return \"invalid\"\n\nExamples\nInput:\nadd 2 3\nOutput:\n5\n\nInput:\ndiv 5 0\nOutput:\ninvalid",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/);\n  if (parts.length !== 3) return \"invalid\";\n  const [op, aStr, bStr] = parts;\n  const a = Number(aStr);\n  const b = Number(bStr);\n  if (isNaN(a) || isNaN(b)) return \"invalid\";\n\n  switch (op) {\n    case 'add': return String(a + b);\n    case 'sub': return String(a - b);\n    case 'mul': return String(a * b);\n    case 'div': return b === 0 ? \"invalid\" : String(Math.floor(a / b));\n    default: return \"invalid\";\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse operation and numbers, then compute result\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -625,7 +625,7 @@
                 "objects",
                 "typescript"
               ],
-              "description": "Problem Statement\nYou are given a JSON API response.\n\nRules\n- If status = success \u00e2\u2020\u2019 return data field\n- If status = error \u00e2\u2020\u2019 return message field\n- Invalid JSON \u00e2\u2020\u2019 return \"invalid\"\n\nExamples\nInput:\n{\"status\":\"success\",\"data\":\"ok\"}\nOutput:\nok\n\nInput:\n{\"status\":\"error\",\"message\":\"fail\"}\nOutput:\nfail",
+              "description": "Problem Statement\nYou are given a JSON API response.\n\nRules\n- If status = success \u2192 return data field\n- If status = error \u2192 return message field\n- Invalid JSON \u2192 return \"invalid\"\n\nExamples\nInput:\n{\"status\":\"success\",\"data\":\"ok\"}\nOutput:\nok\n\nInput:\n{\"status\":\"error\",\"message\":\"fail\"}\nOutput:\nfail",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.status === 'success') return obj.data;\n    if (obj.status === 'error') return obj.message;\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse JSON and extract success message\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -701,7 +701,7 @@
                 "mapping",
                 "typescript"
               ],
-              "description": "Problem Statement\nMap a numeric status code to its message.\n\nRules\n- 200 \u00e2\u2020\u2019 OK\n- 404 \u00e2\u2020\u2019 Not Found\n- 500 \u00e2\u2020\u2019 Server Error\n- Any other \u00e2\u2020\u2019 Unknown\n\nExamples\nInput:\n200\nOutput:\nOK\n\nInput:\n123\nOutput:\nUnknown",
+              "description": "Problem Statement\nMap a numeric status code to its message.\n\nRules\n- 200 \u2192 OK\n- 404 \u2192 Not Found\n- 500 \u2192 Server Error\n- Any other \u2192 Unknown\n\nExamples\nInput:\n200\nOutput:\nOK\n\nInput:\n123\nOutput:\nUnknown",
               "solution": "function solution(input: string): string {\n  const code = input.trim();\n  switch (code) {\n    case '200': return 'OK';\n    case '404': return 'Not Found';\n    case '500': return 'Server Error';\n    default: return 'Unknown';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: map status code to message\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -779,7 +779,7 @@
                 "json",
                 "events"
               ],
-              "description": "Problem Statement\nYou are given a JSON event.\n\nRules\n- Extract 'type' and 'user'\n- Format: \"User <user> triggered <type>\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"click\",\"user\":\"John\"}\nOutput:\nUser John triggered click",
+              "description": "Problem Statement\nYou are given a JSON event.\n\nRules\n- Extract 'type' and 'user'\n- Format: \"User <user> triggered <type>\"\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"click\",\"user\":\"John\"}\nOutput:\nUser John triggered click",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (!obj.type || !obj.user) return \"invalid\";\n    return `User ${obj.user} triggered ${obj.type}`;\n  } catch {\n    return \"invalid\";\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: parse event JSON and return formatted log\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -817,7 +817,7 @@
                 "validation",
                 "objects"
               ],
-              "description": "Problem Statement\nValidate a nested object structure.\n\nRules\n- Object must contain user.name (string) and user.age (number)\n- If valid \u00e2\u2020\u2019 return \"valid\"\n- Else \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"user\":{\"name\":\"John\",\"age\":20}}\nOutput:\nvalid\n\nInput:\n{\"user\":{\"name\":123}}\nOutput:\ninvalid",
+              "description": "Problem Statement\nValidate a nested object structure.\n\nRules\n- Object must contain user.name (string) and user.age (number)\n- If valid \u2192 return \"valid\"\n- Else \u2192 \"invalid\"\n\nExamples\nInput:\n{\"user\":{\"name\":\"John\",\"age\":20}}\nOutput:\nvalid\n\nInput:\n{\"user\":{\"name\":123}}\nOutput:\ninvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (\n      obj.user &&\n      typeof obj.user.name === 'string' &&\n      typeof obj.user.age === 'number'\n    ) {\n      return 'valid';\n    }\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate nested object structure\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -855,7 +855,7 @@
                 "types",
                 "overloading"
               ],
-              "description": "Problem Statement\nPerform operation based on input types.\n\nRules\n- If both inputs are numbers \u00e2\u2020\u2019 return sum\n- If both are strings \u00e2\u2020\u2019 concatenate\n- Otherwise \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n2 3\nOutput:\n5\n\nInput:\nhello world\nOutput:\nhelloworld",
+              "description": "Problem Statement\nPerform operation based on input types.\n\nRules\n- If both inputs are numbers \u2192 return sum\n- If both are strings \u2192 concatenate\n- Otherwise \u2192 \"invalid\"\n\nExamples\nInput:\n2 3\nOutput:\n5\n\nInput:\nhello world\nOutput:\nhelloworld",
               "solution": "function solution(input: string): string {\n  const [a, b] = input.trim().split(/\\s+/);\n  const numA = Number(a);\n  const numB = Number(b);\n\n  if (!isNaN(numA) && !isNaN(numB)) {\n    return String(numA + numB);\n  }\n\n  if (/^[a-zA-Z]+$/.test(a) && /^[a-zA-Z]+$/.test(b)) {\n    return a + b;\n  }\n\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: handle string concat or number addition\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -893,7 +893,7 @@
                 "immutability",
                 "typescript"
               ],
-              "description": "Problem Statement\nYou are given a JSON object.\n\nYour task is to return it unchanged.\n\nRules\n- Do not modify the object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1}\nOutput:\n{\"a\":1}",
+              "description": "Problem Statement\nYou are given a JSON object.\n\nYour task is to return it unchanged.\n\nRules\n- Do not modify the object\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1}\nOutput:\n{\"a\":1}",
               "solution": "function solution(input: string): string {\n  try {\n    JSON.parse(input);\n    return input.trim();\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return object without modifying it\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -935,7 +935,7 @@
                 "objects",
                 "comparison"
               ],
-              "description": "Problem Statement\nYou are given two JSON objects (one per line).\n\nYour task is to compare them for shallow equality.\n\nRules\n- Objects are equal if they have the same keys and values\n- Order of keys does not matter\n- Return \"equal\" or \"not equal\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":2,\"a\":1}\nOutput:\nequal",
+              "description": "Problem Statement\nYou are given two JSON objects (one per line).\n\nYour task is to compare them for shallow equality.\n\nRules\n- Objects are equal if they have the same keys and values\n- Order of keys does not matter\n- Return \"equal\" or \"not equal\"\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":2,\"a\":1}\nOutput:\nequal",
               "solution": "function solution(input: string): string {\n  try {\n    const [aStr, bStr] = input.trim().split('\\n');\n    const a = JSON.parse(aStr);\n    const b = JSON.parse(bStr);\n\n    const keysA = Object.keys(a);\n    const keysB = Object.keys(b);\n\n    if (keysA.length !== keysB.length) return 'not equal';\n\n    for (const key of keysA) {\n      if (a[key] !== b[key]) return 'not equal';\n    }\n\n    return 'equal';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: compare two objects for shallow equality\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -973,7 +973,7 @@
                 "merge",
                 "typescript"
               ],
-              "description": "Problem Statement\nMerge two JSON objects.\n\nRules\n- Input has two lines (two JSON objects)\n- Second object overrides first on conflict\n- Return merged object as JSON string\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"a\":1}\n{\"b\":2}\nOutput:\n{\"a\":1,\"b\":2}",
+              "description": "Problem Statement\nMerge two JSON objects.\n\nRules\n- Input has two lines (two JSON objects)\n- Second object overrides first on conflict\n- Return merged object as JSON string\n- Invalid JSON \u2192 \"invalid\"\n\nExample\nInput:\n{\"a\":1}\n{\"b\":2}\nOutput:\n{\"a\":1,\"b\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const [aStr, bStr] = input.trim().split('\\n');\n    const a = JSON.parse(aStr);\n    const b = JSON.parse(bStr);\n    return JSON.stringify({ ...a, ...b });\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: merge two JSON objects\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1007,7 +1007,7 @@
                 "optional",
                 "typescript"
               ],
-              "description": "Problem Statement\nExtract user.profile.name safely from JSON.\n\nRules\n- If path exists \u00e2\u2020\u2019 return name\n- Missing \u00e2\u2020\u2019 \"not found\"\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"user\":{\"profile\":{\"name\":\"John\"}}}\nOutput:\nJohn",
+              "description": "Problem Statement\nExtract user.profile.name safely from JSON.\n\nRules\n- If path exists \u2192 return name\n- Missing \u2192 \"not found\"\n- Invalid JSON \u2192 \"invalid\"\n\nExample\nInput:\n{\"user\":{\"profile\":{\"name\":\"John\"}}}\nOutput:\nJohn",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return obj?.user?.profile?.name ?? 'not found';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: safely access nested property user.profile.name\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1040,7 +1040,7 @@
                 "functions",
                 "defaults"
               ],
-              "description": "Problem Statement\nGenerate greeting with default name.\n\nRules\n- If input empty \u00e2\u2020\u2019 use \"Guest\"\n- Else use given name\n\nExample\nInput:\n(empty)\nOutput:\nHello Guest",
+              "description": "Problem Statement\nGenerate greeting with default name.\n\nRules\n- If input empty \u2192 use \"Guest\"\n- Else use given name\n\nExample\nInput:\n(empty)\nOutput:\nHello Guest",
               "solution": "function solution(input: string): string {\n  const name = input.trim() || 'Guest';\n  return `Hello ${name}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply default value if missing\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1069,7 +1069,7 @@
                 "arrays",
                 "tuple"
               ],
-              "description": "Problem Statement\nReturn first and last elements from input.\n\nRules\n- If one element \u00e2\u2020\u2019 return it twice\n- Maintain order\n\nExample\nInput:\n1 2 3 4\nOutput:\n1 4",
+              "description": "Problem Statement\nReturn first and last elements from input.\n\nRules\n- If one element \u2192 return it twice\n- Maintain order\n\nExample\nInput:\n1 2 3 4\nOutput:\n1 4",
               "solution": "function solution(input: string): string {\n  const arr = input.trim().split(/\\s+/);\n  if (arr.length === 1) return `${arr[0]} ${arr[0]}`;\n  return `${arr[0]} ${arr[arr.length - 1]}`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return first and last element\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1105,7 +1105,7 @@
                 "filter",
                 "logic"
               ],
-              "description": "Problem Statement\nFilter an array based on a condition.\n\nRules\n- First line: condition (gt, lt, eq) and value\n- Second line: array\n- gt \u00e2\u2020\u2019 greater than, lt \u00e2\u2020\u2019 less than, eq \u00e2\u2020\u2019 equal\n\nExamples\nInput:\ngt 3\n1 2 3 4 5\nOutput:\n4 5",
+              "description": "Problem Statement\nFilter an array based on a condition.\n\nRules\n- First line: condition (gt, lt, eq) and value\n- Second line: array\n- gt \u2192 greater than, lt \u2192 less than, eq \u2192 equal\n\nExamples\nInput:\ngt 3\n1 2 3 4 5\nOutput:\n4 5",
               "solution": "function solution(input: string): string {\n  const [condLine, arrLine] = input.trim().split('\\n');\n  const [cond, valStr] = condLine.split(' ');\n  const val = Number(valStr);\n  const nums = arrLine.split(/\\s+/).map(Number);\n\n  let result: number[] = [];\n  if (cond === 'gt') result = nums.filter(n => n > val);\n  else if (cond === 'lt') result = nums.filter(n => n < val);\n  else if (cond === 'eq') result = nums.filter(n => n === val);\n\n  return result.join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: filter values based on condition\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1139,7 +1139,7 @@
                 "json",
                 "logic"
               ],
-              "description": "Problem Statement\nCalculate area based on shape type.\n\nRules\n- circle \u00e2\u2020\u2019 \u00cf\u20acr\u00c2\u00b2 (use 3.1416)\n- square \u00e2\u2020\u2019 side\u00c2\u00b2\n- triangle \u00e2\u2020\u2019 (base \u00c3\u2014 height)/2\n- Round to 2 decimal places if needed\n- Invalid input \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"circle\",\"radius\":2}\nOutput:\n12.57",
+              "description": "Problem Statement\nCalculate area based on shape type.\n\nRules\n- circle \u2192 \u03c0r\u00b2 (use 3.1416)\n- square \u2192 side\u00b2\n- triangle \u2192 (base \u00c3\u2014 height)/2\n- Round to 2 decimal places if needed\n- Invalid input \u2192 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"circle\",\"radius\":2}\nOutput:\n12.57",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.type === 'circle') return (3.1416 * obj.radius * obj.radius).toFixed(2);\n    if (obj.type === 'square') return String(obj.side * obj.side);\n    if (obj.type === 'triangle') return String((obj.base * obj.height) / 2);\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: calculate area based on shape type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1172,7 +1172,7 @@
                 "error-handling",
                 "math"
               ],
-              "description": "Problem Statement\nPerform division safely.\n\nRules\n- Input: two values\n- If valid numbers \u00e2\u2020\u2019 return division\n- Division by zero \u00e2\u2020\u2019 \"error\"\n- Invalid numbers \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n10 2\nOutput:\n5",
+              "description": "Problem Statement\nPerform division safely.\n\nRules\n- Input: two values\n- If valid numbers \u2192 return division\n- Division by zero \u2192 \"error\"\n- Invalid numbers \u2192 \"invalid\"\n\nExamples\nInput:\n10 2\nOutput:\n5",
               "solution": "function solution(input: string): string {\n  const [aStr, bStr] = input.trim().split(/\\s+/);\n  const a = Number(aStr);\n  const b = Number(bStr);\n\n  if (isNaN(a) || isNaN(b)) return 'invalid';\n  if (b === 0) return 'error';\n  return String(a / b);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: safely divide two numbers\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1205,7 +1205,7 @@
                 "logic",
                 "validation"
               ],
-              "description": "Problem Statement\nSimulate a promise result.\n\nRules\n- If input is a valid number \u00e2\u2020\u2019 \"resolved <number>\"\n- Otherwise \u00e2\u2020\u2019 \"rejected\"\n\nExamples\nInput:\n42\nOutput:\nresolved 42",
+              "description": "Problem Statement\nSimulate a promise result.\n\nRules\n- If input is a valid number \u2192 \"resolved <number>\"\n- Otherwise \u2192 \"rejected\"\n\nExamples\nInput:\n42\nOutput:\nresolved 42",
               "solution": "function solution(input: string): string {\n  const val = Number(input.trim());\n  if (!isNaN(val)) return `resolved ${val}`;\n  return 'rejected';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate and return result or error\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1235,7 +1235,7 @@
                 "objects",
                 "merge"
               ],
-              "description": "Problem Statement\nUpdate a base object using a partial object.\n\nRules\n- First line: base object\n- Second line: partial update\n- Override matching keys\n- Return updated object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":3}\nOutput:\n{\"a\":1,\"b\":3}",
+              "description": "Problem Statement\nUpdate a base object using a partial object.\n\nRules\n- First line: base object\n- Second line: partial update\n- Override matching keys\n- Return updated object\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\n{\"b\":3}\nOutput:\n{\"a\":1,\"b\":3}",
               "solution": "function solution(input: string): string {\n  try {\n    const [baseStr, updateStr] = input.trim().split('\\n');\n    const base = JSON.parse(baseStr);\n    const update = JSON.parse(updateStr);\n    return JSON.stringify({ ...base, ...update });\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: merge partial object into base object\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1300,7 +1300,7 @@
                 "logic",
                 "overloading"
               ],
-              "description": "Problem Statement\nSimulate function overloading.\n\nRules\n- \"sum\" \u00e2\u2020\u2019 sum all numbers\n- \"concat\" \u00e2\u2020\u2019 concatenate all strings\n- Invalid \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\nsum 1 2 3\nOutput:\n6",
+              "description": "Problem Statement\nSimulate function overloading.\n\nRules\n- \"sum\" \u2192 sum all numbers\n- \"concat\" \u2192 concatenate all strings\n- Invalid \u2192 \"invalid\"\n\nExamples\nInput:\nsum 1 2 3\nOutput:\n6",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/);\n  const type = parts[0];\n  const rest = parts.slice(1);\n\n  if (type === 'sum') {\n    const nums = rest.map(Number);\n    if (nums.some(isNaN)) return 'invalid';\n    return String(nums.reduce((a, b) => a + b, 0));\n  }\n\n  if (type === 'concat') {\n    return rest.join('');\n  }\n\n  return 'invalid';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply different logic based on input pattern\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1337,7 +1337,7 @@
                 "logic",
                 "type-check"
               ],
-              "description": "Problem Statement\nDetermine type of input.\n\nRules\n- Number \u00e2\u2020\u2019 \"number\"\n- true/false \u00e2\u2020\u2019 \"boolean\"\n- valid JSON object \u00e2\u2020\u2019 \"object\"\n- otherwise \u00e2\u2020\u2019 \"string\"\n\nExamples\nInput:\n123\nOutput:\nnumber",
+              "description": "Problem Statement\nDetermine type of input.\n\nRules\n- Number \u2192 \"number\"\n- true/false \u2192 \"boolean\"\n- valid JSON object \u2192 \"object\"\n- otherwise \u2192 \"string\"\n\nExamples\nInput:\n123\nOutput:\nnumber",
               "solution": "function solution(input: string): string {\n  const val = input.trim();\n\n  if (!isNaN(Number(val))) return 'number';\n  if (val === 'true' || val === 'false') return 'boolean';\n\n  try {\n    const parsed = JSON.parse(val);\n    if (typeof parsed === 'object') return 'object';\n  } catch {}\n\n  return 'string';\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify input type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1374,7 +1374,7 @@
                 "json",
                 "validation"
               ],
-              "description": "Problem Statement\nDetermine object type using fields.\n\nRules\n- type=user and has name \u00e2\u2020\u2019 \"user\"\n- type=admin and has level \u00e2\u2020\u2019 \"admin\"\n- otherwise \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"user\",\"name\":\"John\"}\nOutput:\nuser",
+              "description": "Problem Statement\nDetermine object type using fields.\n\nRules\n- type=user and has name \u2192 \"user\"\n- type=admin and has level \u2192 \"admin\"\n- otherwise \u2192 \"invalid\"\n\nExamples\nInput:\n{\"type\":\"user\",\"name\":\"John\"}\nOutput:\nuser",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if (obj.type === 'user' && typeof obj.name === 'string') return 'user';\n    if (obj.type === 'admin' && typeof obj.level === 'number') return 'admin';\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate object type based on fields\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1408,7 +1408,7 @@
                 "arrays",
                 "json"
               ],
-              "description": "Problem Statement\nFlatten a nested array.\n\nRules\n- Input is JSON array (possibly nested)\n- Output flattened values space-separated\n- Maintain order\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n[1,[2,3],[4,[5]]]\nOutput:\n1 2 3 4 5",
+              "description": "Problem Statement\nFlatten a nested array.\n\nRules\n- Input is JSON array (possibly nested)\n- Output flattened values space-separated\n- Maintain order\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n[1,[2,3],[4,[5]]]\nOutput:\n1 2 3 4 5",
               "solution": "function solution(input: string): string {\n  try {\n    const arr = JSON.parse(input);\n\n    const result: number[] = [];\n    function flatten(a: any) {\n      for (const el of a) {\n        if (Array.isArray(el)) flatten(el);\n        else result.push(el);\n      }\n    }\n\n    flatten(arr);\n    return result.join(' ');\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: flatten nested arrays\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1445,7 +1445,7 @@
                 "objects",
                 "keys"
               ],
-              "description": "Problem Statement\nReturn all keys of a JSON object in sorted order.\n\nRules\n- Output keys space-separated\n- Sort alphabetically\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"b\":2,\"a\":1}\nOutput:\na b",
+              "description": "Problem Statement\nReturn all keys of a JSON object in sorted order.\n\nRules\n- Output keys space-separated\n- Sort alphabetically\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"b\":2,\"a\":1}\nOutput:\na b",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    return Object.keys(obj).sort().join(' ');\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return all keys of object sorted\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1478,7 +1478,7 @@
                 "arrays",
                 "index"
               ],
-              "description": "Problem Statement\nReturn element at given index.\n\nRules\n- First line: array\n- Second line: index\n- If index out of range \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n1 2 3 4\n2\nOutput:\n3",
+              "description": "Problem Statement\nReturn element at given index.\n\nRules\n- First line: array\n- Second line: index\n- If index out of range \u2192 \"invalid\"\n\nExamples\nInput:\n1 2 3 4\n2\nOutput:\n3",
               "solution": "function solution(input: string): string {\n  const [arrLine, idxLine] = input.trim().split('\\n');\n  const arr = arrLine.split(/\\s+/);\n  const idx = Number(idxLine);\n\n  if (isNaN(idx) || idx < 0 || idx >= arr.length) return 'invalid';\n  return arr[idx];\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return element at given index\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1577,7 +1577,7 @@
                 "type-check",
                 "logic"
               ],
-              "description": "Problem Statement\nClassify each value by type.\n\nRules\n- number \u00e2\u2020\u2019 \"number\"\n- true/false \u00e2\u2020\u2019 \"boolean\"\n- others \u00e2\u2020\u2019 \"string\"\n\nExamples\nInput:\n1 true hello\nOutput:\nnumber boolean string",
+              "description": "Problem Statement\nClassify each value by type.\n\nRules\n- number \u2192 \"number\"\n- true/false \u2192 \"boolean\"\n- others \u2192 \"string\"\n\nExamples\nInput:\n1 true hello\nOutput:\nnumber boolean string",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n\n  const result = parts.map(p => {\n    if (!isNaN(Number(p))) return 'number';\n    if (p === 'true' || p === 'false') return 'boolean';\n    return 'string';\n  });\n\n  return result.join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify values by type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1612,7 +1612,7 @@
                 "objects",
                 "transformation"
               ],
-              "description": "Problem Statement\nTransform all values of a JSON object into strings.\n\nRules\n- Keep keys same\n- Convert values using String()\n- Return JSON string\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":true}\nOutput:\n{\"a\":\"1\",\"b\":\"true\"}",
+              "description": "Problem Statement\nTransform all values of a JSON object into strings.\n\nRules\n- Keep keys same\n- Convert values using String()\n- Return JSON string\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":true}\nOutput:\n{\"a\":\"1\",\"b\":\"true\"}",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    const result: any = {};\n    for (const key in obj) {\n      result[key] = String(obj[key]);\n    }\n    return JSON.stringify(result);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: transform all values to strings\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1711,7 +1711,7 @@
                 "validation",
                 "objects"
               ],
-              "description": "Problem Statement\nValidate object against required keys.\n\nRules\n- First line: JSON object\n- Second line: required keys\n- If all exist \u00e2\u2020\u2019 \"valid\"\n- Else \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\na b\nOutput:\nvalid",
+              "description": "Problem Statement\nValidate object against required keys.\n\nRules\n- First line: JSON object\n- Second line: required keys\n- If all exist \u2192 \"valid\"\n- Else \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":2}\na b\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, keysLine] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const keys = keysLine.split(/\\s+/);\n\n    for (const k of keys) {\n      if (!(k in obj)) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: ensure object has required keys\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1779,7 +1779,7 @@
                 "classification",
                 "logic"
               ],
-              "description": "Problem Statement\nClassify each value into its type category.\n\nRules\n- number \u00e2\u2020\u2019 number\n- true/false \u00e2\u2020\u2019 boolean\n- valid JSON object/array \u00e2\u2020\u2019 object\n- otherwise \u00e2\u2020\u2019 string\n\nExamples\nInput:\n1 true hello {}\nOutput:\nnumber boolean string object",
+              "description": "Problem Statement\nClassify each value into its type category.\n\nRules\n- number \u2192 number\n- true/false \u2192 boolean\n- valid JSON object/array \u2192 object\n- otherwise \u2192 string\n\nExamples\nInput:\n1 true hello {}\nOutput:\nnumber boolean string object",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n\n  return parts.map(p => {\n    if (!isNaN(Number(p))) return 'number';\n    if (p === 'true' || p === 'false') return 'boolean';\n\n    try {\n      const parsed = JSON.parse(p);\n      if (typeof parsed === 'object') return 'object';\n    } catch {}\n\n    return 'string';\n  }).join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: classify each value into categories\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1846,7 +1846,7 @@
                 "analysis",
                 "arrays"
               ],
-              "description": "Problem Statement\nDetermine the element type of an array.\n\nRules\n- All numbers \u00e2\u2020\u2019 number\n- All strings \u00e2\u2020\u2019 string\n- Mixed \u00e2\u2020\u2019 mixed\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n[1,2,3]\nOutput:\nnumber",
+              "description": "Problem Statement\nDetermine the element type of an array.\n\nRules\n- All numbers \u2192 number\n- All strings \u2192 string\n- Mixed \u2192 mixed\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n[1,2,3]\nOutput:\nnumber",
               "solution": "function solution(input: string): string {\n  try {\n    const arr = JSON.parse(input);\n    if (!Array.isArray(arr)) return 'invalid';\n\n    let hasNum = false;\n    let hasStr = false;\n\n    for (const el of arr) {\n      if (typeof el === 'number') hasNum = true;\n      else if (typeof el === 'string') hasStr = true;\n    }\n\n    if (hasNum && hasStr) return 'mixed';\n    if (hasNum) return 'number';\n    if (hasStr) return 'string';\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: infer array element type\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1912,7 +1912,7 @@
                 "state",
                 "simulation"
               ],
-              "description": "Problem Statement\nSimulate a reducer with actions.\n\nRules\n- First line: initial number\n- Following lines: actions\n- inc \u00e2\u2020\u2019 +1\n- dec \u00e2\u2020\u2019 -1\n\nExamples\nInput:\n0\ninc\ninc\ndec\nOutput:\n1",
+              "description": "Problem Statement\nSimulate a reducer with actions.\n\nRules\n- First line: initial number\n- Following lines: actions\n- inc \u2192 +1\n- dec \u2192 -1\n\nExamples\nInput:\n0\ninc\ninc\ndec\nOutput:\n1",
               "solution": "function solution(input: string): string {\n  const lines = input.trim().split('\\n');\n  let state = Number(lines[0]);\n\n  for (let i = 1; i < lines.length; i++) {\n    if (lines[i] === 'inc') state++;\n    else if (lines[i] === 'dec') state--;\n  }\n\n  return String(state);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply actions to state\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -1949,7 +1949,7 @@
                 "objects",
                 "transform"
               ],
-              "description": "Problem Statement\nRemove all null or undefined values from an object.\n\nRules\n- Keep only keys with valid values\n- Return cleaned object\n- Invalid JSON \u00e2\u2020\u2019 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":null,\"c\":2}\nOutput:\n{\"a\":1,\"c\":2}",
+              "description": "Problem Statement\nRemove all null or undefined values from an object.\n\nRules\n- Keep only keys with valid values\n- Return cleaned object\n- Invalid JSON \u2192 \"invalid\"\n\nExamples\nInput:\n{\"a\":1,\"b\":null,\"c\":2}\nOutput:\n{\"a\":1,\"c\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    const res: any = {};\n    for (const k in obj) {\n      if (obj[k] !== null && obj[k] !== undefined) {\n        res[k] = obj[k];\n      }\n    }\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: remove null/undefined values from object\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2015,7 +2015,7 @@
                 "validation",
                 "strings"
               ],
-              "description": "Problem Statement\nReturn length of a valid string.\n\nRules\n- If input is \"null\" or empty \u00e2\u2020\u2019 return 0\n- Otherwise return string length\n\nExamples\nInput:\nhello\nOutput:\n5",
+              "description": "Problem Statement\nReturn length of a valid string.\n\nRules\n- If input is \"null\" or empty \u2192 return 0\n- Otherwise return string length\n\nExamples\nInput:\nhello\nOutput:\n5",
               "solution": "function solution(input: string): string {\n  const val = input.trim();\n  if (!val || val === 'null') return '0';\n  return String(val.length);\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return length of valid string or 0\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2048,7 +2048,7 @@
                 "json",
                 "validation"
               ],
-              "description": "Problem Statement\nIdentify object type based on keys.\n\nRules\n- radius \u00e2\u2020\u2019 circle\n- side \u00e2\u2020\u2019 square\n- otherwise \u00e2\u2020\u2019 unknown\n\nExamples\nInput:\n{\"radius\":2}\nOutput:\ncircle",
+              "description": "Problem Statement\nIdentify object type based on keys.\n\nRules\n- radius \u2192 circle\n- side \u2192 square\n- otherwise \u2192 unknown\n\nExamples\nInput:\n{\"radius\":2}\nOutput:\ncircle",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n    if ('radius' in obj) return 'circle';\n    if ('side' in obj) return 'square';\n    return 'unknown';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: detect object type based on keys\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2081,7 +2081,7 @@
                 "arrays",
                 "manipulation"
               ],
-              "description": "Problem Statement\nRemove last element from array without mutating original.\n\nRules\n- Return remaining elements\n- Single element \u00e2\u2020\u2019 empty output\n\nExamples\nInput:\n1 2 3\nOutput:\n1 2",
+              "description": "Problem Statement\nRemove last element from array without mutating original.\n\nRules\n- Return remaining elements\n- Single element \u2192 empty output\n\nExamples\nInput:\n1 2 3\nOutput:\n1 2",
               "solution": "function solution(input: string): string {\n  const arr = input.trim().split(/\\s+/).filter(Boolean);\n  return arr.slice(0, -1).join(' ');\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: return new array with last element removed\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2117,7 +2117,7 @@
                 "resolution",
                 "cycles"
               ],
-              "description": "Problem Statement\nResolve dependencies from a container with cycle detection.\n\nRules\n- First line: JSON map of dependencies\n- Second line: key to resolve\n- Follow chain until terminal value\n- If cycle detected \u00e2\u2020\u2019 \"cycle\"\n- If key not present \u00e2\u2020\u2019 \"not_found\"\n\nExample\nInput:\n{\"a\":\"b\",\"b\":\"c\",\"c\":\"value\"}\na\nOutput:\nvalue",
+              "description": "Problem Statement\nResolve dependencies from a container with cycle detection.\n\nRules\n- First line: JSON map of dependencies\n- Second line: key to resolve\n- Follow chain until terminal value\n- If cycle detected \u2192 \"cycle\"\n- If key not present \u2192 \"not_found\"\n\nExample\nInput:\n{\"a\":\"b\",\"b\":\"c\",\"c\":\"value\"}\na\nOutput:\nvalue",
               "solution": "function solution(input: string): string {\n  try {\n    const [mapStr, key] = input.trim().split('\\n');\n    const map = JSON.parse(mapStr);\n\n    if (!(key in map)) return 'not_found';\n\n    let current = key;\n    const visited = new Set();\n\n    while (current in map) {\n      if (visited.has(current)) return 'cycle';\n      visited.add(current);\n      current = map[current];\n    }\n\n    return current;\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: resolve dependency with cycle detection\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2151,7 +2151,7 @@
                 "overwrite",
                 "order"
               ],
-              "description": "Problem Statement\nBuild an object step-by-step.\n\nRules\n- Each line: key=value\n- Later assignments overwrite earlier ones\n- Invalid format \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nname=John\nage=20\nname=Jane\nOutput:\n{\"name\":\"Jane\",\"age\":20}",
+              "description": "Problem Statement\nBuild an object step-by-step.\n\nRules\n- Each line: key=value\n- Later assignments overwrite earlier ones\n- Invalid format \u2192 \"invalid\"\n\nExample\nInput:\nname=John\nage=20\nname=Jane\nOutput:\n{\"name\":\"Jane\",\"age\":20}",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n').filter(Boolean);\n    const obj: any = {};\n\n    for (const line of lines) {\n      if (!line.includes('=')) return 'invalid';\n      const [k, v] = line.split('=');\n      const num = Number(v);\n      obj[k] = isNaN(num) ? v : num;\n    }\n\n    return JSON.stringify(obj);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply build steps with overwrite rules\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2184,7 +2184,7 @@
                 "validation",
                 "rules"
               ],
-              "description": "Problem Statement\nValidate a form with multiple constraints.\n\nRules\n- name: non-empty string\n- age: \u00e2\u2030\u00a5 18\n- email (optional): must contain '@'\n- Missing required fields \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"name\":\"John\",\"age\":20,\"email\":\"a@b.com\"}\nOutput:\nvalid",
+              "description": "Problem Statement\nValidate a form with multiple constraints.\n\nRules\n- name: non-empty string\n- age: \u2265 18\n- email (optional): must contain '@'\n- Missing required fields \u2192 \"invalid\"\n\nExample\nInput:\n{\"name\":\"John\",\"age\":20,\"email\":\"a@b.com\"}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const obj = JSON.parse(input);\n\n    if (typeof obj.name !== 'string' || obj.name.length === 0) return 'invalid';\n    if (typeof obj.age !== 'number' || obj.age < 18) return 'invalid';\n\n    if ('email' in obj) {\n      if (typeof obj.email !== 'string' || !obj.email.includes('@')) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate with multiple constraints\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2217,7 +2217,7 @@
                 "mapping",
                 "conflicts"
               ],
-              "description": "Problem Statement\nRename keys using mapping with conflicts.\n\nRules\n- If multiple keys map to same key \u00e2\u2020\u2019 last wins\n- Keys not in mapping remain unchanged\n\nExample\nInput:\n{\"a\":1,\"b\":2}\n{\"a\":\"x\",\"b\":\"x\"}\nOutput:\n{\"x\":2}",
+              "description": "Problem Statement\nRename keys using mapping with conflicts.\n\nRules\n- If multiple keys map to same key \u2192 last wins\n- Keys not in mapping remain unchanged\n\nExample\nInput:\n{\"a\":1,\"b\":2}\n{\"a\":\"x\",\"b\":\"x\"}\nOutput:\n{\"x\":2}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, mapStr] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const map = JSON.parse(mapStr);\n\n    const res: any = {};\n\n    for (const k in obj) {\n      const newKey = map[k] || k;\n      res[newKey] = obj[k];\n    }\n\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: remap keys with conflict resolution\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2312,7 +2312,7 @@
                 "flags",
                 "transform"
               ],
-              "description": "Problem Statement\nApply modifiers to an object.\n\nRules\n- readonly \u00e2\u2020\u2019 return same object\n- optional \u00e2\u2020\u2019 remove all keys\n- unknown modifier \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"x\":1}\noptional\nOutput:\n{}",
+              "description": "Problem Statement\nApply modifiers to an object.\n\nRules\n- readonly \u2192 return same object\n- optional \u2192 remove all keys\n- unknown modifier \u2192 \"invalid\"\n\nExample\nInput:\n{\"x\":1}\noptional\nOutput:\n{}",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, modifier] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n\n    if (modifier === 'readonly') return JSON.stringify(obj);\n    if (modifier === 'optional') return JSON.stringify({});\n\n    return 'invalid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: apply modifiers to object values\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2345,7 +2345,7 @@
                 "validation",
                 "schema"
               ],
-              "description": "Problem Statement\nValidate object against a schema definition.\n\nRules\n- Schema maps keys to types: number/string/boolean\n- All keys must match type\n- Missing or mismatch \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n{\"a\":1,\"b\":\"x\"}\n{\"a\":\"number\",\"b\":\"string\"}\nOutput:\nvalid",
+              "description": "Problem Statement\nValidate object against a schema definition.\n\nRules\n- Schema maps keys to types: number/string/boolean\n- All keys must match type\n- Missing or mismatch \u2192 \"invalid\"\n\nExample\nInput:\n{\"a\":1,\"b\":\"x\"}\n{\"a\":\"number\",\"b\":\"string\"}\nOutput:\nvalid",
               "solution": "function solution(input: string): string {\n  try {\n    const [objStr, schemaStr] = input.trim().split('\\n');\n    const obj = JSON.parse(objStr);\n    const schema = JSON.parse(schemaStr);\n\n    for (const key in schema) {\n      if (!(key in obj)) return 'invalid';\n      if (typeof obj[key] !== schema[key]) return 'invalid';\n    }\n\n    return 'valid';\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: validate object against schema\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2379,7 +2379,7 @@
                 "transitions",
                 "validation"
               ],
-              "description": "Problem Statement\nSimulate a state machine.\n\nStates: idle, running\n\nTransitions:\n- idle \u00e2\u2020\u2019 start \u00e2\u2020\u2019 running\n- running \u00e2\u2020\u2019 stop \u00e2\u2020\u2019 idle\n- invalid transition \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nidle\nstart\nstop\nOutput:\nidle",
+              "description": "Problem Statement\nSimulate a state machine.\n\nStates: idle, running\n\nTransitions:\n- idle \u2192 start \u2192 running\n- running \u2192 stop \u2192 idle\n- invalid transition \u2192 \"invalid\"\n\nExample\nInput:\nidle\nstart\nstop\nOutput:\nidle",
               "solution": "function solution(input: string): string {\n  const lines = input.trim().split('\\n');\n  let state = lines[0];\n\n  for (let i = 1; i < lines.length; i++) {\n    const action = lines[i];\n\n    if (state === 'idle' && action === 'start') state = 'running';\n    else if (state === 'running' && action === 'stop') state = 'idle';\n    else return 'invalid';\n  }\n\n  return state;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: simulate state machine\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2617,7 +2617,7 @@
                 "routing",
                 "matching"
               ],
-              "description": "Problem Statement\nMatch a route pattern and extract parameters.\n\nRules\n- Pattern may contain :param\n- Match exact segments\n- Return params as JSON\n- If mismatch \u00e2\u2020\u2019 \"not_found\"\n\nExample\nInput:\n/user/:id\n/user/42\nOutput:\n{\"id\":\"42\"}",
+              "description": "Problem Statement\nMatch a route pattern and extract parameters.\n\nRules\n- Pattern may contain :param\n- Match exact segments\n- Return params as JSON\n- If mismatch \u2192 \"not_found\"\n\nExample\nInput:\n/user/:id\n/user/42\nOutput:\n{\"id\":\"42\"}",
               "solution": "function solution(input: string): string {\n  try {\n    const [pattern, path] = input.trim().split('\\n');\n    const pParts = pattern.split('/').filter(Boolean);\n    const pathParts = path.split('/').filter(Boolean);\n\n    if (pParts.length !== pathParts.length) return 'not_found';\n\n    const res: any = {};\n\n    for (let i = 0; i < pParts.length; i++) {\n      if (pParts[i].startsWith(':')) {\n        res[pParts[i].slice(1)] = pathParts[i];\n      } else if (pParts[i] !== pathParts[i]) {\n        return 'not_found';\n      }\n    }\n\n    return JSON.stringify(res);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: match route and extract params\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2650,7 +2650,7 @@
                 "query",
                 "strings"
               ],
-              "description": "Problem Statement\nConstruct a GraphQL query.\n\nRules\n- First word = root\n- Remaining = fields\n- Format: { root { fields } }\n- Empty input \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\nuser id name\nOutput:\n{ user { id name } }",
+              "description": "Problem Statement\nConstruct a GraphQL query.\n\nRules\n- First word = root\n- Remaining = fields\n- Format: { root { fields } }\n- Empty input \u2192 \"invalid\"\n\nExample\nInput:\nuser id name\nOutput:\n{ user { id name } }",
               "solution": "function solution(input: string): string {\n  const parts = input.trim().split(/\\s+/).filter(Boolean);\n  if (parts.length === 0) return 'invalid';\n\n  const [root, ...fields] = parts;\n  return `{ ${root} { ${fields.join(' ')} } }`;\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: build GraphQL query string\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2749,7 +2749,7 @@
                 "state",
                 "cache"
               ],
-              "description": "Problem Statement\nSimulate a key-value cache.\n\nRules\n- set key value\n- get key \u00e2\u2020\u2019 value or \"null\"\n- Only output last get result\n\nExample\nInput:\nset a 1\nget a\nOutput:\n1",
+              "description": "Problem Statement\nSimulate a key-value cache.\n\nRules\n- set key value\n- get key \u2192 value or \"null\"\n- Only output last get result\n\nExample\nInput:\nset a 1\nget a\nOutput:\n1",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    const cache: any = {};\n    let result = '';\n\n    for (const line of lines) {\n      const [cmd, key, value] = line.split(' ');\n\n      if (cmd === 'set') {\n        cache[key] = value;\n      } else if (cmd === 'get') {\n        result = cache[key] ?? 'null';\n      }\n    }\n\n    return result;\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: simulate cache operations\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -2915,7 +2915,7 @@
                 "pipeline",
                 "state"
               ],
-              "description": "Problem Statement\nExecute plugins sequentially.\n\nPlugins:\n- inc \u00e2\u2020\u2019 +1\n- double \u00e2\u2020\u2019 *2\n\nRules\n- Apply in order\n- Unknown plugin \u00e2\u2020\u2019 \"invalid\"\n\nExample\nInput:\n5\ninc\ndouble\nOutput:\n12",
+              "description": "Problem Statement\nExecute plugins sequentially.\n\nPlugins:\n- inc \u2192 +1\n- double \u2192 *2\n\nRules\n- Apply in order\n- Unknown plugin \u2192 \"invalid\"\n\nExample\nInput:\n5\ninc\ndouble\nOutput:\n12",
               "solution": "function solution(input: string): string {\n  try {\n    const lines = input.trim().split('\\n');\n    let val = Number(lines[0]);\n\n    for (let i = 1; i < lines.length; i++) {\n      const cmd = lines[i];\n\n      if (cmd === 'inc') val += 1;\n      else if (cmd === 'double') val *= 2;\n      else return 'invalid';\n    }\n\n    return String(val);\n  } catch {\n    return 'invalid';\n  }\n}",
               "starter_code": {
                 "typescript": "declare var require: any;\ndeclare var process: any;\n\nfunction solution(input: string): string {\n  // TODO: execute plugins in order\n  return \"\";\n}\n\nfunction main() {\n  const fs = require('fs');\n  const input = fs.readFileSync(0, 'utf-8');\n  process.stdout.write(solution(input));\n}\n\nmain();"
@@ -10537,7 +10537,7 @@
             },
             {
               "id": "CS-INT2-M-2",
-              "title": "Entity Framework Core \u00e2\u20ac\u201d CRUD + Eager Loading",
+              "title": "Entity Framework Core \u2014 CRUD + Eager Loading",
               "skill": ".NET, C#",
               "level": "Intermediate_2",
               "difficulty": "Medium",
